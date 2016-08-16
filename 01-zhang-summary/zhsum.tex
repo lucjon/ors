@@ -1,0 +1,95 @@
+\documentclass[libertine,widepage,nosubthm]{lmaths}
+\addbibresource{../ors.bib}
+\ExecuteBibliographyOptions{url=false}
+
+\title{One-Relation Special Monoids Have Decidable Word Problems}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+	This document is intended as a summary applying the techniques of \cite{Zhang1992a} to show that the word problem is decidable for monoids admitting a presentation of the form $\langle A \mid u = \epsilon\rangle$.
+\end{abstract}
+
+
+This note proves the following theorem, first proved by Adjan \cite{Adian1966}, using the approach of Zhang in \cite{Zhang1992a}:
+\begin{theorem}[Adjan]
+	Let $M$ be a monoid admitting a presentation of the form $\langle A \mid u = \epsilon\rangle$, where $u$ is a word over a finite set $A$ of generators, and $\epsilon$ denotes (as it will henceforth) the empty word. Then the word problem of $M$ is decidable.
+\end{theorem}
+
+The broad approach is to use this presentation to derive a one-relation presentation for a particular submonoid, which is shown to be a group to which we can reduce the word problem of the monoid as a whole. We can then appeal to the corresponding word problem theorem for groups:
+\begin{theorem}[Magnus]
+	Let $G$ be a group admitting a presentation of the form $\langle A \mid u = v\rangle$, where $u$ and $v$ are words over the generating set $A$. Then the word problem for $G$ is decidable.
+\end{theorem}
+
+A proof of the above can be found in e.g. \cite{Magnus2004}.
+
+
+\section{Building a generating set}
+
+Suppose $M = \langle A \mid w = \epsilon\rangle$ is a finitely presented monoid.
+
+Given a subset $X \subseteq A^*$ of words, define
+	\begin{align*}
+		L(X) &= \{ x \in A^* \mid \exists\ w \in A^* \colon wx \in X \} \text{ and } \\
+		R(X) &= \{ x \in A^* \mid \exists\ w \in A^* \colon xw \in X \}
+	\end{align*}
+to be the set of left and right factors respectively of words in $X$. Then, if $W(X) = L(X) \cap R(X)$ is the set of words which are both left and right factors, let $W'(X) = \{ w \in W(X) \mid \not\exists\ s, t \in A^+ \colon w = st, t \in W(X) \}$ be those two-sided factors for which no proper right factor appears in $W(X)$.
+
+Taking $C_1 = \{w\}$, let
+	\[ C_{i+1} = C_i \cup \{ xy \mid y \in W(X), yx \in C_i \} \cup \{ yz \mid y \in W(X), zy \in C_i \} \]
+be those words obtained by moving right factors from $W(X)$ to the beginning of the words in $C_i$ in which they appear and left factors to the end of words. Each word in $C_i$ has the same length as $w$: this is easy to see by induction on $i$. It is clearly true in $C_1$. Suppose every word in $C_i$ has length $|w|$; then a new word $xy \in C_{i+1}$, with one of $x$ or $y \in W(C_i)$ has $xy$ or $yx$ in $C_i$ and hence $|xy| = |yx| = |w|$ by the inductive hypothesis. Hence every word in $C_{i+1}$ has length $|w|$.
+
+It follows from this that since $|C_i| \le |A|^{|w|}$ (which is finite since $M$ is finitely presented) and $C_{i+1} \supseteq C_i$ for all $i \ge 1$, that there is a maximal set $C_k$. The set $W'(C_k)$, denoted $E(M)$, shall be the generating set for the submonoid we consider in the remainder of the proof.
+
+\begin{example}
+	We perform this construction on the monoid $M = \langle a, b \mid bbab = \epsilon \rangle$:
+
+	\begin{center}
+	\begin{tabular}{c|ll}
+		$i$ & $C_i$ & $W(C_i)$ \\
+		\hline
+		1 & \{bbab\} & \{b, bbab\} \\
+		2 & \{babb, bbab, bbba\} & \{bba, bb, b, bbab, bab, bbba, babb, ba\} \\
+		3 & \{babb, bbab, abbb, bbba\} & \{ab, bba, abbb, bb, b, bbab, bab, bbb, bbba, a, babb, ba, abb\} \\
+		4 & \{babb, bbab, abbb, bbba\} & \{ab, bba, abbb, bb, b, bbab, bab, bbb, bbba, a, babb, ba, abb\}
+	\end{tabular}
+	\end{center}
+
+	The maximal set is $C_3 = \{babb, bbab, abbb, bbba\}$, so $E(M) = W'(C_3) = \{a, b\}$.
+\end{example}
+
+\begin{example}[The bicyclic monoid]
+	Performing this construction on the bicyclic monoid $B = \langle b, c \mid bc = \epsilon \rangle$ gives the following:
+
+	\begin{center}
+	\begin{tabular}{c|ll}
+		$i$ & $C_i$ & $W(C_i)$ \\
+		\hline
+		1 & \{bc\} & \{bc\} \\
+		2 & \{bc\} & \{bc\}
+	\end{tabular}
+	\end{center}
+
+	Hence the maximal set is $C_1 = \{bc\}$, giving $E(M) = W'(C_1) = \{ bc \}$.
+\end{example}
+
+\section{The group}
+Define a new alphabet $B$ disjoint with $A$ such that we have a bijection $\midtilde\phi \colon E(M) \to B$, and let $\phi \colon E(M)^* \to B^*$ be the unique homomorphic extension of $\midtilde\phi$. By the following lemma, $\phi(w)$ is well-defined:
+
+\begin{lemma}
+	The relator $w$ can be expressed as a product of factors in $E(M)$.
+\end{lemma}
+\begin{proof}
+	Since $w \in C_k$, we can factor $w = st$, where $t \in E(M)$ and $s \in A^*$. Carson an lean càch? Ceist mhath.
+\end{proof}
+
+We now define a monoid $M'$ given by the presentation $\langle B \mid \phi(w) = \epsilon \rangle$.
+
+
+\printbibliography
+
+
+\end{document}

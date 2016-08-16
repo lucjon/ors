@@ -1,0 +1,11 @@
+*.blg
+__pycache__/*
+*.log
+*.aux
+*.bbl
+*.bcf
+*.idx
+*.out
+*.pdf
+*.run.xml
+*.pyc

@@ -1,0 +1,21 @@
+*** AGENDA FOR MEETING WITH NIK
+
+	1.	Questions about the papers
+	
+
+	2.	Propose some papers to look over next
+		- Mention not being able to find the English translation of Adian's original paper
+		- Extending semigp/monoid results
+		- Looking at related results (not just WP) i.e. other problems/Freiheitssatz/etc.
+		- Looking at Magnus' group result
+		- Ask him for suggestions on papers or directions
+	
+	3.	Questions about the form of the dissertation
+		- Target audience
+		- Background material required
+		- Format of background material
+		- Pick a few results from the literature and prove them? Change proofs? Broader survey?
+			* What is the bulk of the written document?
+
+
+
