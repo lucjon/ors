@@ -1,21 +1,37 @@
 *** AGENDA FOR MEETING WITH NIK
 
 	1.	Questions about the papers
-	
+		Check that the broad ideas (reducing to group of units, complete
+		rewriting systems give algorithms to decide WP, etc.) are correct.
+
+		- A Short Proof...
+			- Highlighted section about it being a group (p. 2) and why exactly
+			  $w$ is expressible as a product of factors in $E(M)$.
+		
+		- Rewriting methods for special monoids
+			- ??
 
 	2.	Propose some papers to look over next
-		- Mention not being able to find the English translation of Adian's original paper
+		- Mention not being able to find the English translation of Adian's
+		  original paper
 		- Extending semigp/monoid results
-		- Looking at related results (not just WP) i.e. other problems/Freiheitssatz/etc.
+			- reductions, like Adian's to uvw
+		- Looking at related results (not just WP) i.e. other
+			- divisibility/other decision problems
+			- complexity of division problems
+		  problems/Freiheitssatz/etc.
 		- Looking at Magnus' group result
+		- Other results for rewriting systems in general?
+
 		- Ask him for suggestions on papers or directions
 	
 	3.	Questions about the form of the dissertation
 		- Target audience
 		- Background material required
 		- Format of background material
-		- Pick a few results from the literature and prove them? Change proofs? Broader survey?
-			* What is the bulk of the written document?
+		- Pick a few results from the literature and prove them? Change proofs?
+		  Broader survey?
+			* What will the bulk of the written document look like?
 
 
 

@@ -1,0 +1,15 @@
+Dear Lucas,
+
+Try this: We prove by induction that every element of W(C_k) is a concatenation of 
+elements of of E(M). This will imply that w is such a concatenation, because w 
+belongs to W(C_k).
+
+To do induction, treat the elements of E(M) as the anchor. Any other element u in 
+W(C_k) has en element of E(M) as a prefix, say u=ev. Prove that v is also an element 
+of W(C_k). To do this you need to show that is a prefix and a suffix of some elements 
+of W(C_k) (recall that C_k=C_{k+1}). This should follow from the fact that u and e 
+are such pre/suffixes.
+
+Far from complete, but should work.
+
+Nik Ruskuc

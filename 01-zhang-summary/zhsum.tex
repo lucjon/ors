@@ -2,29 +2,38 @@
 \addbibresource{../ors.bib}
 \ExecuteBibliographyOptions{url=false}
 
+\newcommand{\ltlex}{<_{\mathrm{lex}}}
+\newcommand{\gtlex}{>_{\mathrm{lex}}}
+\setlist{leftmargin=3em}
+
 \title{One-Relation Special Monoids Have Decidable Word Problems}
 \author{}
 \date{}
 
+\let\oldbeginabstract\abstract
+\renewcommand{\abstract}{\oldbeginabstract\noindent}
+
 \begin{document}
 \maketitle
 
-\begin{abstract}
-	This document is intended as a summary applying the techniques of \cite{Zhang1992a} to show that the word problem is decidable for monoids admitting a presentation of the form $\langle A \mid u = \epsilon\rangle$.
+\begin{abstract}%
+This document is intended as a summary applying the techniques of \cite{Zhang1992a} to show that the word problem is decidable for monoids admitting a presentation of the form $\langle A \mid w = \epsilon\rangle$.
 \end{abstract}
 
 
 This note proves the following theorem, first proved by Adjan \cite{Adian1966}, using the approach of Zhang in \cite{Zhang1992a}:
-\begin{theorem}[Adjan]
+\begin{theorem}[Adjan] \label{thm:ors-decidablewp}
 	Let $M$ be a monoid admitting a presentation of the form $\langle A \mid u = \epsilon\rangle$, where $u$ is a word over a finite set $A$ of generators, and $\epsilon$ denotes (as it will henceforth) the empty word. Then the word problem of $M$ is decidable.
 \end{theorem}
 
-The broad approach is to use this presentation to derive a one-relation presentation for a particular submonoid, which is shown to be a group to which we can reduce the word problem of the monoid as a whole. We can then appeal to the corresponding word problem theorem for groups:
-\begin{theorem}[Magnus]
+The broad approach is to use this presentation to derive a one-relation presentation for another monoid, which is shown to be a group to which we can reduce the word problem of the original monoid through a confluent, Noetherian rewriting system. We can then appeal to the corresponding word problem theorem for groups:
+\begin{theorem}[Magnus] \label{thm:orgp-decidablewp}
 	Let $G$ be a group admitting a presentation of the form $\langle A \mid u = v\rangle$, where $u$ and $v$ are words over the generating set $A$. Then the word problem for $G$ is decidable.
 \end{theorem}
 
 A proof of the above can be found in e.g. \cite{Magnus2004}.
+
+Throughout, $\langle A \mid R \rangle$ will denote a monoid presentation; that is, the monoid obtained by taking the free monoid $A^*$ quotiented by the least congruence containing the elements $R \subseteq A^*$. We write $\Gp \langle A \mid R \rangle$ for group presentations, i.e. the quotients of the free groups by the normal closures of a set of relators.
 
 
 \section{Building a generating set}
@@ -39,10 +48,10 @@ Given a subset $X \subseteq A^*$ of words, define
 to be the set of left and right factors respectively of words in $X$. Then, if $W(X) = L(X) \cap R(X)$ is the set of words which are both left and right factors, let $W'(X) = \{ w \in W(X) \mid \not\exists\ s, t \in A^+ \colon w = st, t \in W(X) \}$ be those two-sided factors for which no proper right factor appears in $W(X)$.
 
 Taking $C_1 = \{w\}$, let
-	\[ C_{i+1} = C_i \cup \{ xy \mid y \in W(X), yx \in C_i \} \cup \{ yz \mid y \in W(X), zy \in C_i \} \]
-be those words obtained by moving right factors from $W(X)$ to the beginning of the words in $C_i$ in which they appear and left factors to the end of words. Each word in $C_i$ has the same length as $w$: this is easy to see by induction on $i$. It is clearly true in $C_1$. Suppose every word in $C_i$ has length $|w|$; then a new word $xy \in C_{i+1}$, with one of $x$ or $y \in W(C_i)$ has $xy$ or $yx$ in $C_i$ and hence $|xy| = |yx| = |w|$ by the inductive hypothesis. Hence every word in $C_{i+1}$ has length $|w|$.
+	\[ C_{i+1} = C_i \cup \{ xy \mid y \in W(C_i), yx \in C_i \} \cup \{ yz \mid y \in W(C_i), zy \in C_i \} \]
+be those words obtained by moving right factors from $W(C_i)$ to the beginning of the words in $C_i$ in which they appear and left factors to the end of words. Each word in $C_i$ has the same length as $w$: this is easy to see by induction on $i$. It is clearly true in $C_1$. Suppose every word in $C_i$ has length $|w|$; then a new word $xy \in C_{i+1}$, with one of $x$ or $y \in W(C_i)$ has $xy$ or $yx$ in $C_i$ and hence $|xy| = |yx| = |w|$ by the inductive hypothesis. Hence every word in $C_{i+1}$ has length $|w|$.
 
-It follows from this that since $|C_i| \le |A|^{|w|}$ (which is finite since $M$ is finitely presented) and $C_{i+1} \supseteq C_i$ for all $i \ge 1$, that there is a maximal set $C_k$. The set $W'(C_k)$, denoted $E(M)$, shall be the generating set for the submonoid we consider in the remainder of the proof.
+It follows from this that since $|C_i| \le |A|^{|w|}$ (which is finite since $M$ is finitely presented) and $C_{i+1} \supseteq C_i$ for all $i \ge 1$, there is a maximal set $C_k$. The set $W'(C_k)$, denoted $E(M)$, shall form the generating set for the monoid we consider in the remainder of the proof.
 
 \begin{example}
 	We perform this construction on the monoid $M = \langle a, b \mid bbab = \epsilon \rangle$:
@@ -79,15 +88,119 @@ It follows from this that since $|C_i| \le |A|^{|w|}$ (which is finite since $M$
 \section{The group}
 Define a new alphabet $B$ disjoint with $A$ such that we have a bijection $\midtilde\phi \colon E(M) \to B$, and let $\phi \colon E(M)^* \to B^*$ be the unique homomorphic extension of $\midtilde\phi$. By the following lemma, $\phi(w)$ is well-defined:
 
-\begin{lemma}
+\begin{lemma} \label{lma:relator-factors-E(M)}
 	The relator $w$ can be expressed as a product of factors in $E(M)$.
 \end{lemma}
 \begin{proof}
-	Since $w \in C_k$, we can factor $w = st$, where $t \in E(M)$ and $s \in A^*$. Carson an lean càch? Ceist mhath.
+	Since $w \in C_k$, we can factor $w = st$, where $t \in E(M)$ and $s \in A^*$.
 \end{proof}
 
-We now define a monoid $M'$ given by the presentation $\langle B \mid \phi(w) = \epsilon \rangle$.
+We now define a monoid $M'$ given by the presentation $\langle B \mid \phi(w) = \epsilon \rangle$. We assert that this monoid is in fact a group:
 
+\begin{lemma}
+	The monoid $M' = \langle B \mid \phi(w) = \epsilon\rangle$ is a group.
+\end{lemma}
+\begin{proof}
+	Factor $w = st$ for $s \in E(M)$, $t \in E(M)^*$. Then clearly $st = w \leftrightarrow^*_{(st, \epsilon)} \epsilon$, so $st =_M \epsilon$, and $ts \leftrightarrow^*_{(st, \epsilon)} \epsilon$ hence $ts =_M \epsilon$. Since $\phi$ is a homomorphism we have $\phi(t)\phi(s) =_{M'} \epsilon$.
+\end{proof}
+
+We shall call this group $G$ rather than $M'$ from now on.
+
+\pushcounter{example}{2}
+\begin{example}
+	Recall the monoid $M = \langle a, b \mid bbab = \epsilon \rangle$ from before. This presentation in fact presents a group; since $ba \leftrightarrow babbab \leftrightarrow bbabbabbab \leftrightarrow bbabab \leftrightarrow ab$, where $\leftrightarrow$ denotes the reflexive closure of the relation $\{(bbab, \epsilon)\}$, we have that $ba =_M ab$.
+\end{example}
+\popcounter{example}
+
+\section{The rewriting system}
+We use this group to construct a rewriting system on all the words of $A^*$, recalling that this is the set of all words over the generators of our original monoid.
+
+A linear order on a set $X$ is a relation which is transitive and satisfies the trichotomy condition, i.e. exactly one of $x \le y$ or $y \le x$ or $x = y$ holds for all $x, y \in X$. Let $<$ be some linear order on the alphabet $A$, and extend it to a shortlex order $\ltlex$ over $A^*$: say that $x \ltlex y$ for words $x = x_1\cdots x_m$, $y = y_1\cdots y_n$ in $A^*$ if and only if $m < n$, or $m = n$ and there is some index $i$ such that $x_i < y_i$ and $x_j = y_j$ for all $1 \le j < i$.
+
+Now define a rewriting system $R$ with precisely the rules $u \to v$, where $u, v \in E(M)^*$, $v \ltlex u$ and $\phi(u) =_G \phi(v)$.
+
+This system $R$ is equivalent to the system $\{w \to \epsilon\}$, i.e. they present the same monoid:
+
+\begin{lemma} \label{lma:R-equivalent-to-pres}
+	The rewriting systems $\{w \to \epsilon\}$ and $R$ are equivalent in the sense that their Thue congruences are equal.
+\end{lemma}
+\begin{proof}
+First, observe that $w \in E(M)^*$ by lemma \ref{lma:relator-factors-E(M)}, $\epsilon \ltlex w$, and $\phi(w) =_G \epsilon$ follows immediately from the presentation for $G$; so $w \to \epsilon$ is a rule in $R$ and hence $\leftrightarrow^*_{\{(w,\epsilon)\}}\ \subseteq\ \leftrightarrow^*_R$.
+
+Conversely, suppose $u \to v$ is a rule in $R$. Then $\phi(u) =_G \phi(v)$ means $\phi(u) \leftrightarrow^*_{\{(\phi(w), \epsilon)\}} \phi(v)$, and since $\phi$ is a homomorphism, $u \leftrightarrow^*_{\{(w, \epsilon)\}} v$. So $\leftrightarrow^*_R\ \subseteq\ \leftrightarrow^*_{\{(w,\epsilon)\}}$.
+
+Hence the two rewriting systems are equivalent.
+\end{proof}
+
+However, the advantage of $R$ over the simple system $\{w \to \epsilon\}$ is that it is confluent and Noetherian, and hence we can use it to find a unique normal form for every element in our one-relator monoid $M$. Once we have such a normal form, it is relatively straightforward to show \cref{thm:ors-decidablewp}, that the word problem is decidable.
+
+\subsection{Some lemmas on $E(M)$}
+
+We state here two lemmas about the generating set $E(M)$ which will be useful to prove the remaining properties of $R$:
+
+\begin{lemma} \label{lma:no-middle-E(M)}
+	If $x, y, z \in A^*$ are strings such that $xy, yz \in E(M)$, then either $y = \epsilon$ or $x = z = \epsilon$.
+\end{lemma}
+\begin{proof}
+	Suppose $y \ne \epsilon$. Then since $xy \in E(M)$, $xy \in W(C_k)$ and in particular, $xy \in L(C_k)$, so there is some $\alpha \in A^*$ such that $\alpha x \cdot y \in C_k$. So $y$ is a right factor of a word in $C_k$, i.e. $y \in R(C_k)$. Likewise, $yz \in R(C_k)$ so $y \cdot z\beta \in C_k$ for some $\beta \in A^*$ and $y \in L(C_k)$. Hence $y \in W(C_k)$. By the definition of $E(M)$, $xy$ has no proper right factor in $W(C_k)$, so $y$ must not be a proper factor. By assumption, $y \ne \epsilon$, so we must have $x = \epsilon$. Similarly, $yz$ has no proper right factor in $W(C_k)$, so $z$ is not a proper factor and $z = \epsilon$.
+\end{proof}
+
+\begin{cly} \label{cly:middle-E(M)*}
+	If $x, y, z \in A^*$ are strings such that $xy, yz \in E(M)^*$, then $y \in E(M)^*$.
+\end{cly}
+\begin{proof}
+	Suppose $xy, yz \in E(M)^*$. Then we can factor
+		\begin{align*}
+			xy &= a_1 a_2 \cdots a_m, \\
+			yz &= b_1 b_2 \cdots b_n
+		\end{align*}
+	for $a_i, b_i \in E(M)$. Then $y = X a_i a_{i+1} \cdots a_m$ for some index $i$ and some $X \in A^*$, and $y = b_1 \cdots b_j Z$ for some index $j, Y \in A^*$. \textcolor{red}{To be continued...}
+\end{proof}
+
+\subsection{Confluence of $R$}
+
+In order to show that $R$ is a confluent rewriting system, we use the following condition for confluence, a restatement of theorem 1 in \cite{McNaughton1987}:
+\begin{theorem}
+	A rewriting system $R$ over an alphabet $A$ is confluent if and only if the following hold for all strings $u, v, w, x, y \in A^*$:
+	\begin{enumerate}[(1)]
+		\item \label{it:conf-overlap} If $uv \to x$ and $vw \to y$ are rules of $R$ then there is a $z \in A^*$ such that $xw \to^*_R z$ and $uy \to^*_R z$.
+		\item \label{it:conf-middle} If $uvw \to x$ and $v \to y$ are rules of $R$ then there is a $z \in A^*$ such that $x \to^*_R z$ and $uyw \to^*_R z$.
+	\end{enumerate}
+\end{theorem}
+
+For part \ref{it:conf-overlap}, suppose $uv \to_R x$ and $vw \to_R y$, with $uv \ne vw$ (if they are equal, we have nothing to prove). We claim that in fact that one of $xw \to uy$ or $uy \to xw$ is a rule in $R$ and so $uy$ or $xw$ is a suitable $z$. By the definition of $R$, $uv, vw, x, y\in E(M)^*$, and so by \cref{cly:middle-E(M)*}, $v \in E(M)^*$. Hence $u, w \in E(M)^*$ and $uy, xw \in E(M)^*$. Now observe that by the rules we know are in $R$ and the fact $\phi$ is a homomorphism, we have $\phi(xw) = \phi(x)\phi(w) =_G \phi(uv)\phi(w) = \phi(u)\phi(vw) =_G \phi(u)\phi(y) = \phi(uy)$. Finally, since $\ltlex$ is linear, either $xw \ltlex uy$, in which case $uy \to xw$ is a rule in $R$; or $uy \ltlex xw$, in which case $xw \to uy$ is a rule in $R$ as required.
+
+Now consider condition \ref{it:conf-middle}: suppose $uvw \to_R x$ and $v \to_R y$, and assume that $v \ne y$. Observe that $\phi(x) =_G \phi(uyw)$, since $\phi(uvw) =_G \phi(x)$ and $\phi(v) =_G \phi(y)$. Furthermore, either $uyw \ltlex x$ or $x \ltlex uyw$. So as before, if $uyw \in E(M)^*$, then one of $x$ or $uyw$ will be a suitable $z$. Since $uvw, v, y \in E(M)^*$, if $uyw \not\in E(M)^*$, then $u = u_1u_2 \cdots u_m U$ and $w = W w_1 w_2 \cdots w_n$ for $u_i, w_i \in E(M)$ and some non-empty strings $U$ and $W$, with $UvW \in E(M)$. This means $v$ must be shorter than the longest word in $E(M)$ (or $UvW$ would be longer and therefore not in $E(M)$).
+
+We claim that any word $a$ shorter than the longest word in $E(M)$ is irreducible under $R$: let $L$ be a word of maximal length in $E(M)$, and suppose $a$ were reducible. Then we can write $a = a'ba''$ where $b \in E(M)^*$ and $b \to_R c$ for some $c \in E(M)^*$. Then $c \ltlex b$ and so $|c| \le |b| \le |a| < |L|$, and hence $L$ cannot appear in $b$ or $c$. We then appeal to the Freiheitssatz for one-relator groups (found in \cite{Magnus2004}, although a more modern proof can be found in \cite{Lyndon2001}):
+
+\begin{theorem}[Freiheitssatz]
+	Let $G = \Gp \langle A \mid w = \epsilon \rangle$ be a one-relator group, and let $a \in A$ be a letter contained in $w$. Then the subgroup $\langle A \setminus \{a\} \rangle$ is a free group.
+\end{theorem}
+
+Since $b \to_R c$, $\phi(b) =_G \phi(c)$. Since $L$ is not in $b$ or $c$, $\phi(L)$ is not in $\phi(b)$ or $\phi(c)$, i.e. $\phi(b)$ and $\phi(c)$ are in the subgroup of $G$ generated by $B \setminus \{L\}$, which is free by the above; and so $\phi(b) = \phi(c)$ as words. Since $\phi$ is a homomorphism and $\midtilde\phi$ is a bijection, $\phi$ is injective and so $b = c$. But $c \ltlex b$, so we have a contradiction and $a$ is indeed irreducible.
+
+It then follows that $v$ is irreducible by $R$; but this is impossible, since by hypothesis $v \to_R y$. So in fact $uyw \in E(M)^*$, and one of $uyw \to_R x$ or $x \to_R uyw$ holds. Therefore condition \ref{it:conf-middle} is satisfied and $R$ is confluent.
+
+
+\subsection{Unique normal forms} \label{sec:unique-normal-forms}
+
+That $R$ is Noetherian follows from the fact that $\ltlex$ is well-founded: pick a string $a$ and suppose there were an infinite chain of strings $a_1, a_2, \cdots \in A^*$ such that $a \gtlex a_1 \gtlex a_2 \gtlex \cdots$. All of these strings must be at most as long as $|a|$, and there are only finitely many (in fact, $|A|^{|a|}$) such strings. There is a string of length at most that of $|a|$ which is minimal with respect to $\gtlex$, namely the minimal letter $x$ in $A$ with respect to the linear order $<$ used to define $\ltlex$. Finally, since $\gtlex$ itself is linear, all of the $a_i$ must be distinct --- but this contradicts there being infinitely many of them.
+
+Because $u \to^*_R v$ implies that $v \ltlex u$, this suffices to show that there is no infinite chain of strings $a_1 \to^*_R a_2 \to^*_R \cdots$, that is, that $R$ is Noetherian.
+
+Since $R$ is Noetherian, given any word $w \in A^*$ representing a member of $M$, we can find an irreducible word $w'$ such that $w \leftrightarrow^*_{R} w'$, i.e. $w =_M w'$, by repeatedly applying rules from $R$. If we had another irreducible word $w''$ such that $w \leftrightarrow^*_{R} w''$, then because $R$ is confluent, there would be some $z$ such that $w' \to^*_R z$ and $w'' \to^*_R z$; but both $w'$ and $w''$ are irreducible, so in fact $z = w' = w''$. Hence each word $w$ has a \emph{unique} irreducible word in $A^*$, the normal form of $w$, denoted $\midbar{w}$.
+
+
+\section{The word problem is decidable}
+
+We now prove \cref{thm:ors-decidablewp}.
+
+Let $v, w \in A^*$ be words representing members of $M$. By the argument in \cref{sec:unique-normal-forms}, both $v$ and $w$ have unique normal forms $\midbar{v}$ and $\midbar{w}$ with respect to the rewriting system $R$. To find the normal form for $v$, set $v_1 = v$. We find the string $v_{i+1}$ from $v_i$ by iterating over the rules in $R$ to determine which could apply to $v_i$. This can be done in finitely many steps since there are only finitely many strings in $E(M)^*$ which have length at most $|v_i|$ (and any longer strings could not occur in $v_i$). We can then iterate over every pair of such strings to decide whether $v \ltlex u$. Finally, since the word problem is decidable for one-relator groups (\cref{thm:orgp-decidablewp}), it is decidable in finite time whether $\phi(u) =_G \phi(v)$.
+
+Once we have a set of candidate rewrite rules, apply any of them to $v_i$ to get $v_{i+1}$, or terminate with $\midbar{v} = v_i$ if there are none remaining. Since $R$ is Noetherian, the process will always terminate in this manner.
+
+Using the same procedure to compute $\midbar{w}$, we can now determine whether $v$ and $w$ are equal in $M$: since $R$ is equivalent to $\{w \to \epsilon\}$, $v =_M w$ if and only if $v \leftrightarrow^*_R w$, which is the case if and only if $\midbar{v} = \midbar{w}$, we can determine whether $v =_M w$ or $v \ne_M w$ by comparing $\midbar v$ and $\midbar w$ letter by letter. This comparison completes in finitely many steps for arbitrary $v$ and $w$, as does the computation of $\midbar v$ and $\midbar w$, so the word problem for $M$ is decidable.
 
 \printbibliography
 
