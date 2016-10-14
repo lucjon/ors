@@ -101,7 +101,15 @@ Define a new alphabet $B$ disjoint with $A$ such that we have a bijection $\midt
 	The relator $w$ can be expressed as a product of factors in $E(M)$.
 \end{lemma}
 \begin{proof}
-	Since $w \in C_k$, we can factor $w = st$, where $t \in E(M)$ and $s \in A^*$.
+	\hspace{-0.25mm}We show that every element of $W(C_k)$ is a product of factors in $E(M)$. The lemma then follows since $w \in W(C_k)$.
+	
+	We proceed by induction on word length. Suppose $u \in W(C_k)$ is of minimal length in $W(C_k)$. Then $u$ has no proper factors in $W(C_k)$, and so $u \in E(M)$.
+
+	Now suppose that all strings in $W(C_k)$ with length less than $n$ are products of factors in $E(M)$, and let $u \in W(C_k)$ have length $n$. If $u$ has no proper right factors in $W(C_k)$, then it is in $E(M)$ by definition. Otherwise, we can write $u = ev$ for $e \in E(M)$, $v \in A^+$. \draftnote{Why...?}
+
+	Since $u$ is in $W(C_k)$, it is a prefix of some word $x \in C_k$, so that $x = ux' = e \cdot vx'$ for some $x' \in A^*$. The prefix $e$ is also in $W(C_k)$ --- since it is in $E(M)$ --- so by the definition of $C_{k+1}$, the word $vx'e$ is in $C_{k+1}$. But since $C_k$ is maximal, $C_{k+1} = C_k$, so $v$ is a prefix of a word in $C_k$.
+
+	Furthermore, $u$ is also a suffix of some word in $C_k$, so $v$ is a suffix of the same word. Altogether, this means $v$ is in $W(C_k)$ and hence a product of factors in $E(M)$, by the inductive hypothesis. Therefore $u$ is a product of factors in $E(M)$, and by induction all the words of $W(C_k)$ can be expressed as such a product.
 \end{proof}
 
 We now define a monoid $M'$ given by the presentation $\langle B \mid \phi(w) = \epsilon \rangle$. We assert that this monoid is in fact a group:
@@ -110,7 +118,15 @@ We now define a monoid $M'$ given by the presentation $\langle B \mid \phi(w) = 
 	The monoid $M' = \langle B \mid \phi(w) = \epsilon\rangle$ is a group.
 \end{lemma}
 \begin{proof}
-	Factor $w = st$ for $s \in E(M)$, $t \in E(M)^*$. Then clearly $st = w \leftrightarrow^*_{(st, \epsilon)} \epsilon$, so $st =_M \epsilon$, and $ts \leftrightarrow^*_{(st, \epsilon)} \epsilon$ hence $ts =_M \epsilon$. Since $\phi$ is a homomorphism we have $\phi(t)\phi(s) =_{M'} \epsilon$.
+	It suffices to show that every generator of $M'$ is invertible. We first show by induction that for all $i$, every word in $C_i$ is trivial in $M$. In the base case $C_1$, the only word to consider is $w$ itself, which is trivial by the defining relation $w = \epsilon$. Suppose then that all words in $C_j$ are trivial, for each $j \le i$, and consider a word $v \in C_{i+1}$, $v \not\in C_i$.
+
+	In the first case, $v = xy$ for $y \in W(C_i)$, $yx \in C_i$. So by the inductive hypothesis, $yx =_M \epsilon$, i.e. $x$ is a right inverse for $y$ in $M$. As $y \in W(C_i)$, there is a word $u \in C_i$ such that $u = u'y =_M \epsilon$ for some $u' \in A^*$. So $u'$ is a left inverse for $y$ in $M$. We have a left and a right inverse for $y$ in $M$, so they must be equivalent in $M$, hence $v = xy =_M u'y =_M u$. But $u$ is in $C_i$ and so is trivial by the inductive hypothesis. Therefore $v =_M \epsilon$ as required.
+
+	A similar argument shows that $v$ is trivial in $M$ if $v = yz$ for $y \in W(C_i)$, $zy \in C_i$. This accounts for every word in $C_{i+1}$, and so by induction all words in $C_j$ are trivial in $M$, for every index $j$. In particular, all the words in $C_k$ are trivial.
+
+	For any word $z \in W(C_k)$, there are words $a, b$ in $C_k$ such that $a = za'$ and $b = b'z$ for some $a', b' \in A^*$. Since these words $a$ and $b$ are trivial in $M$, $a'$ is a right inverse for $z$ and $b'$ is a left inverse for $z$ in $M$ and hence $z$ is invertible in $M$. In particular, every word in $E(M)$ is invertible.
+
+	Finally, if $b \in B$ is a generator of $M'$, then $\tilde\phi^{-1}(b) \in E(M)$ has an inverse $\midbar b$ in $M$. Then $\epsilon =_M \tilde\phi^{-1}(b) \midbar{b}$ and so $\epsilon =_{M'} b\phi(\midbar{b})$, and likewise $\phi(\midbar{b})b = \epsilon$. The arbitrary generator $b$ of $M'$ is hence invertible, so $M'$ is a group.
 \end{proof}
 
 We shall call this group $G$ rather than $M'$ from now on.
