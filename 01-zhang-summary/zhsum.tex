@@ -2,6 +2,11 @@
 \addbibresource{../ors.bib}
 \ExecuteBibliographyOptions{url=false}
 
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usetikzlibrary{cd}
+\tikzcdset{arrow style=math font}
+
 \newcommand{\ltlex}{<_{\mathrm{lex}}}
 \newcommand{\gtlex}{>_{\mathrm{lex}}}
 \setlist{leftmargin=3em}
@@ -12,6 +17,10 @@
 
 \let\oldbeginabstract\abstract
 \renewcommand{\abstract}{\oldbeginabstract\noindent}
+
+\newcommand{\draftnote}[1]{\textcolor{red}{#1}}
+\newcommand{\nearrowstar}{\mathclap{\nearrow}_{\normalsize *}}
+\newcommand{\searrowstar}{\mathclap{\searrow}^{\normalsize *}}
 
 \begin{document}
 \maketitle
@@ -157,7 +166,8 @@ We state here two lemmas about the generating set $E(M)$ which will be useful to
 	for $a_i, b_i \in E(M)$. Then $y = X a_i a_{i+1} \cdots a_m$ for some index $i$ and some $X \in A^*$, and $y = b_1 \cdots b_j Z$ for some index $j, Y \in A^*$. \textcolor{red}{To be continued...}
 \end{proof}
 
-\subsection{Confluence of $R$}
+
+\subsection{Conditions for confluence}
 
 In order to show that $R$ is a confluent rewriting system, we use the following condition for confluence, a restatement of theorem 1 in \cite{McNaughton1987}:
 \begin{theorem}
@@ -168,9 +178,184 @@ In order to show that $R$ is a confluent rewriting system, we use the following 
 	\end{enumerate}
 \end{theorem}
 
+Here, we shall prove this theorem for the restricted case of local confluence:
+
+\begin{defn}
+	A rewriting system $R$ over an alphabet $A$ is \dn{locally confluent} if for all strings $a, b, c \in A^*$, whenever $a \to_R b$ and $a \to_R c$, there exists a string $z \in A^*$ such that $b \to^*_R z$ and $c \to^*_R z$.
+\end{defn}
+
+This is sufficient for our purposes because $R$ is noetherian, and hence the following theorem applies:
+
+\begin{theorem}[Newman] \label{thm:newman}
+	If $R$ is a noetherian rewriting system, then $R$ is confluent if and only if it is locally confluent.
+\end{theorem}
+
+This theorem is often known as Newman's lemma, having first been proven by Newman in \cite{Newman1942}. A simpler proof written using the modern language of string rewriting systems appears in \cite{Huet1980}. The principal technique of this proof is the notion of \dn{Noetherian induction}:
+
+\begin{prop}[Noetherian induction]
+	Let $P(x)$ be a property of elements of a set $X$, and suppose that $\rightarrow$ is a noetherian relation. Then $P(x)$ is true for all $x$ if for any $y$, $P(y)$ is true if $P(z)$ is true for all $z \ne y$ such that $y \rightarrow^* z$.
+\end{prop}
+\begin{proof}
+	Suppose $P(y)$ is true if $P(z)$ is true for all descendants $z$ of $y$, and suppose there is some $x \in X$ such that $P(x)$ is false. If $x$ has no descendants, then $P(x)$ is vacuously true. So $x$ must have a descendant $x_2$ such that $P(x_2)$ is false. By the same reasoning $x_2$ must have a descendant $x_3$ such that $P(x_3)$ is false. Continuing in this fashion, we have an infinite chain of descendants
+		\[ \cdots \to x_3 \to x_2 \to x, \]
+	for each of which $P$ is false. But this contradicts $\to$ being noetherian, since by definition a noetherian relation has no infinite chains.
+\end{proof}
+
+We can then proceed to the proof of theorem \ref{thm:newman}.
+
+\begin{proof}[Theorem \ref{thm:newman}]
+	Suppose $R$ is a locally confluent rewriting system over an alphabet $A$. We shall prove the statement $P(x)$ over $A^*$ by noetherian induction, where $P(x)$ is true if and only if for all $X, X' \in A^*$ such that $x \to^* X$ and $x \to^* X'$, there exists $z \in A^*$ such that $X \to^* z$ and $X' \to^* z$. By definition, if $P(x)$ holds for all strings, the system is confluent.
+
+	Let $x \in A^*$ be such that $P(x)$ holds for all its descendants. Let $X, X' \in A^*$ be such that $x \to_R^* X$ and $x \to_R^* X'$, and in particular that $x = x_1 \to_R x_2 \to_R \cdots \to_R x_m = X$ and $x = x_1' \to_R x_2' \to_R \cdots \to_R x_n' = X'$. Since $R$ is locally confluent, the fact that $x \to_R x_1$ and $x \to_R x_1'$ means there exists a string $u \in A^*$ such that $x_1 \to_R^* u$ and $x_1' \to_R^* u$:
+
+	{\centering
+	\begin{tikzcd}
+		& \arrow[dl] x \arrow[dr] \\
+		x_1 \arrow[dd, "*"] \arrow[dr, "*"] & & x_1' \arrow[dd, "*"] \arrow[dl, "*"'] \\
+		& u & \\
+		X & & X'
+	\end{tikzcd}
+	\par}
+
+	Since $x_1$ is a descendant of $x$, by the inductive hypothesis, there exists a $v \in A^*$ such that $u \to^* v$ and $X \to^* v$.
+
+	{\centering
+	\begin{tikzcd}
+		& \arrow[dl] x \arrow[dr] \\
+		x_1 \arrow[dd, "*"'] \arrow[dr, "*"] & & x_1' \arrow[dd, "*"] \arrow[dl, "*"'] \\
+		& u \arrow[ddl, "*"] & \\
+		X \arrow[d, "*"'] & & X' \\
+		v
+	\end{tikzcd}
+	\par}
+
+	Next, since $x_1'$ is a descendant of $x$, by the inductive hypothesis there is a string $w \in A^*$ such that $u \to^* w$ and $X' \to^* w$.
+
+	{\centering
+	\begin{tikzcd}
+		& \arrow[dl] x \arrow[dr] \\
+		x_1 \arrow[dd, "*"'] \arrow[dr, "*"] & & x_1' \arrow[dd, "*"] \arrow[dl, "*"'] \\
+		& u \arrow[ddl, "*"] \arrow[ddr, "*"'] & \\
+		X \arrow[d, "*"'] & & X' \arrow[d, "*"] \\
+		v & & w
+	\end{tikzcd}
+	\par}
+
+	To complete the proof, we observe that $u$ is a descendant of $x$, so there is a string $z \in A^*$ such that $v \to^* z$ and $w \to^* z$.
+
+	{\centering
+	\begin{tikzcd}
+		& \arrow[dl] x \arrow[dr] \\
+		x_1 \arrow[dd, "*"'] \arrow[dr, "*"] & & x_1' \arrow[dd, "*"] \arrow[dl, "*"'] \\
+		& u \arrow[ddl, "*"] \arrow[ddr, "*"'] & \\
+		X \arrow[d, "*"'] & & X' \arrow[d, "*"] \\
+		v \arrow[dr, "*"] & & w \arrow[dl, "*"'] \\
+		& z & 
+	\end{tikzcd}
+	\par}
+
+	Thus we have found a $z$ such that $x_1 \to^* z$ and $x_1' \to^* z$ as required.
+\end{proof}
+
+With this in hand, we are now able to show the following:
+
+\begin{theorem} \label{thm:local-confluence-cond}
+	A noetherian rewriting system $R$ over an alphabet $A$ is confluent if and only if the following hold for all strings $u, v, w, x, y \in A^*$:
+	\begin{enumerate}[(1)]
+		\item \label{it:conf-overlap} If $uv \to x$ and $vw \to y$ are rules of $R$ then there is a $z \in A^*$ such that $xw \to^*_R z$ and $uy \to^*_R z$.
+		\item \label{it:conf-middle} If $uvw \to x$ and $v \to y$ are rules of $R$ then there is a $z \in A^*$ such that $x \to^*_R z$ and $uyw \to^*_R z$.
+	\end{enumerate}
+\end{theorem}
+\begin{proof}
+	The `only if' direction is straightforward. To show the `if' direction, we prove $R$ is locally confluent; the result then follows from theorem \ref{thm:newman}.
+
+	Suppose $a, x, y$ are strings such that $a \to_R x$ through a rule $u \to v$ and $a \to_R y$ through a rule $u' \to v'$. Then $a$ contains $u$ as a substring, i.e. $a = AuZ$ for some $A, Z \in A^*$. The string $u'$ must also occur somewhere in $a$. There are five possibilities for its location, and in each case we show that a common descendant $z \in A^*$ exists for $x$ and $y$ and hence that $R$ is locally confluent.
+
+	\textbf{Case (i)}: $u'$ is entirely contained in $A$. Write $a = Bu'CuZ$, so that $A = Bu'C$. Then \[
+		\begin{array}{lllll}
+			& & Au'CvZ & & \\
+			& \nearrow & & \searrow & \\
+			a = Bu'CuZ & & & & Av'CvZ, \\
+			& \searrow & & \nearrow & \\
+			& & Av'CuZ & &
+		\end{array}
+	\]
+	so $z = Av'CvZ$ works.
+
+	\textbf{Case (ii)}: $u'$ is contained in $Au$ but not in $A$ or $u$. Factor $a = BCDEZ$ as follows, so that $u = DE$ and $u' = CD$:
+
+	{\centering
+	\begin{tikzpicture}
+		\filldraw[fill=gray!20] (0,0) rectangle (2,0.5) node[midway] {$A$};
+		\draw[<->] (0.05,0.6) -- (0.75,0.6) node[above,midway] {$B$};
+		\draw[dashed] (0.8,0) -- (0.8,0.5);
+		\draw[<->] (0.85,0.6) -- (1.95,0.6) node[above,midway] {$C$};
+		\draw[solid] (2,0) -- (2,0.5);
+		\filldraw[fill=gray!20] (2,0) rectangle (4,0.5) node[midway] {$u$};
+		\draw[<->] (2.05,0.6) -- (2.75,0.6) node[above,midway] {$D$};
+		\draw[<->] (0.85,-0.1) -- (2.75,-0.1) node [below,midway] {$u'$};
+		\draw[dashed] (2.8,0) -- (2.8,0.5);
+		\draw[<->] (2.85,0.6) -- (3.95,0.6) node[above,midway] {$E$};
+		\filldraw[fill=gray!20] (4,0) rectangle (6,0.5) node[midway] {$Z$};
+	\end{tikzpicture}\par}
+
+	Then we have rules $CD \to v'$ and $DE \to v$ in $R$, so by hypothesis there is a $z \in A^*$ such that $v'E \to^*_R z$ and $Cv \to^*_R z$, and we have a common descendant like so: \[
+		\begin{array}{lllll}
+			& & Bv'EZ & & \\
+			& \nearrow & & \searrowstar & \\
+			a = BCDEZ & & & & BzZ. \\
+			& \searrow & & \nearrowstar & \\
+			& & BCvZ & &
+		\end{array}
+	\]
+
+	\textbf{Case (iii)}: $u'$ is entirely contained in $u$. Factor $a = ABu'CZ$ so that $u = Bu'C$. Then by hypothesis there is a $z \in A^*$ such that $v \to^* z$ and $Bv'C \to^* z$. So we have the diagram: \[
+		\begin{array}{lllll}
+			& & ABv'CZ & & \\
+			& \nearrow & & \searrowstar & \\
+			a = ABu'CZ & & & & AzZ. \\
+			& \searrow & & \nearrowstar & \\
+			& & AvZ & &
+		\end{array}
+	\]
+
+	\textbf{Case (iv)}: $u'$ is contained in $uZ$ but not in $u$ or $Z$. Factor $a = ABCDE$ as below, so that $u = BC$, $u' = CD$ and $Z = DE$:
+
+	{\centering
+	\begin{tikzpicture}
+		\filldraw[fill=gray!20] (0,0) rectangle (2,0.5) node[midway] {$A$};
+		\draw[<->] (2.05,0.6) -- (2.75,0.6) node[above,midway] {$B$};
+		\draw[<->] (2.85,0.6) -- (3.95,0.6) node[above,midway] {$C$};
+		\draw[solid] (2,0) -- (2,0.5);
+		\filldraw[fill=gray!20] (2,0) rectangle (4,0.5) node[midway] {$u$};
+		\draw[<->] (4.05,0.6) -- (4.75,0.6) node[above,midway] {$D$};
+		\draw[dashed] (2.8,0) -- (2.8,0.5);
+		\draw[<->] (4.85,0.6) -- (5.95,0.6) node[above,midway] {$E$};
+		\filldraw[fill=gray!20] (4,0) rectangle (6,0.5) node[midway] {$Z$};
+		\draw[dashed] (4.8,0) -- (4.8,0.5);
+		\draw[<->] (2.85,-0.1) -- (4.75,-0.1) node [below,midway] {$u'$};
+	\end{tikzpicture}\par}
+
+	Since we have rules $BC \to v$, $CD \to v'$, by hypothesis there is a $z \in A^*$ such that $vD \to^* z$ and $Bv' \to z$, giving the diagram: \[
+		\begin{array}{lllll}
+			& & AvDE & & \\
+			& \nearrow & & \searrowstar & \\
+			a = ABCDE & & & & AzZ. \\
+			& \searrow & & \nearrowstar & \\
+			& & ABv'E & &
+		\end{array}
+	\]
+
+	\textbf{Case (v)}: $u'$ is entirely contained in $Z$. This case is very similar to case (i) and is omitted.
+\end{proof}
+
+\subsection{Confluence of $R$}
+
+We apply theorem \ref{thm:local-confluence-cond} from above directly to $R$ to show that it is confluent.
+
 For part \ref{it:conf-overlap}, suppose $uv \to_R x$ and $vw \to_R y$, with $uv \ne vw$ (if they are equal, we have nothing to prove). We claim that in fact that one of $xw \to uy$ or $uy \to xw$ is a rule in $R$ and so $uy$ or $xw$ is a suitable $z$. By the definition of $R$, $uv, vw, x, y\in E(M)^*$, and so by \cref{cly:middle-E(M)*}, $v \in E(M)^*$. Hence $u, w \in E(M)^*$ and $uy, xw \in E(M)^*$. Now observe that by the rules we know are in $R$ and the fact $\phi$ is a homomorphism, we have $\phi(xw) = \phi(x)\phi(w) =_G \phi(uv)\phi(w) = \phi(u)\phi(vw) =_G \phi(u)\phi(y) = \phi(uy)$. Finally, since $\ltlex$ is linear, either $xw \ltlex uy$, in which case $uy \to xw$ is a rule in $R$; or $uy \ltlex xw$, in which case $xw \to uy$ is a rule in $R$ as required.
 
-Now consider condition \ref{it:conf-middle}: suppose $uvw \to_R x$ and $v \to_R y$, and assume that $v \ne y$. Observe that $\phi(x) =_G \phi(uyw)$, since $\phi(uvw) =_G \phi(x)$ and $\phi(v) =_G \phi(y)$. Furthermore, either $uyw \ltlex x$ or $x \ltlex uyw$. So as before, if $uyw \in E(M)^*$, then one of $x$ or $uyw$ will be a suitable $z$. Since $uvw, v, y \in E(M)^*$, if $uyw \not\in E(M)^*$, then $u = u_1u_2 \cdots u_m U$ and $w = W w_1 w_2 \cdots w_n$ for $u_i, w_i \in E(M)$ and some non-empty strings $U$ and $W$, with $UvW \in E(M)$. This means $v$ must be shorter than the longest word in $E(M)$ (or $UvW$ would be longer and therefore not in $E(M)$).
+Now consider condition \ref{it:conf-middle}: suppose $uvw \to_R x$ and $v \to_R y$, and again assume that $v \ne y$. Observe that $\phi(x) =_G \phi(uyw)$, since $\phi(uvw) =_G \phi(x)$ and $\phi(v) =_G \phi(y)$. Furthermore, either $uyw \ltlex x$ or $x \ltlex uyw$. So as before, if $uyw \in E(M)^*$, then one of $x$ or $uyw$ will be a suitable $z$. Since $uvw, v, y \in E(M)^*$, if $uyw \not\in E(M)^*$, then $u = u_1u_2 \cdots u_m U$ and $w = W w_1 w_2 \cdots w_n$ for $u_i, w_i \in E(M)$ and some non-empty strings $U$ and $W$, with $UvW \in E(M)$. This means $v$ must be shorter than the longest word in $E(M)$ (or $UvW$ would be longer and therefore not in $E(M)$).
 
 We claim that any word $a$ shorter than the longest word in $E(M)$ is irreducible under $R$: let $L$ be a word of maximal length in $E(M)$, and suppose $a$ were reducible. Then we can write $a = a'ba''$ where $b \in E(M)^*$ and $b \to_R c$ for some $c \in E(M)^*$. Then $c \ltlex b$ and so $|c| \le |b| \le |a| < |L|$, and hence $L$ cannot appear in $b$ or $c$. We then appeal to the Freiheitssatz for one-relator groups (found in \cite{Magnus2004}, although a more modern proof can be found in \cite{Lyndon2001}):
 
