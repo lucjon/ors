@@ -1,0 +1,33 @@
+Dehn proposed the Word Problem, etc. in 1911
+	Dehn, Max (1911). Über unendliche diskontinuierliche Gruppen, Math. Ann. 71 (1): 116-144
+
+	"Das Identitätsproblem; das Transformationsproblem; das Isomorphieproblem"
+	Already had notion of finitely presented groups
+		Dyck, Walther (1882). Gruppentheoretische Studien, Math. Ann. 20 (1)
+	
+	Interested in fundamental groups of topological spaces.
+
+Dehn first stated the Freiheitssatz [MacTutor]
+	Rigorously proved by Magnus:
+	Magnus, Wilhelm (1930). Über diskontinuierliche Gruppen mit einer definierended Relation. (Der Freiheitssatz), J. Reine Agnew. Math. 163: 141-165.
+
+Thue first described the word problem for semigroups in 1914
+	Thue, Axel (1914). Probleme über Veränderungen von Zeichenreihen nach gegebenen Reglen, Kra. Videnskabs-Selskabets Skrifter. I. Mat. Nat. Kl. 10
+	tr. Power, James F. (2013). Problems concerning the transformation of symbol sequences according to given rules, arXiv:1308.5858.
+
+Word problem for cancellative semigroups first (mostly) proved undecidable by Turing in 1950
+	Turing, A. M. (1950). The Word Problem in Semi-Groups With Cancellation, Ann. Math. 52 (2): 491-505
+
+Word problem for semigroups first proved unsolvable by Post in 1947
+	Post, Emil L. (1947). Recursive unsolvability of a problem of Thue, J. Symbolic Logic 12 (1): 1-11.
+
+Word problem for finite semigroups proved unsolvable by Gurevich in 1966
+	Gurevich, Yuri. (1966). The word problem for certain classes of semigroups, Algebra and Logic 5: 25-35
+
+Finite cancellative semigroups are groups; and finite groups have solvable (in fact regular! due to Anisimov) WP
+
+Word problem for groups proven unsolvable by Novikov (1952), Boone (1957)
+	[perhaps]
+	Novikov, P. S. (1955). On the algorithmic unsolvability of the word problem in group theory, Trudy Mat. Inst. Steklov 44
+	
+	Boone, W. W. (1959). The word problem, Ann. Math. 70 (2): 207-265
