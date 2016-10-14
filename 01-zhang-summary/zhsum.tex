@@ -1,4 +1,4 @@
-\documentclass[libertine,widepage,nosubthm]{lmaths}
+\documentclass[11pt,libertine,widepage,nosubthm]{lmaths}
 \addbibresource{../ors.bib}
 \ExecuteBibliographyOptions{url=false}
 
@@ -42,7 +42,7 @@ The broad approach is to use this presentation to derive a one-relation presenta
 
 A proof of the above can be found in e.g. \cite{Magnus2004}.
 
-Throughout, $\langle A \mid R \rangle$ will denote a monoid presentation; that is, the monoid obtained by taking the free monoid $A^*$ quotiented by the least congruence containing the elements $R \subseteq A^*$. We write $\Gp \langle A \mid R \rangle$ for group presentations, i.e. the quotients of the free groups by the normal closures of a set of relators.
+Throughout, $\langle A \mid R \rangle$ will denote a monoid presentation; that is, the monoid obtained by taking the free monoid $A^*$ quotiented by the least congruence containing the elements $R \subseteq A^*$. We write $\Gp \langle A \mid R \rangle$ for group presentations, i.e. the quotients of free groups by the normal closures of a set of relators.
 
 
 \section{Building a generating set}
@@ -51,8 +51,8 @@ Suppose $M = \langle A \mid w = \epsilon\rangle$ is a finitely presented monoid.
 
 Given a subset $X \subseteq A^*$ of words, define
 	\begin{align*}
-		L(X) &= \{ x \in A^* \mid \exists\ w \in A^* \colon wx \in X \} \text{ and } \\
-		R(X) &= \{ x \in A^* \mid \exists\ w \in A^* \colon xw \in X \}
+		L(X) &= \{ x \in A^+ \mid \exists\ w \in A^* \colon wx \in X \} \text{ and } \\
+		R(X) &= \{ x \in A^+ \mid \exists\ w \in A^* \colon xw \in X \}
 	\end{align*}
 to be the set of left and right factors respectively of words in $X$. Then, if $W(X) = L(X) \cap R(X)$ is the set of words which are both left and right factors, let $W'(X) = \{ w \in W(X) \mid \not\exists\ s, t \in A^+ \colon w = st, t \in W(X) \}$ be those two-sided factors for which no proper right factor appears in $W(X)$.
 
@@ -140,7 +140,7 @@ We shall call this group $G$ rather than $M'$ from now on.
 \section{The rewriting system}
 We use this group to construct a rewriting system on all the words of $A^*$, recalling that this is the set of all words over the generators of our original monoid.
 
-A linear order on a set $X$ is a relation which is transitive and satisfies the trichotomy condition, i.e. exactly one of $x \le y$ or $y \le x$ or $x = y$ holds for all $x, y \in X$. Let $<$ be some linear order on the alphabet $A$, and extend it to a shortlex order $\ltlex$ over $A^*$: say that $x \ltlex y$ for words $x = x_1\cdots x_m$, $y = y_1\cdots y_n$ in $A^*$ if and only if $m < n$, or $m = n$ and there is some index $i$ such that $x_i < y_i$ and $x_j = y_j$ for all $1 \le j < i$.
+A linear order on a set $X$ is a relation $<$ which is transitive and satisfies the trichotomy condition, i.e. exactly one of $x < y$ or $y < x$ or $x = y$ holds for all $x, y \in X$. Let $<$ be some linear order on the alphabet $A$, and extend it to a shortlex order $\ltlex$ over $A^*$: say that $x \ltlex y$ for words $x = x_1\cdots x_m$, $y = y_1\cdots y_n$ in $A^*$ if and only if $m < n$, or $m = n$ and there is some index $i$ such that $x_i < y_i$ and $x_j = y_j$ for all $1 \le j < i$.
 
 Now define a rewriting system $R$ with precisely the rules $u \to v$, where $u, v \in E(M)^*$, $v \ltlex u$ and $\phi(u) =_G \phi(v)$.
 
