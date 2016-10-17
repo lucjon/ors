@@ -105,11 +105,11 @@ Define a new alphabet $B$ disjoint with $A$ such that we have a bijection $\midt
 	
 	We proceed by induction on word length. Suppose $u \in W(C_k)$ is of minimal length in $W(C_k)$. Then $u$ has no proper factors in $W(C_k)$, and so $u \in E(M)$.
 
-	Now suppose that all strings in $W(C_k)$ with length less than $n$ are products of factors in $E(M)$, and let $u \in W(C_k)$ have length $n$. If $u$ has no proper right factors in $W(C_k)$, then it is in $E(M)$ by definition. Otherwise, we can write $u = ev$ for $e \in E(M)$, $v \in A^+$. \draftnote{Why...?}
+	Now suppose that all strings in $W(C_k)$ with length less than $n$ are products of factors in $E(M)$, and let $u \in W(C_k)$ have length $n$. If $u$ has no proper right factors in $W(C_k)$, then it is in $E(M)$ by definition. Otherwise, we can write $u = ve$ for $e \in E(M)$, $v \in A^+$.
 
-	Since $u$ is in $W(C_k)$, it is a prefix of some word $x \in C_k$, so that $x = ux' = e \cdot vx'$ for some $x' \in A^*$. The prefix $e$ is also in $W(C_k)$ --- since it is in $E(M)$ --- so by the definition of $C_{k+1}$, the word $vx'e$ is in $C_{k+1}$. But since $C_k$ is maximal, $C_{k+1} = C_k$, so $v$ is a prefix of a word in $C_k$.
+	We want to show that $v \in W(C_k)$, so that by the inductive hypothesis (since $|v| < n$), $v \in E(M)^*$ and hence $u \in E(M)^*$. Since $v$ is a prefix of $u$, it is in $L(C_k)$; it remains to show that it is in $R(C_k)$, i.e. that it is a suffix of some word in $C_k$. Because $u \in W(C_k)$, there is some word $x \in C_k$ such that $x = x'u = x've$ . Then by the definition of $C_{k+1}$, since $e \in W(C_k)$, the word $ex'v \in C_{k+1}$ and hence $v \in R(C_{k+1})$. But $C_{k+1} = C_k$, so we are done.
 
-	Furthermore, $u$ is also a suffix of some word in $C_k$, so $v$ is a suffix of the same word. Altogether, this means $v$ is in $W(C_k)$ and hence a product of factors in $E(M)$, by the inductive hypothesis. Therefore $u$ is a product of factors in $E(M)$, and by induction all the words of $W(C_k)$ can be expressed as such a product.
+	Altogether, this means $u$ is a product of factors in $E(M)$ and so by induction all the words of $W(C_k)$ can be expressed as such a product.
 \end{proof}
 
 We now define a monoid $M'$ given by the presentation $\langle B \mid \phi(w) = \epsilon \rangle$. We assert that this monoid is in fact a group:
