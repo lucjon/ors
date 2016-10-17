@@ -157,7 +157,9 @@ Conversely, suppose $u \to v$ is a rule in $R$. Then $\phi(u) =_G \phi(v)$ means
 Hence the two rewriting systems are equivalent.
 \end{proof}
 
-However, the advantage of $R$ over the simple system $\{w \to \epsilon\}$ is that it is confluent and Noetherian, and hence we can use it to find a unique normal form for every element in our one-relator monoid $M$. Once we have such a normal form, it is relatively straightforward to show \cref{thm:ors-decidablewp}, that the word problem is decidable.
+% VVVVVVVVVVV that is wrong
+% However, the advantage of $R$ over the simple system $\{w \to \epsilon\}$ is that it is confluent and Noetherian, and hence we can use it to find a unique normal form for every element in our one-relator monoid $M$. Once we have such a normal form, it is relatively straightforward to show \cref{thm:ors-decidablewp}, that the word problem is decidable.
+% ^^^^^^^^^^^
 
 \subsection{Some lemmas on $E(M)$}
 
@@ -206,13 +208,13 @@ This is sufficient for our purposes because $R$ is noetherian, and hence the fol
 	If $R$ is a noetherian rewriting system, then $R$ is confluent if and only if it is locally confluent.
 \end{theorem}
 
-This theorem is often known as Newman's lemma, having first been proven by Newman in \cite{Newman1942}. A simpler proof written using the modern language of string rewriting systems appears in \cite{Huet1980}. The principal technique of this proof is the notion of \dn{Noetherian induction}:
+This theorem is often known as Newman's lemma, having first been proven by Newman in \cite{Newman1942}. We follow here a simpler proof due to Huet written using the modern language of rewriting systems, which appears in \cite{Huet1980}. The principal technique of this proof is the notion of \dn{Noetherian induction}:
 
 \begin{prop}[Noetherian induction]
-	Let $P(x)$ be a property of elements of a set $X$, and suppose that $\rightarrow$ is a noetherian relation. Then $P(x)$ is true for all $x$ if for any $y$, $P(y)$ is true if $P(z)$ is true for all $z \ne y$ such that $y \rightarrow^* z$.
+	Let $P(x)$ be a property of elements of a set $X$, and suppose that $\rightarrow$ is a noetherian relation. Then $P(x)$ is true for all $x \in X$ if for any $y \in X$, $P(y)$ is true if $P(z)$ is true for all $z \ne y$ such that $y \rightarrow^* z$. That is, if $P(y)$ is true whenever $P$ is true for every descendant of $y$.
 \end{prop}
 \begin{proof}
-	Suppose $P(y)$ is true if $P(z)$ is true for all descendants $z$ of $y$, and suppose there is some $x \in X$ such that $P(x)$ is false. If $x$ has no descendants, then $P(x)$ is vacuously true. So $x$ must have a descendant $x_2$ such that $P(x_2)$ is false. By the same reasoning $x_2$ must have a descendant $x_3$ such that $P(x_3)$ is false. Continuing in this fashion, we have an infinite chain of descendants
+	Suppose that for each $y \in X$, $P(y)$ is true if $P(z)$ is true for all descendants $z$ of $y$, and suppose there is some $x \in X$ such that $P(x)$ is false. If $x$ has no descendants, then $P(x)$ is vacuously true. So $x$ must have a descendant $x_2$ such that $P(x_2)$ is false. By the same reasoning $x_2$ must have a descendant $x_3$ such that $P(x_3)$ is false. Continuing in this fashion, we have an infinite chain of descendants
 		\[ \cdots \to x_3 \to x_2 \to x, \]
 	for each of which $P$ is false. But this contradicts $\to$ being noetherian, since by definition a noetherian relation has no infinite chains.
 \end{proof}
@@ -220,7 +222,9 @@ This theorem is often known as Newman's lemma, having first been proven by Newma
 We can then proceed to the proof of theorem \ref{thm:newman}.
 
 \begin{proof}[Theorem \ref{thm:newman}]
-	Suppose $R$ is a locally confluent rewriting system over an alphabet $A$. We shall prove the statement $P(x)$ over $A^*$ by noetherian induction, where $P(x)$ is true if and only if for all $X, X' \in A^*$ such that $x \to^* X$ and $x \to^* X'$, there exists $z \in A^*$ such that $X \to^* z$ and $X' \to^* z$. By definition, if $P(x)$ holds for all strings, the system is confluent.
+	It is clear that a confluent system is locally confluent, since if $x \to z$ then $x \to^* z$ for all $x, z \in A^*$.
+
+	Conversely, suppose $R$ is a locally confluent rewriting system over an alphabet $A$. We shall prove the statement $P(x)$ over $A^*$ by noetherian induction, where $P(x)$ is true if and only if for all $X, X' \in A^*$ such that $x \to^* X$ and $x \to^* X'$, there exists $z \in A^*$ such that $X \to^* z$ and $X' \to^* z$. If $P(x)$ holds for all strings $x$, the system is confluent by definition. 
 
 	Let $x \in A^*$ be such that $P(x)$ holds for all its descendants. Let $X, X' \in A^*$ be such that $x \to_R^* X$ and $x \to_R^* X'$, and in particular that $x = x_1 \to_R x_2 \to_R \cdots \to_R x_m = X$ and $x = x_1' \to_R x_2' \to_R \cdots \to_R x_n' = X'$. Since $R$ is locally confluent, the fact that $x \to_R x_1$ and $x \to_R x_1'$ means there exists a string $u \in A^*$ such that $x_1 \to_R^* u$ and $x_1' \to_R^* u$:
 
@@ -369,7 +373,7 @@ With this in hand, we are now able to show the following:
 
 We apply theorem \ref{thm:local-confluence-cond} from above directly to $R$ to show that it is confluent.
 
-For part \ref{it:conf-overlap}, suppose $uv \to_R x$ and $vw \to_R y$, with $uv \ne vw$ (if they are equal, we have nothing to prove). We claim that in fact that one of $xw \to uy$ or $uy \to xw$ is a rule in $R$ and so $uy$ or $xw$ is a suitable $z$. By the definition of $R$, $uv, vw, x, y\in E(M)^*$, and so by \cref{cly:middle-E(M)*}, $v \in E(M)^*$. Hence $u, w \in E(M)^*$ and $uy, xw \in E(M)^*$. Now observe that by the rules we know are in $R$ and the fact $\phi$ is a homomorphism, we have $\phi(xw) = \phi(x)\phi(w) =_G \phi(uv)\phi(w) = \phi(u)\phi(vw) =_G \phi(u)\phi(y) = \phi(uy)$. Finally, since $\ltlex$ is linear, either $xw \ltlex uy$, in which case $uy \to xw$ is a rule in $R$; or $uy \ltlex xw$, in which case $xw \to uy$ is a rule in $R$ as required.
+For part \ref{it:conf-overlap}, suppose $uv \to_R x$ and $vw \to_R y$, with $uv \ne vw$ (if they are equal, we have nothing to prove). We claim that in fact one of $xw \to uy$ or $uy \to xw$ is a rule in $R$ and so $uy$ or $xw$ is a suitable $z$. By the definition of $R$, $uv, vw, x, y\in E(M)^*$, and so by \cref{cly:middle-E(M)*}, $v \in E(M)^*$. Hence $u, w \in E(M)^*$ and $uy, xw \in E(M)^*$. Now observe that by the rules we know are in $R$ and the fact $\phi$ is a homomorphism, we have $\phi(xw) = \phi(x)\phi(w) =_G \phi(uv)\phi(w) = \phi(u)\phi(vw) =_G \phi(u)\phi(y) = \phi(uy)$. Finally, since $\ltlex$ is linear, either $xw \ltlex uy$, in which case $uy \to xw$ is a rule in $R$; or $uy \ltlex xw$, in which case $xw \to uy$ is a rule in $R$ as required.
 
 Now consider condition \ref{it:conf-middle}: suppose $uvw \to_R x$ and $v \to_R y$, and again assume that $v \ne y$. Observe that $\phi(x) =_G \phi(uyw)$, since $\phi(uvw) =_G \phi(x)$ and $\phi(v) =_G \phi(y)$. Furthermore, either $uyw \ltlex x$ or $x \ltlex uyw$. So as before, if $uyw \in E(M)^*$, then one of $x$ or $uyw$ will be a suitable $z$. Since $uvw, v, y \in E(M)^*$, if $uyw \not\in E(M)^*$, then $u = u_1u_2 \cdots u_m U$ and $w = W w_1 w_2 \cdots w_n$ for $u_i, w_i \in E(M)$ and some non-empty strings $U$ and $W$, with $UvW \in E(M)$. This means $v$ must be shorter than the longest word in $E(M)$ (or $UvW$ would be longer and therefore not in $E(M)$).
 
