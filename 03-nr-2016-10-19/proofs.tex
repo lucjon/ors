@@ -1,0 +1,93 @@
+\documentclass[noinsetproof,widepage,11pt,libertine]{lmaths}
+\newtheorem{claim}{Claim}
+\newtheorem{subclaim}{Claim}[claim]
+\newtheorem{subsubclaim}{Claim}[subclaim]
+
+\setlist[enumerate]{label*=\arabic*.}
+%\linespread{1.5}
+\begin{document}
+
+\begin{prop} \label{lma:relator-factors-E(M)}
+	The relator $w$ is a product of factors in $E(M)$.
+\end{prop}
+\begin{proof}
+	\vspace{-2\parskip}
+	\hspace{-0.25mm}We show by induction on word length that every element of $W(C_k)$ is a product of factors in $E(M)$. First suppose that $u \in W(C_k)$ is of minimal length in $W(C_k)$. Then $u$ has no proper factors in $W(C_k)$, and so $u \in E(M)$.
+
+	Now suppose that all strings in $W(C_k)$ with length less than $n$ are products of factors in $E(M)$, and let $u \in W(C_k)$ have length $n$. If $u$ has no proper right factors in $W(C_k)$, then it is in $E(M)$ by definition. Otherwise, we can write $u = ve$ for $e \in E(M)$, $v \in A^+$.
+
+	We want to show that $v \in W(C_k)$, so that by the inductive hypothesis (since $|v| < n$), $v \in E(M)^*$ and hence $u \in E(M)^*$. Since $v$ is a prefix of $u$, for $v$ to be in $W(C_k)$ it remains only to show that it is a suffix of some word in $C_k$. Because $u \in W(C_k)$, there is some word $x \in C_k$ such that $x = x'u = x've$ . Then by the definition of $C_{k+1}$, since $e \in W(C_k)$, the word $ex'v \in C_{k+1}$. But $C_{k+1} = C_k$, so $v$ is indeed a suffix of a word in $C_k$.
+
+	Altogether, this means $u$ is a product of factors in $E(M)$ and so by induction all the words of $W(C_k)$ are such a product. In particular, since $w \in W(C_k)$, $w$ is a product of factors in $E(M)$.
+\end{proof}
+
+\bigskip
+
+Define a new alphabet $B$ disjoint with $A$ such that we have a bijection $\midtilde\phi \colon E(M) \to B$, and let $\phi \colon E(M)^* \to B^*$ be the unique homomorphic extension of $\midtilde\phi$ to $E(M)^*$. By the following result, $\phi(w)$ is well-defined:
+
+\begin{prop}
+	The monoid $M' = \langle B \mid \phi(w) = \epsilon\rangle$ is a group.
+\end{prop}
+\begin{proof}
+	\vspace{-2\parskip}
+	It suffices to show that every generator of $M'$ is invertible. We first show by induction that for all $i$, every word in $C_i$ is trivial in $M$. In the base case $C_1$, the only word to consider is $w$ itself, which is trivial by the defining relation $w = \epsilon$. Suppose then that all words in $C_j$ are trivial, for each $j \le i$, and consider a word $v \in C_{i+1}$, $v \not\in C_i$.
+
+	This new word $v$ can arise in two ways. In the first case, $v = xy$ for some $y \in W(C_i)$, $yx \in C_i$. So by the inductive hypothesis, $yx =_M \epsilon$, i.e. $x$ is a right inverse for $y$ in $M$. As $y \in W(C_i)$, there is a word $u \in C_i$ such that $u = u'y =_M \epsilon$ for some $u' \in A^*$. So $u'$ is a left inverse for $y$ in $M$. We have a left and a right inverse for $y$ in $M$, so they must be equivalent in $M$, hence $v = xy =_M u'y =_M u$. But $u$ is in $C_i$ and so is trivial by the inductive hypothesis. Therefore $v =_M \epsilon$ as required.
+
+	A similar argument shows that $v$ is trivial in $M$ if $v = yz$ for $y \in W(C_i)$, $zy \in C_i$. This accounts for every word in $C_{i+1}$, and so by induction all words in $C_j$ are trivial in $M$, for every index $j$. In particular, all the words in $C_k$ are trivial.
+
+	For any word $z \in W(C_k)$, there are words $a, b$ in $C_k$ such that $a = za'$ and $b = b'z$ for some $a', b' \in A^*$. Since these words $a$ and $b$ are trivial in $M$, $a'$ is a right inverse for $z$ and $b'$ is a left inverse for $z$ in $M$ and hence $z$ is invertible in $M$. In particular, it follows that every word in $E(M)$ is invertible.
+
+	To conclude, let $b \in B$ be a generator of $M'$. Then $\tilde\phi^{-1}(b) \in E(M)$ has an inverse $\midbar b$ in $M$. Hence $\epsilon =_M \tilde\phi^{-1}(b) \midbar{b}$ and so $\epsilon =_{M'} b\phi(\midbar{b})$; and likewise $\phi(\midbar{b})b = \epsilon$. The arbitrary generator $b$ of $M'$ is hence invertible, so $M'$ is a group.
+\end{proof}
+
+\clearpage
+\linespread{1}
+\section*{Overview}
+
+\begin{enumerate}
+	\item
+		Decidability and the word problem
+		\begin{enumerate}
+			\item Decidability
+			\item The word problem for groups
+			\item The word problem for semigroups
+			\item One-relation semigroups
+		\end{enumerate}
+	\item
+		The Freiheitssatz
+		\begin{enumerate}
+			\item Introduction [history and applications]
+			\item Free groups and HNN extensions
+			\item Proof of the Freiheitssatz
+		\end{enumerate}
+	\item
+		Rewriting systems
+		\begin{enumerate}
+			\item Introduction [basic definitions]
+			\item Noetherian rewriting systems and Noetherian induction
+			\item Confluence and conditions for confluence
+			\item Normal forms
+			\item Orders on strings
+		\end{enumerate}
+	\item
+		The word problem for special monoids
+\end{enumerate}
+
+\clearpage
+\section*{Equivalence of constructions}
+
+\begin{claim} Each minimal factor $l_i$ of $w$ is in $E(M)$. \end{claim}
+	\begin{subclaim} Each $l_i \in W(C_k)$. \end{subclaim}
+	\begin{subclaim} $l_i$ has no proper right factors in $W(C_k)$. \end{subclaim}
+\begin{claim} Each word $e \in E(M)$ is a minimal factor of $w$. \end{claim}
+	\begin{subclaim} Each $e \in E(M)$ is minimal. \end{subclaim}
+		\begin{subsubclaim} $e \in E(M) \implies |e| \le |w|$. \label{sc:e-short} \end{subsubclaim}
+		\begin{subsubclaim} $e \in E(M) \implies e$ has no invertible proper left factors. \end{subsubclaim}
+	\begin{subclaim} $w$ can be expressed as a product of factors in $E(M)$. \end{subclaim}
+
+
+Claim \ref{sc:e-short} is easy since all members of $W(C_k)$ are factors of words in $C_k$ and all words in $C_k$ have length $w$.
+
+
+\end{document}
