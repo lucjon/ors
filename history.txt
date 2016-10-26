@@ -9,7 +9,7 @@ Dehn proposed the Word Problem, etc. in 1911
 
 Dehn first stated the Freiheitssatz [MacTutor]
 	Rigorously proved by Magnus:
-	Magnus, Wilhelm (1930). Über diskontinuierliche Gruppen mit einer definierended Relation. (Der Freiheitssatz), J. Reine Agnew. Math. 163: 141-165.
+	Magnus, Wilhelm (1930). Über diskontinuierliche Gruppen mit einer definierenden Relation. (Der Freiheitssatz), J. Reine Agnew. Math. 163: 141-165.
 
 Thue first described the word problem for semigroups in 1914
 	Thue, Axel (1914). Probleme über Veränderungen von Zeichenreihen nach gegebenen Reglen, Kra. Videnskabs-Selskabets Skrifter. I. Mat. Nat. Kl. 10
@@ -31,3 +31,9 @@ Word problem for groups proven unsolvable by Novikov (1952), Boone (1957)
 	Novikov, P. S. (1955). On the algorithmic unsolvability of the word problem in group theory, Trudy Mat. Inst. Steklov 44
 	
 	Boone, W. W. (1959). The word problem, Ann. Math. 70 (2): 207-265
+
+Word problem for one-relator groups proven soluble by Magnus in 1932
+	Magnus, Wilhelm (1932). Das Identitätsproblem für Gruppen mit einer definierenden Relation, Math. Ann. 106 (1): 295-307.
+
+Word problem for one-relator special monoids proven by Adjan in 1960
+	Adjan, S. I. (1966). Defining relations and algorithmic problems for groups and semigroups, Proc. Steklov Inst. Math. 85
