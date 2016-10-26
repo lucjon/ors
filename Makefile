@@ -23,6 +23,7 @@ $(patsubst %,clean-%,$(PDFS)):
 	rm -f $(@:clean-%.pdf=%.bbl) $(@:clean-%.pdf=%.run.xml)
 
 clean: $(patsubst %,clean-%,$(PDFS))
+	rm -f missfont.log
 
 
 .PHONY: clean $(patsubst %,clean-%,$(PDFS)) $(SUBTARGETS)
