@@ -1,4 +1,4 @@
-\documentclass[showlabels,noindex]{lmaths}
+\documentclass[showlabels,noindex,12pt]{lmaths}
 \addbibresource{../ors.bib}
 \ExecuteBibliographyOptions{url=false}
 
@@ -16,66 +16,149 @@
 \newcommand{\nearrowstar}{\mathclap{\nearrow}_{*}}
 \newcommand{\searrowstar}{\mathclap{\searrow}^{*}}
 
+\DeclareMathOperator{\WP}{WP}
+\DeclareMathOperator{\FG}{FG}
+
+\title{The Word Problem for One-Relation Semigroups}
+\author{Lucas Jones}
 
 \begin{document}
 
-\section{Introduction}
+\maketitle
+\bigskip
+\tableofcontents
 
-\subsection{Group and semigroup presentations}
+\section{Introduction} \label{sec:intro}
 
-\begin{itemize}
-	\item[Definition] free semigroup, free monoid
-	\item[Definition] congruence
-	\item[Definition] semigroup presentation
-	\item[Definition] free group
-	\item[Definition] group presentation
-	\item[Definition] finitely presented (semi)group
-\end{itemize}
+The aim of this project is to investigate the decidability of the word problem for so-called special one-relation monoids, via Zhang's application of string rewriting systems. In \cref{sec:intro}, we will recall some elementary definitions which will be useful throughout the project, before giving a brief history of the word problem for semigroups and, in particular, an overview of work which has been done for the special case of one-relator semigroups. In \cref{sec:rewriting-systems}, we provide an elementary introduction to string rewriting systems and their properties, which is crucial to \cref{sec:special-monoids}, an exposition of Zhang's proof in \cite{Zhang1992a} that the word problem for one-relation special monoids is decidable.
 
-\subsection{Decidability}
+It is expected that the reader has a basic familiarity with the theory of semigroups, equivalent to the St Andrews module \emph{MT5826 Semigroups} or equivalent.
 
-\begin{itemize}
-	\item[Definition] language (over an alphabet)
-	\item[Definition] decidable language
-	\item Undecidable problems (e.g. the halting problem)
-\end{itemize}
+\subsection{Free semigroups, monoids and groups}
 
-\subsection{The word problem for groups}
+An \dn{alphabet} is any finite set. The \dn{free semigroup} over this alphabet, denoted $A^{+}$, is the set of all nonempty finite strings made up of letters from $A$, equipped with the operation of concatenation.
 
-\begin{itemize}
-	\item Dehn's decision problems
-	\item[Definition] The word problem for a group
-	\item[Theorem] Novikov-Boone theorem (the word problem for fp groups is undecidable)
-\end{itemize}
+The \dn{free monoid} $A^*$ over $A$ is the set $A^+ \cup \{\epsilon\}$ under juxtaposition, where $\epsilon$ is the empty string. A \dn{language} (over $A$) is any subset of $A^*$.
 
-\subsection{The word problem for semigroups}
-\begin{itemize}
-	\item[Definition] The word problem for a semigroup
-	\item[Theorem] (Post, 1947) The word problem for semigroups is undecidable
-	\item[Theorem] (Gurevich, 1966) The word problem for finite semigroups is undecidable
-	\item[Theorem] The word problem for finite groups is decidable
-\end{itemize}
+The construction of a free group is more involved, since the existence of inverses forces there to be some relations between letters. Again, let $A$ be an alphabet and fix an arbitrary set $A^{-1}$ which is disjoint but in bijection with $A$. We will write $a^{-1}$ for the image of $a \in A$ under this bijection. For any letter $a \in A$, the strings $aa^{-1}$ and $a^{-1}a$ are known as \dn{trivial relators}.
 
-\subsection{One-relation semigroups}
-\begin{itemize}
-	\item[Definition] freely reduced, cyclically reduced
-\end{itemize}
+We say that two words $u$ and $v$ in $(A \cup A^{-1})^*$ are related by an elementary move if one can transform $u$ into $v$ by adding or removing a trivial relator at some point in $u$. We extend this to an equivalence relation $\sim$ by saying that $u \sim v$ if $u$ is related to $v$ by a finite sequence of elementary moves.  Furthermore, we claim that this relation $\sim$ is a congruence, and that the resultant quotient monoid $(A \cup A^{-1})^*/{\sim}$ is a group, called the \dn{free group} on $A$ and denoted $\FG(A)$.
 
-\begin{theorem}[Freiheitssatz] \label{thm:freiheitssatz}
-	Let $G = \Gp \langle A \mid w = \epsilon \rangle$ be a one-relator group, with $w$ cyclically reduced, and let $a \in A$ be a letter contained in $w$. Then the subgroup $\langle A \setminus \{a\} \rangle$ is a free group.
+\subsection{Presentations}
+
+Presentations are a concise way of defining a semigroup, monoid or group in terms of a set of generators and a set of relations between these generating elements.
+
+\begin{defn}
+	A \dn{presentation} is an alphabet $A$ together with a set of `relations' $R \subseteq A^+ \times A^+$. Normally this is written $\langle A \mid R\rangle$, or $\langle A \mid a_1 = b_1, a_2 = b_2, \cdots \rangle$, if $R = \{(a_1, b_1), (a_2, b_2), \ldots\}$.
+\end{defn}
+
+\begin{defn}
+	If $\langle A \mid R \rangle$ is a presentation, the \dn{semigroup presented by} $\langle A \mid R\rangle$ is quotient semigroup $A^+/\rho$, where $\rho$ is the smallest congruence on $A^+$ containing $R$. This is also denoted $\langle A \mid R \rangle$.
+\end{defn}
+
+For example, the free semigroup on two letters $F_2$ is presented by $\langle a, b \mid \rangle$. Similarly, the presentation $\langle a \mid a^7 = a \rangle$ defines the cyclic group of order 6.
+
+This definition extends very naturally to monoids.
+
+\begin{defn}
+	The \dn{monoid presented by a presentation} $\langle A \mid R\rangle$ is the quotient monoid $\Mon \langle A \mid R\rangle = A^*/\rho$, where $\rho$ is the smallest congruence on $A^*$ containing $R$. This is also denoted $\langle A \mid R \rangle$.
+\end{defn}
+
+The bicyclic monoid, for example, can be written as $\Mon \langle b, c \mid bc = \epsilon \rangle$. This is equivalent to the semigroup presentation $\langle b, c, \epsilon \mid bc = \epsilon, b\epsilon = \epsilon b = b, a\epsilon = \epsilon a = a, \epsilon^2 = \epsilon \rangle$.
+
+A group presentation is defined in a similar way to the above, except that we need to include the trivial relations $aa^{-1} = a^{-1}a = \epsilon$ implied by the group axioms.
+
+\begin{defn}
+	The \dn{group presented by a presentation} $\langle A \mid R\rangle$, is the quotient monoid $\Gp \langle A \mid R\rangle = A^*/\rho$, where $\rho$ is the smallest congruence on $A^*$ containing $R$ and the trivial relations, namely $aa^{-1} = e$ and $a^{-1}a = \epsilon$ for each $a \in A$.
+\end{defn}
+
+To provide a final example, the dihedral group of order 6 is given by the presentation $\Gp \langle \rho, \sigma \mid \rho^3 = \epsilon, \sigma^2 = \epsilon, \sigma\rho = \rho\sigma^{-1} \rangle$.
+
+In this project, we will be interested mostly in \dn{finitely presented} semigroups, monoids and groups; that is, those structures which admit a presentation $\langle A \mid R\rangle$ where both $A$ and $R$ are finite. Not every semigroup is finitely presented, however. In particular, $\langle a, b \mid ab^ia = aba \quad\forall i \in \mathbb{N} \rangle$ defines a semigroup which is not finitely presented.
+
+\subsection{Decidable and undecidable problems}
+
+%In the 1930s, the discovery that several natural models of computation (such as Turing machines and Church's $\lambda$-calculus among others) were equally powerful provided strong motivation for most mathematicians to accept that for a procedure to be able to be solved by an algorithm meant that it could be solved by, for example, a Turing machine. With a concrete definition of computability came problems which were proven not to be computable. Turing described his machines for the first time in the 1936 paper \emph{On computable numbers with an application to the \emph{Entscheidungsproblem}}, which he used to prove the existence of these undecidable problems. He showed that the so-called halting problem was undecidable.
+
+Fix an alphabet $A$ and let $L$ be a language over $A$. Then the \dn{decision problem} for $L$ takes as input a word $w$ in $A^*$ and outputs `true' if $w$ belongs in $L$ and `false' if it does not. A decision problem is said to be \dn{decidable} if there is an algorithm which always answers true or false in a finite number of steps, no matter what word $w$ is given as input.
+
+One famous decision problem, which motivated much study in the early 20th century, is the \emph{Entscheidungsproblem} proposed by Hilbert in the 1920s. Roughly speaking, the language $L$ in this case is the set of logical statements, written in terms of an appropriate language, which are true assuming some set of axioms. Hilbert's challenge was to determine whether or not this problem is decidable.
+
+Church and Turing proved (independently) in the 1930s that it is not. However, to do so, they had to formalise the notion of `algorithm'. The intuitive concept of an algorithm has, of course, existed for thousands of years --- however, in order to prove that none exists for a particular problem, a mathematically rigorous definition is required. Until this was available, questions such as Hilbert's, as well as those about problems associated with groups and semigroups which we will discuss in \hyperref[sec:word-problem]{the next section}, could not be answered negatively. The word problem for a group was defined long before this, but the only results concerning it were algorithms to solve it for particular classes of groups. It was only afterwards that it could be proven that the word problem is undecidable in general, for example. 
+
+A more elementary example of an undecidable problem is the \dn{halting problem}. As input, it takes a description of an algorithm and an input word $w$. In return, it outputs `true' if the algorithm completes in a finite number of steps --- or \dn{halts} --- given the input $w$, and `false' if it runs indefinitely.
+
+\begin{theorem}
+	The halting problem is undecidable.
 \end{theorem}
+\begin{proof}
+	Suppose the halting problem were decidable, so that there exists an algorithm $H(A, X)$ which returns in finite time whether or not the algorithm $A$ halts given input $X$. Define a new algorithm $S(A)$, as follows: 
+	\begin{enumerate}	
+		\item Compute $H(A, A)$, i.e. whether the algorithm $A$ halts given a description of $A$ as input.
+		\item If $A$ does halt on input $A$, loop forever.
+		\item Otherwise, output `true' and halt.
+	\end{enumerate}
+
+	Now consider the result of applying $S$ to a description of itself. If $S$ halts on $S$, then $H(S, S)$ must have been false. But this means that $S$ does not halt on input $S$, which is a contradiction. By assumption, our algorithm $H$ never halts. So if $S$ does not halt on $S$, $H(S, S)$ must be false --- but this is also a contradiction! So such an algorithm $H$ can not exist.
+\end{proof}
+
+
+\subsection{The word problem for groups} \label{sec:word-problem}
+
+The word problem is one of three decision problems associated with a group introduced by Dehn in 1911, the others being the conjugacy problem and the isomorphism problem.
+
+\begin{defn}
+	Let $G = \Gp \langle A \mid R \rangle$ be a group. Then the \dn{word problem} for $G$, denoted $\WP(G)$, is the set
+	\[ \WP(G) = \{ (u, v) \mid u, v \in A^*, u =_G v \} \]
+	of pairs of words in the generators $A$ which are equal in $G$. The \dn{conjugacy problem} for $G$ is the set
+	\[ \{ (u, v) \mid u, v \in A^*, \exists\ w \in G \colon u = w^{-1}vw \} \]
+	of pairs of words which represent conjugate elements.
+\end{defn}
+
+The isomorphism problem is slightly different: it asks, given two presentations $\langle A \mid R \rangle$ and $\langle B \mid S \rangle$, whether the groups they present are isomorphic.
+
+Each of these problems is readily generalisable to finitely presented semigroups. Axel Thue discussed, though in different language, the word problem for semigroups in his 1914 paper, \emph{Probleme über Veränderungen von Zeichenreihen nach gegebenen Reglen}.
+
+At the time these questions were first posed, there was as yet no rigorous definition of `algorithm', and so no way of proving that the word problem for a particular group is unsolvable. The first results on the word problem were therefore positive ones, giving algorithms for particular special cases --- for example, in his 1911 paper \emph{Über unendliche diskontinuerliche Gruppen} which first introduced the problems, Dehn solved the word problem for some groups arising in topology.
+
+The word problem is readily solvable for certain classes of groups. For example, if $G$ is a free group, the algorithm is as follows: suppose $G$ is freely generated by a set $A$, and suppose that we have two elements $u$ and $v$ of $G$, written as words in $A$ and the corresponding inverse letters. Then since there are no relations in the group except those that follow from the group axioms, namely $aa^{-1} = a^{-1}a = \epsilon$ for each $a \in A$, if we remove all of these pairs then $u =_G v$ if and only if these `reduced' words are equal, letter for letter.
+
+In 1947, however, Emil Post proved that the general word problem for finitely-presented semigroups is undecidable; and shortly afterwards, in 1950, Turing himself showed that the word problem for cancellative finitely-presented semigroups is undecidable. The 1950s saw Novikov and Boone independently prove that the word problem for a general finitely-generated group is undeciadble.
+
+Some important classes of groups and semigroups do, however, have decidable word problems. All finite groups and semigroups have decidable word problem (in fact, Anisimov showed that their word problem is regular). The special case which we shall be most concerned with in this project is that of the word problem of one-relation groups and semigroups.
+
+\subsection{One-relation groups and semigroups}
+
+A one-relation group or semigroup is a finitely presented group or semigroup which admits a presentation of the form $\langle A \mid u = v\rangle$, where $u$ and $v$ are words in $A^*$. The word problem for one-relator groups was in fact solved by Magnus in the early 1930s.
 
 \begin{theorem}[Magnus, 1932] \label{thm:orgp-decidablewp}
 	Let $G$ be a group admitting a presentation of the form $\langle A \mid u = v\rangle$, where $u$ and $v$ are words over the generating set $A$. Then the word problem for $G$ is decidable.
 \end{theorem}
 
-Modern proofs of the above theorems can be found in \cite{Lyndon2001}.
+In his proof, Magnus relies heavily on the following result on the structure of one-relator groups, known as the \emph{Freiheitssatz}:
 
-\begin{itemize}
-	\item[Theorem] (Adjan, 1966) The word problem for one-relation monoids of the form $\langle A \mid w = \epsilon \rangle$ is decidable
-	\item Perhaps a hint of some other results/reductions
-	\item[Theorem] (Squier and Wrathall, 1983) Freiheitssatz for monoids
-\end{itemize}
+\begin{theorem}[Freiheitssatz] \label{thm:freiheitssatz}
+	Let $G = \Gp \langle A \mid w = \epsilon \rangle$ be a one-relator group, with $w$ cyclically reduced, and let $a \in A$ be a letter contained in $w$. Then the subgroup $\langle A \setminus \{a\} \rangle$ is a free group.
+\end{theorem}
+
+Here, a word is said to be \dn{cyclically reduced} if all cyclic permutations of it are freely reduced. Modern proofs of the above theorems can be found in \cite{Lyndon2001}.
+
+While the word problem for one-relator groups is in a sense completely solved, it is currently an open problem as to whether the word problem for one-relator semigroups is decidable. In this project, we consider a significant special case first proved by Adjan in the 1960s:
+
+\begin{defn}
+We say a one-relator monoid is \dn{special} if it admits a finite presentation of the form $\langle A \mid r = \epsilon \rangle$.
+\end{defn}
+
+\begin{theorem}[Adjan]
+	Let $M$ be a one-relator special monoid. Then $M$ has decidable word problem.
+\end{theorem}
+
+There is a monoid analogue to the Freiheitssatz, due to Squier and Wrathall (\cite{Squier1983}):
+% XXX check this XXX
+\begin{theorem}[Freiheitssatz for one-relator monoids]
+	Let $S = \langle A \mid u = v \rangle$ be a one-relator group, with $w$ cylically reduced, and let $a \in A$ be a letter contained in $uv$. Then the submonoid $\langle A \setminus \{a\} \rangle$ is free.
+\end{theorem}
+However, perhaps surprisingly, while both Zhang's proof and Adjan's original proof of the result for one-relator special monoids relies crucially upon the Freiheitssatz for groups, it does not use the monoid result at all.
 
 
 \section{Rewriting systems} \label{sec:rewriting-systems}
@@ -88,17 +171,30 @@ Modern proofs of the above theorems can be found in \cite{Lyndon2001}.
 	\item[Definition] descendant; common descendant
 	\item[Definition] irreducible
 	\item[Definition] equivalent; equivalent modulo a congruence
+	\item[Definition] the rewriting algorithm
 \end{itemize}
 
 \subsection{Noetherian rewriting systems}
 
-\begin{itemize}
-	\item[Definition] well-founded order
-	\item[Definition] Noetherian rewriting system
-\end{itemize}
+A noetherian rewriting system is one whose rewriting algorithm always terminates, no matter which string it is applied to. It is very useful to know that a rewriting system is noetherian if one wants to prove, as we will later, that an algorithm which uses it also always terminates. Before discussing noetherianness, we need to make some definitions relating to partial orders.
+
+\begin{defn}
+	A linear order on a set $X$ is an order $<$ on $X$ which has the following properties for all $a, b, c \in X$:
+	\begin{itemize}
+		\item \emph{Trichotomy:} exactly one of $a < b$, $b < a$ or $a = b$ holds.
+		\item \emph{Transitivity:} if $a < b$ and $b < c$, then $a < c$.
+	\end{itemize}
+\end{defn}
+
+\begin{defn}
+	An order $<$ on a set $X$ is \dn{well-founded} if there is no sequence $x_1, x_2, \ldots \in X$ such that
+	\[ x_1 < x_2 < x_3 < \cdots. \]
+\end{defn}
+
+An interesting application of well-foundedness is the concept of noetherian induction, which generalises regular mathematical induction to any set equipped with a well-founded order.
 
 \begin{prop}[Noetherian induction] \label{prop:noetherian-induction}
-	Let $P(x)$ be a property of elements of a set $X$, and suppose that $\rightarrow$ is a well-founded relation. Then $P(x)$ is true for all $x \in X$ if for any $y \in X$, $P(y)$ is true if $P(z)$ is true for all $z \ne y$ such that $y \rightarrow^* z$. That is, if $P(y)$ is true whenever $P$ is true for every descendant of $y$.
+	Let $P(x)$ be a property of elements of a set $X$, and suppose that $\rightarrow$ is a well-founded order on $X$. Then $P(x)$ is true for all $x \in X$ if for any $y \in X$, $P(y)$ is true if $P(z)$ is true for all $z \ne y$ such that $y \rightarrow^* z$. That is, if $P(y)$ is true whenever $P$ is true for every descendant of $y$.
 \end{prop}
 \begin{proof}
 	Suppose that for each $y \in X$, $P(y)$ is true if $P(z)$ is true for all descendants $z$ of $y$, and suppose there is some $x \in X$ such that $P(x)$ is false. If $x$ has no descendants, then $P(x)$ is vacuously true. So $x$ must have a descendant $x_2$ such that $P(x_2)$ is false. By the same reasoning $x_2$ must have a descendant $x_3$ such that $P(x_3)$ is false. Continuing in this fashion, we have an infinite chain of descendants
@@ -106,9 +202,17 @@ Modern proofs of the above theorems can be found in \cite{Lyndon2001}.
 	for each of which $P$ is false. But this contradicts $\to$ being well-founded, since by definition a well-founded relation has no infinite chains.
 \end{proof}
 
+The usual notion of induction on the natural numbers is the same as the above if $\mathbb{N}$ is equipped with its natural order, which is clearly well-founded.
+
+We can then define a noetherian rewriting system in terms of its reduction relation.
+
+\begin{defn}
+	A noetherian rewriting system is a rewriting system whose reduction relation $\rightarrow$ is well-founded.
+\end{defn}
+
+
 \begin{itemize}
 	\item[Proposition] In a noetherian rewriting system, every string has an irreducible descendant.
-	\item[Definition] linear order
 	\item[Definition] (short-)lexicographic order
 	\item[Proposition] The short-lex order is well-founded.
 \end{itemize}
@@ -132,14 +236,14 @@ This theorem is often known as Newman's lemma, having first been proven by Newma
 \begin{proof}[ \pCref{thm:newman}]
 	It is clear that a confluent system is locally confluent, since if $x \to z$ then $x \to^* z$ for all $x, z \in A^*$.
 
-	Conversely, suppose $R$ is a locally confluent rewriting system over an alphabet $A$. We shall prove the statement $P(x)$ over $A^*$ by noetherian induction, where $P(x)$ is true if and only if for all $X, X' \in A^*$ such that $x \to^* X$ and $x \to^* X'$, there exists $z \in A^*$ such that $X \to^* z$ and $X' \to^* z$. If $P(x)$ holds for all strings $x$, the system is confluent by definition. 
+	Conversely, suppose $R$ is a locally confluent rewriting system over an alphabet $A$. We shall prove the statement $P(x)$ over $A^*$ by noetherian induction, defining $P(x)$ to be true if and only if for all $X, X' \in A^*$ such that $x \to^* X$ and $x \to^* X'$, there exists $z \in A^*$ such that $X \to^* z$ and $X' \to^* z$. If $P(x)$ holds for all strings $x$, the system is confluent by definition. 
 
-	Let $x \in A^*$ be such that $P(x)$ holds for all its descendants. Let $X, X' \in A^*$ be such that $x \to_R^* X$ and $x \to_R^* X'$, and in particular that $x = x_1 \to_R x_2 \to_R \cdots \to_R x_m = X$ and $x = x_1' \to_R x_2' \to_R \cdots \to_R x_n' = X'$. Since $R$ is locally confluent, the fact that $x \to_R x_1$ and $x \to_R x_1'$ means there exists a string $u \in A^*$ such that $x_1 \to_R^* u$ and $x_1' \to_R^* u$:
+	Let $x \in A^*$ be such that $P(x)$ holds for all its descendants. Let $X, X' \in A^*$ be such that $x \to_R^* X$ and $x \to_R^* X'$. In particular, because $\to$ is noetherian, there exist finite derivations $x = x_1 \to_R x_2 \to_R \cdots \to_R x_m = X$ and $x = x_1' \to_R x_2' \to_R \cdots \to_R x_n' = X'$. Since $R$ is locally confluent, the fact that $x \to_R x_1$ and $x \to_R x_1'$ means there exists a string $u \in A^*$ such that $x_1 \to_R^* u$ and $x_1' \to_R^* u$:
 
 	{\centering
 	\begin{tikzcd}
 		& \arrow[dl] x \arrow[dr] \\
-		x_1 \arrow[dd, "*"] \arrow[dr, "*"] & & x_1' \arrow[dd, "*"] \arrow[dl, "*"'] \\
+		x_1 \arrow[dd, "*"'] \arrow[dr, "*"] & & x_1' \arrow[dd, "*"] \arrow[dl, "*"'] \\
 		& u & \\
 		X & & X'
 	\end{tikzcd}
@@ -194,7 +298,7 @@ In order to show that a rewriting system is confluent, we can use the following 
 	\end{enumerate}
 \end{theorem}
 
-In fact, a rewriting system is confluent, not just locally confluent, if it satisfies the above condition. However, local confluence is sufficient for our purposes because the rewriting system we will consider in \cref{sec:special-monoids} is noetherian, and hence \cref{thm:newman} applies.
+In fact, a rewriting system is confluent, not just locally confluent, if it satisfies the above condition. However, local confluence is sufficient for our purposes because the rewriting system we will consider in \cref{sec:special-monoids} is noetherian so we can apply \cref{thm:newman}.
 
 \begin{proof}[ \pCref{thm:confluent-cond}]
 	The `only if' direction is straightforward. To show the `if' direction, suppose $a, x, y$ are strings such that $a \to_R x$ through a rule $u \to v$ and $a \to_R y$ through a rule $u' \to v'$. Then $a$ contains $u$ as a substring, i.e. $a = AuZ$ for some $A, Z \in A^*$. The string $u'$ must also occur somewhere in $a$. There are five possibilities for its location, and in each case we show that a common descendant $z \in A^*$ exists for $x$ and $y$ and hence that $R$ is locally confluent.
@@ -289,7 +393,7 @@ In fact, a rewriting system is confluent, not just locally confluent, if it sati
 	\item When is the normal form computable?
 \end{itemize}
 
-\section{The word problem for special monoids} \label{sec:special-monoids}
+\section{The word problem for one-relation special monoids} \label{sec:special-monoids}
 
 In this section, we discuss the word problem for a special class of one-relation semigroups, namely `special' one-relation monoids.
 
@@ -333,6 +437,51 @@ be those words obtained by moving right factors from $W(C_i)$ to the beginning o
 It follows from the above that since $|C_i| \le |A|^{|w|}$ (which is finite since $M$ is finitely presented) and $C_{i+1} \supseteq C_i$ for all $i \ge 1$, there is a maximal set $C_k$. Define a new set $E(M)$ to be those words in $W(C_k)$ which have no proper right factors in $W(C_k)$.
 
 This set $E(M)$ will effectively serve as the generating set in the presentation for the group of units of $M$ which we construct in the remainder of the proof.
+
+\begin{example}
+	Consider the monoid $M$ defined by the presentation $\langle b, c \mid bcb = \epsilon \rangle$. Running the procedure again we obtain:
+
+	\begin{center}
+	\renewcommand{\arraystretch}{1.2}
+	\begin{tabular}{r|ll}
+		$i$ & $C_i$ & $W(C_i)$ \\ \hline
+		1 & $\{bcb\}$ & $\{b, bcb\}$ \\
+		2 & $\{cbb, bbc, bcb\}$ & $\{cbb, c, b, bb, bc, cb, bbc, bcb\}$
+	\end{tabular}
+	\end{center}
+
+	Notice that both generators $b$ and $c$ are in $W(C_2)$, so $C_2$ contains every cyclic permutation of $bcb$. Hence $C_k = C_2$ and so $E(M) = \{ b, c\}$. Since $E(M)$ is supposed to generate the group of units of $M$, this suggests (correctly) that every generator, and hence every element, of the monoid is invertible, i.e. that $M$ is in fact a group. 
+\end{example}
+
+\begin{example}
+	Consider the bicyclic monoid, given by the presentation $B = \langle b, c \mid bc = \epsilon \rangle$.
+	Applying the above construction, we find:
+
+	\begin{center}
+	\renewcommand{\arraystretch}{1.2}
+	\begin{tabular}{r|ll}
+		$i$ & $C_i$ & $W(C_i)$ \\ \hline
+		1 & $\{bc\}$ & $\{bc\}$ \\
+		2 & $\{bc\}$ & $\{bc\}$
+	\end{tabular}
+	\end{center}
+
+	So $C_k = C_1 = \{ bc \}$, and hence $E(B) = bc$. This suggests that the only invertible element in $B$ is the identity $(bc)^n = bc = \epsilon$.
+\end{example}
+
+\begin{example}
+	For a less extreme example, look at the monoid $N$ with defining presentation $\langle a, b, c \mid bcab = \epsilon\rangle$. Performing the computations:
+
+	\begin{center}
+	\renewcommand{\arraystretch}{1.2}
+	\begin{tabular}{r|ll}
+		$i$ & $C_i$ & $W(C_i)$ \\ \hline
+		1 & $\{bcab\}$ & $\{b, bcab\}$ \\
+		2 & $\{bbca, cabb, bcab\}$ & $\{b, bb, bbca, ca, bcab, bca, cabb, cab\}$
+	\end{tabular}
+	\end{center}
+
+\end{example}
 
 \subsubsection{An alternative definition}
 
