@@ -16,6 +16,8 @@
 \newcommand{\nearrowstar}{\mathclap{\nearrow}_{*}}
 \newcommand{\searrowstar}{\mathclap{\searrow}^{*}}
 
+\newtheorem{algorithm}[defn]{Algorithm}
+
 \DeclareMathOperator{\WP}{WP}
 \DeclareMathOperator{\FG}{FG}
 
@@ -32,7 +34,7 @@
 
 The aim of this project is to investigate the decidability of the word problem for so-called special one-relation monoids, via Zhang's application of string rewriting systems. In \cref{sec:intro}, we will recall some elementary definitions which will be useful throughout the project, before giving a brief history of the word problem for semigroups and, in particular, an overview of work which has been done for the special case of one-relator semigroups. In \cref{sec:rewriting-systems}, we provide an elementary introduction to string rewriting systems and their properties, which is crucial to \cref{sec:special-monoids}, an exposition of Zhang's proof in \cite{Zhang1992a} that the word problem for one-relation special monoids is decidable.
 
-It is expected that the reader has a basic familiarity with the theory of semigroups, equivalent to the St Andrews module \emph{MT5826 Semigroups} or equivalent.
+It is expected that the reader has a basic familiarity with the theory of semigroups, equivalent to the St Andrews module \emph{MT5826 Semigroups}, and an elementary acquaintance with groups.
 
 \subsection{Free semigroups, monoids and groups}
 
@@ -40,7 +42,7 @@ An \dn{alphabet} is any finite set. The \dn{free semigroup} over this alphabet, 
 
 The \dn{free monoid} $A^*$ over $A$ is the set $A^+ \cup \{\epsilon\}$ under juxtaposition, where $\epsilon$ is the empty string. A \dn{language} (over $A$) is any subset of $A^*$.
 
-The construction of a free group is more involved, since the existence of inverses forces there to be some relations between letters. Again, let $A$ be an alphabet and fix an arbitrary set $A^{-1}$ which is disjoint but in bijection with $A$. We will write $a^{-1}$ for the image of $a \in A$ under this bijection. For any letter $a \in A$, the strings $aa^{-1}$ and $a^{-1}a$ are known as \dn{trivial relators}.
+The construction of a free group is more involved, since the existence of inverses forces there to be some relations between letters. Again, let $A$ be an alphabet and fix an arbitrary set $A^{-1}$ which is disjoint but in bijection with $A$. We will write $a^{-1}$ for the image of $a \in A$ under this bijection. For any letter $a \in A$, the strings $aa^{-1}$ and $a^{-1}a$ are known as \dn{trivial relators}. We say a word is \dn{freely reduced} if it contains no trivial relators.
 
 We say that two words $u$ and $v$ in $(A \cup A^{-1})^*$ are related by an elementary move if one can transform $u$ into $v$ by adding or removing a trivial relator at some point in $u$. We extend this to an equivalence relation $\sim$ by saying that $u \sim v$ if $u$ is related to $v$ by a finite sequence of elementary moves.  Furthermore, we claim that this relation $\sim$ is a congruence, and that the resultant quotient monoid $(A \cup A^{-1})^*/{\sim}$ is a group, called the \dn{free group} on $A$ and denoted $\FG(A)$.
 
@@ -117,7 +119,7 @@ The word problem is one of three decision problems associated with a group intro
 
 The isomorphism problem is slightly different: it asks, given two presentations $\langle A \mid R \rangle$ and $\langle B \mid S \rangle$, whether the groups they present are isomorphic.
 
-Each of these problems is readily generalisable to finitely presented semigroups. Axel Thue discussed, though in different language, the word problem for semigroups in his 1914 paper, \emph{Probleme über Veränderungen von Zeichenreihen nach gegebenen Reglen}.
+Each of these problems is readily generalisable to finitely presented semigroups. Axel Thue discussed the word problem for semigroups as early as 1914; interestingly, by considering rewriting systems as we will in \cref{sec:rewriting-systems} rather than semigroups as algebraic structures\footnote{In \cite{Thue1914}; see the translation and commentary in \cite{Power2013}.}.
 
 At the time these questions were first posed, there was as yet no rigorous definition of `algorithm', and so no way of proving that the word problem for a particular group is unsolvable. The first results on the word problem were therefore positive ones, giving algorithms for particular special cases --- for example, in his 1911 paper \emph{Über unendliche diskontinuerliche Gruppen} which first introduced the problems, Dehn solved the word problem for some groups arising in topology.
 
@@ -141,9 +143,9 @@ In his proof, Magnus relies heavily on the following result on the structure of 
 	Let $G = \Gp \langle A \mid w = \epsilon \rangle$ be a one-relator group, with $w$ cyclically reduced, and let $a \in A$ be a letter contained in $w$. Then the subgroup $\langle A \setminus \{a\} \rangle$ is a free group.
 \end{theorem}
 
-Here, a word is said to be \dn{cyclically reduced} if all cyclic permutations of it are freely reduced. Modern proofs of the above theorems can be found in \cite{Lyndon2001}.
+Here, a word is said to be \dn{cyclically reduced} if all cyclic permutations of it are freely reduced --- e.g. $aba^{-1}$ is freely reduced but not cyclically reduced, since $a^{-1}ab$ is a cyclic permutation containing the trivial relator $a^{-1}a$. Modern proofs of the above theorems can be found in \cite{Lyndon2001}.
 
-While the word problem for one-relator groups is in a sense completely solved, it is currently an open problem as to whether the word problem for one-relator semigroups is decidable. In this project, we consider a significant special case first proved by Adjan in the 1960s:
+While the word problem for one-relator groups is in a sense completely solved, it is currently an open problem as to whether the word problem for one-relator semigroups is decidable. In this project, we consider a significant special case first proved by Adjan in the 1960s (\cite{Adian1966}):
 
 \begin{defn}
 We say a one-relator monoid is \dn{special} if it admits a finite presentation of the form $\langle A \mid r = \epsilon \rangle$.
@@ -158,21 +160,52 @@ There is a monoid analogue to the Freiheitssatz, due to Squier and Wrathall (\ci
 \begin{theorem}[Freiheitssatz for one-relator monoids]
 	Let $S = \langle A \mid u = v \rangle$ be a one-relator group, with $w$ cylically reduced, and let $a \in A$ be a letter contained in $uv$. Then the submonoid $\langle A \setminus \{a\} \rangle$ is free.
 \end{theorem}
-However, perhaps surprisingly, while both Zhang's proof and Adjan's original proof of the result for one-relator special monoids relies crucially upon the Freiheitssatz for groups, it does not use the monoid result at all.
+However, perhaps surprisingly, while both Zhang's proof and Adjan's original proof of the result for one-relator special monoids rely crucially upon the Freiheitssatz for groups, it does not use the monoid result at all.
 
 
 \section{Rewriting systems} \label{sec:rewriting-systems}
 
 \subsection{Introduction}
 
-\begin{itemize}
-	\item[Definition] string rewriting system; rewriting relation
-\item[Definition] reflexive; transitive closure
-	\item[Definition] descendant; common descendant
-	\item[Definition] irreducible
-	\item[Definition] equivalent; equivalent modulo a congruence
-	\item[Definition] the rewriting algorithm
-\end{itemize}
+A \dn{string rewriting system} over an alphabet $A$ is a set $R \subseteq A^* \times A^*$ of rules, normally written $\{u_1 \to v_1, u_2 \to v_2, \ldots\}$. The rules specify the action of the rewriting system on a string: each rule $u \to v$ specifies that whenever $u$ appears as a substring, it should be replaced by the string $v$. Formally:
+
+\begin{defn}
+	Let $R$ be a string rewriting system over an alphabet $A$. Then the \dn{rewriting relation} $\to_R$ (or often just $\to$) is defined as follows: if $u, v \in A^*$, then $u \to_R v$ if and only if there exist strings $A, B \in A^*$ and a rule $(w, z) \in R$ such that $u = AwB$ and $v = AzB$.
+\end{defn}
+
+\begin{example} \label{ex:rws1}
+	Let $R$ be the rewriting system $\{ bb \to a, aa \to b \}$. Then $abba \to aaa$, $aaa \to ba$ and $aaa \to ab$. On the other hand, $a \nrightarrow bb$, $bba \nrightarrow ba$ and $abba \nrightarrow ab$.
+\end{example}
+
+Two strings are related under the rewriting relation if the right hand side is the result of rewriting the left hand side by making exactly one replacement according to a rule in the corresponding rewriting system. Often it is useful to consider strings arising after an arbitrary number of replacements:
+
+\begin{defn}
+	The \dn{transitive closure} of the rewriting relation $\to_R$, denoted $\to_R^*$, is the smallest transitive relation on $A^*$ containing $\to_R$. Equivalently, two strings $u, v \in A^*$ are related under $\to_R^*$ if there exist strings $u_1, u_2, \ldots, u_n \in A^*$ (for some $n \ge 0$) such that $u \to_R u_1 \to_R u_2 \to_R \cdots \to_R u_n \to_R v$.
+\end{defn}
+
+Continuing \cref{ex:rws1}, while $abba \nrightarrow ab$, it is true that $abba \to^* ab$.
+
+Let $u, v, w \in A^*$ be strings. If $u \to^* w$, then we say that $v$ is a \dn{descendant} of $u$. Furthermore, if it is also true that $v \to^* w$, then we say that $w$ is a \dn{common descendant} of $u$ and $v$. Whether or not a given string has a descendant is an important question when we are considering the termination properties of a string rewriting system. In particular, the `irreducible' strings are crucial:
+
+\begin{defn}
+	A word $u$ is \dn{irreducible} if it has no descendants; i.e. if there is no word $v$ such that $u \to v$.
+\end{defn}
+
+\subsection{Equivalences and presentations}
+
+We can further extend the rewriting relation to an equivalence relation.
+
+\begin{defn}
+	The \dn{symmetric closure} of the rewriting relation $\to_R$, denoted $\leftrightarrow_R$, is defined such that for two words $u, v \in A^*$, $u \leftrightarrow_R v$ if and only if $u \to_R v$ or $v \to_R u$.
+\end{defn}
+
+\begin{defn}
+	Given a string rewriting system $R$, the relation \dn{equivalence modulo $R$}, denoted $=_R$, is the smallest equivalence relation containing $R^*$. Equivalently, if $u, v \in A^*$ are two words, then $u =_R v$ if there exist strings $u_1, u_2, \ldots, u_n \in A^*$, for some $n \ge 1$, such that $u = u \leftrightarrow u_1 \leftrightarrow u_2 \leftrightarrow \cdots \leftrightarrow u_n = v$.
+\end{defn}
+
+In the above definition, taking $n = 1$ leaves no conditions to check, so $u =_R u$ for all strings $u \in A^*$.
+
+\label{sec:rws-presentations} The usefulness of this equivalence relation for our purposes becomes apparent when we identify rewriting systems with monoid presentations. Suppose we have a presentation $\Mon \langle A \mid R\rangle$. Then picking a `direction' for each equation in $R$, we can write $R = \{ (r_1, s_1), (r_2, s_2), \ldots \}$. This set $R$ also forms a string rewriting system over $A^*$, and the equivalence $=_R$ is exactly the word problem for the monoid $M = \Mon \langle A \mid R\rangle$. Furthermore, $=_R$ is also a congruence on $A^*$, and the quotient $A^*/{=_R}$ is isomorphic to $M$.
 
 \subsection{Noetherian rewriting systems}
 
@@ -204,18 +237,55 @@ An interesting application of well-foundedness is the concept of noetherian indu
 
 The usual notion of induction on the natural numbers is the same as the above if $\mathbb{N}$ is equipped with its natural order, which is clearly well-founded.
 
-We can then define a noetherian rewriting system in terms of its reduction relation.
+We can now define the notion of a noetherian rewriting system in terms of its reduction relation.
 
 \begin{defn}
 	A noetherian rewriting system is a rewriting system whose reduction relation $\rightarrow$ is well-founded.
 \end{defn}
 
+The crucial consequence of this is the following:
 
-\begin{itemize}
-	\item[Proposition] In a noetherian rewriting system, every string has an irreducible descendant.
-	\item[Definition] (short-)lexicographic order
-	\item[Proposition] The short-lex order is well-founded.
-\end{itemize}
+\begin{prop}
+	In a noetherian rewriting system, every string has an irreducible descendant. \label{prop:noetherian-every-irred}
+\end{prop}
+\begin{proof}
+	Suppose $R$ is a noetherian rewriting system, and that $u \in A^*$ does not have an irreducible descendant. Then it must have some descendant $u_1 \in A^*$ such that $u \to u_1$, or $u$ itself would be irreducible. But $u_1$ must also have no irreducible descendants, since any of its irreducible descendants would also be irreducible descendants of $u$. Applying this reasoning to $u_1$, there must be a word $u_2 \in A^*$ such that $u_1 \to u_2$ and $u_2$ has no irreducible descendants. Continuing in this manner, we have a sequence of strings
+		\[ u_1 \to u_2 \to u_3 \to \cdots; \]
+	but since $R$ is noetherian, $\to$ is well-founded and so this is a contradiction.
+\end{proof}
+
+A corollary of this is that the rewriting algorithm must terminate for every string, as mentioned at the start of the section.
+
+One way of showing a rewriting system is noetherian is to define a well-founded linear order $<$ on the set of strings $A^*$, and show that whenever $(u, v)$ is a rule in $R$, $v < u$. One common order which can be applied to many practical rewriting systems is the short-lexicographic order, which takes an order $\prec$ on the alphabet $A$ and extends it to a useful order on the whole set of strings $A^*$. Our examples thus far have mostly used the alphabet $\{a, b, c\}$, on which there is an `obvious' order to extend, $a \prec b \prec c$.
+
+\begin{defn}
+	Let $A$ be an alphabet, and let $\succ$ be a linear order on $A$. Then the \dn{short-lexicographic}, or \dn{short-lex order} $>$ on $A^*$ extending $\succ$ is defined as follows: suppose $u = u_1\cdots u_m, v = v_1\cdots v_n \in A^*$ are words. Then $u > v$ if and only if
+	\begin{enumerate}[(i)]
+		\item $m > n$; or
+		\item $m = n$ and there exists an index $1 \le i \le n$ such that $u_j = v_j$ for all $1 \le j > i$ and $u_i \succ v_i$.
+	\end{enumerate}
+\end{defn}
+
+It remains to show that the order as defined is suitable for the purposes we described above:
+\begin{lemma}
+	The short-lexicographic order is, in fact, a linear order.
+\end{lemma}
+\begin{proof}
+	Let $A$ be an alphabet equipped with a linear order $\succ$ and let $>$ be the short-lex order extending $\succ$. Suppose $a, b, c \in A^*$, and assume that $|a| \ge |b| \ge |c|$. To show $>$ satisfies the trichotomy condition, we show that if $a \ne b$, one of $a > b$ or $b > a$ holds. If $a \ne b$, then either $a$ and $b$ have different lengths --- in which case $a > b$ --- or $|a| = |b|$ but they differ in at least one symbol. Let $i$ be the lowest $i \in \mathbb{N}$ such that $a_i \ne b_i$. Then since $\succ$ is a linear order, either $a_i \succ b_i$, in which case $a > b$; or $b_i \succ a_i$, in which case $b > a$. So the condition is satisfied.
+
+	Finally, we show that $>$ is transitive. Suppose $a > b$ and $b > c$. If either $|a| > |b|$ or $|a| > |c|$, then $a > c$ follows immediately. So suppose $|a| = |b| = |c|$. Then since $a > b$, there is a lowest index $i \in \mathbb{N}$ such that $a_i \succ b_i$. Furthermore, since $b > c$, we must have $b_i = c_i$ or $b_i \succ c_i$. In either situation, $a_i \succ c_i$; and $a_1\cdots a_{i-1} = b_1\cdots b_{i-1} = c_1\cdots c_{i-1}$, so $a > c$ as required.
+
+	Hence $>$ is indeed a linear order on $A^*$.
+\end{proof}
+
+\begin{prop}
+	The short-lexicographic order is well-founded.
+\end{prop}
+\begin{proof}
+	Let $A$ be an alphabet with a linear order $\succ$ extended to a short-lex order $>$ on $A^*$. Suppose we have an an infinite chain of words $u_1, u_2, \ldots \in A^*$ such that $u_1 > u_2 > \cdots$. Since the order $>$ on $\mathbb{N}$ is well-founded, the sequence $|u_1|, |u_2|, \ldots$ must eventually become constant, say at $|u_k|$. Then $|u_k| = |u_{k+1}| = |u_{k+2}| = \cdots$, so for $u_k > u_{k+1}$ to be true, the strings must differ at some index $i_1$. Then for $u_k > u_{k+1} > u_{k+2}$ to be true, $u_{k+1}$ and $u_{k+2}$ must differ at some index $i_2 \ge i_1$.
+	
+	Continuing for $u_{k+3}$ and so on, we obtain a nondecreasing sequence $i_1, i_2, \ldots$ of these indices. A particular index can only be repeated at most $|A|$ times, or we run out of letters in the alphabet which can be greater than the one in the corresponding place in the previous string. But the indices are bounded by $|u_k|$, so such an (infinite) sequence can not exist, and so neither can the words $u_1 > u_2 > \cdots$.
+\end{proof}
 
 \subsection{Confluence}
 
@@ -381,17 +451,60 @@ In fact, a rewriting system is confluent, not just locally confluent, if it sati
 	\textbf{Case (v)}: $u'$ is entirely contained in $Z$. This case is very similar to case (i) and is omitted.
 \end{proof}
 
+\begin{prop}
+	In a confluent rewriting system a string has at most one irreducible descendant. \label{prop:confluent-at-most-one}
+\end{prop}
+\begin{proof}
+	Let $R$ be a confluent rewriting system over an alphabet, and let $u \in A^*$. Suppose $u$ had two irreducible descendants $u'$ and $u''$ in $A^*$. Then since $R$ is confluent, there exists a string $v \in A^*$ such that $u' \to^* v$ and $u'' \to^* v$. But since both these strings are irreducible, the only way for $u' \to^* v$ to be true is if $u' = v$, and hence $u' = v = u''$. Therefore if $u$ has an irreducible descendant, it must be unique.
+\end{proof}
 
-\begin{itemize}
-	\item[Proposition] In a confluent rewriting system a string has at most one irreducible descendant.
-\end{itemize}
+\subsection{Normal forms} \label{sec:normal-forms}
 
-\subsection{Normal forms}
+The idea of a normal form comes from the following result:
 
-\begin{itemize}
-	\item[Proposition] Confluent noetherian rewriting systems give unique normal forms.
-	\item When is the normal form computable?
-\end{itemize}
+\begin{prop}
+	With respect to a confluent noetherian rewriting system, every string $u \in A^*$ has exactly one irreducible descendant.
+\end{prop}
+\begin{proof}
+	Let $R$ be a confluent noetherian rewriting system over an alphabet $A$, and let $u \in A^*$. Then since $R$ is noetherian, by \cref{prop:noetherian-every-irred} the word $u$ has an irreducible descendant $u' \in A^*$. Finally, by \cref{prop:confluent-at-most-one}, this irreducible descendant $u'$ must be unique.
+\end{proof}
+
+We refer to this irreducible descendant $u'$ as the \dn{normal form} for $u$, which will for a general word $u$ be denoted $\bar u$. We can in fact say more than this:
+
+\begin{theorem}
+	Let $R$ be a confluent noetherian rewriting system and $u \in A^*$. Then if $u =_R v$, then $\bar u =_R \bar v$.
+\end{theorem}
+\begin{proof}
+	Let $R$ be such a rewriting system, and let $u, v \in A^*$ such that $u =_R v$. Since $u \to_R^* \bar u$, $u =_R \bar u$; and since $v \to_R^* \bar v$, $v =_R \bar v$ and so by transitivity of $=_R$, $\bar u =_R \bar v$.
+\end{proof}
+
+Recall from \cref{sec:rws-presentations} that if we have a presentation $\Mon \langle A \mid R \rangle$, the monoid it presents is given by the quotient $A^*/{=_R}$. Thus the theorem above gives each equivalence class, i.e. every element in the monoid, a unique representative. If we had a way of computing this normal form for an element given by any word, we could compare two elements --- i.e. solve the word problem --- by computing their normal forms and comparing those letter by letter.
+
+Since we are considering confluent noetherian rewriting systems, the following simple algorithm accomplishes this very task:
+
+\begin{algorithm} The rewriting algorithm: \label{alg:rewrite}
+
+\hspace{0.05\textwidth}
+\parbox[t]{0.9\textwidth}{
+	\textbf{Input:} a confluent noetherian rewriting system $R$ over an alphabet $A$; a word $w \in A^*$ \\
+	\textbf{Output:} the normal form $\bar w$ of $w$
+	\medskip
+
+	\begin{enumerate}
+		\item Let $w' \leftarrow w$.
+		\item For every rule $u \to v$ in $R$:	\label{nfal-for-every-rule}
+			\begin{enumerate}
+				\item Scan the string $w'$ from left to right to try to find an occurence of $u$.
+				\item If one is found, then we can write $w' = AuB$. Set $w' \leftarrow AvB$ and return to step \ref{nfal-for-every-rule}. It should be clear that $AuB =_R AvB$.
+			\end{enumerate}
+		\item If we reach this point, then $w'$ is irreducible and so we can set $\bar w \leftarrow w'$.
+	\end{enumerate}
+}
+\end{algorithm}
+
+The crucial question we ask about this algorithm is then: does it halt on any input? Since $R$ is assumed to be noetherian, the string can only be reduced finitely many times. So the algorithm halts on any input as long as the number of rules in $R$ is finite (otherwise the loop in step \ref{nfal-for-every-rule} would never terminate). In fact, it is sufficient that there are only a finite number of rules which can apply to any particular $w'$, and that this set of rules can be found in finite time. For example, if the set of rules was stored in order of the length of the left hand side, and there are only finitely many rules of any given length, then we can simply check all rules until the length of one exceeds the length of $w'$.
+
+This is essentially the argument we will use in \cref{sec:special-monoids} to conclude that the word problem is decidable.
 
 \section{The word problem for one-relation special monoids} \label{sec:special-monoids}
 
@@ -407,7 +520,7 @@ The main result is a theorem of Adjan, which states that the word problem is ind
 	Let $M$ be a one-relation special monoid, i.e. a monoid admitting a presentation of the form $\langle A \mid w = \epsilon\rangle$, where $A$ is an alphabet, $w \in A^+$. Then $M$ has decidable word problem.
 \end{theorem}
 
-Here, we follow Zhang's proof from \cite{Zhang1992a}. Zhang's overall approach is to construct a one-relation presentation for the group of units of the special monoid --- whose word problem is then decidable by Magnus' theorem --- and reduce the word problem of the whole monoid to that of the group of units using a confluent, noetherian rewriting system.
+Here, we follow Zhang's proof from \cite{Zhang1992a}, which uses rewriting systems to obtain a dramatic simplification of Adian's first proof in \cite{Adian1966}. Zhang's overall approach is to construct a one-relation presentation for the group of units of the special monoid --- whose word problem is then decidable by Magnus' theorem --- and reduce the word problem of the whole monoid to that of the group of units using a confluent, noetherian rewriting system.
 
 In another paper (\cite{Zhang1992}), Zhang uses a similar method to generalise this statement by reducing the word problem of any special monoid to the word problem of its group of units, as well as obtaining similar results on the conjugacy and divisibility problems for these monoids.
 
@@ -431,7 +544,7 @@ be those words obtained by moving right factors from $W(C_i)$ to the beginning o
 	For each index $i$, every word in $C_i$ has the same length as $w$.
 \end{lemma}
 \begin{proof}
-	This can be shown by a straightforward induction on $i$. It is true in $C_1$, since $C_1 = \{w\}$. So suppose every word in $C_i$ has length $|w|$, and let $xy$ be a new word in $C_{i+1}$ for some $x, y \in A^+$ such that $x$ or $y$ is in $W(C_i)$. Then either $xy$ or $yx$ in $C_i$ and hence $|xy| = |yx| = |w|$ by the inductive hypothesis. Hence every word in $C_{i+1}$ has length $|w|$ and so every word in $C_i$ has length $|w|$, for any index $i$.
+	This can be shown by a straightforward induction on $i$. It is true in $C_1$, since $C_1 = \{w\}$. So suppose every word in $C_i$ has length $|w|$, and let $xy$ be a new word in $C_{i+1}$ for some $x, y \in A^+$ such that $x$ or $y$ is in $W(C_i)$. Then either $xy$ or $yx$ is in $C_i$ and hence $|xy| = |yx| = |w|$ by the inductive hypothesis. Hence every word in $C_{i+1}$ has length $|w|$ and so every word in $C_i$ has length $|w|$, for any index $i$.
 \end{proof}
 
 It follows from the above that since $|C_i| \le |A|^{|w|}$ (which is finite since $M$ is finitely presented) and $C_{i+1} \supseteq C_i$ for all $i \ge 1$, there is a maximal set $C_k$. Define a new set $E(M)$ to be those words in $W(C_k)$ which have no proper right factors in $W(C_k)$.
@@ -601,9 +714,13 @@ It follows from this that $v$ is irreducible by $R$; but this is impossible, sin
 
 \subsection{The word problem is decidable}
 
-We can now prove \cref{thm:ors-decidablewp}. Suppose we have two words $u$ and $v \in A^*$. Observe that we can enumerate the rules of $R$ which could apply to $u$ in a finite number of steps: since if a rule $(a, b)$ applies to $u$, then $a$ is a substring of $u$ and so $|b| \le |a| \le |u|$. Enumerating all possible pairs $(a, b)$ of strings in of length $|u|$ or less, it is decidable whether $b < a$ and --- by \cref{thm:orgp-decidablewp} --- whether $a =_G b$, and hence whether $(a, b)$ is a rule in $R$. If there are any such rules, we can apply one and repeat the process with the resulting string. Eventually, since $R$ is confluent and noetherian, no such rules shall remain and we will have computed the unique normal form $\midbar{u}$ for $u$.
+We can now prove \cref{thm:ors-decidablewp}. We essentially use the argument in \cref{sec:normal-forms} using our confluent, noetherian rewriting system $R$. For \cref{alg:rewrite} to halt, we required that a finite number of rules applied to any given word $u \in A^*$, and that there was a procedure which could enumerate this set in a finite number of steps.
 
-Repeating this process starting with $v$, we can compute its normal form $\midbar{v}$ in a finite number of steps. Since $R$ is equivalent to $\{(w, \epsilon)\}$ by \cref{lma:R-equivalent-to-pres}, $u =_M v$ if and only if $\midbar{u} = \midbar{v}$ as words. We can perform this comparison in a finite number of steps, so the overall problem of determining whether $u =_M v$ is decidable. This is precisely the word problem for $M$.
+Start by simply enumerating all pairs $(a, b)$ of strings of length $|u|$ or less. It is decidable to compare $a$ and $b$ under the short-lex order, i.e. to determine if $b < a$. Furthermore, by Magnus' \cref{thm:orgp-decidablewp}, it is decidable whether $a =_G b$. If and only if both of these hold is $a \to b$ a rule in $R$. There are a finite number of these pairs, so we have our required procedure.
+
+Given two words $u, v \in A^*$, we can thus obtain their normal forms $\bar u$ and $\bar v$ with respect to $R$ and, comparing these letter by letter, determine if $u =_R v$. Therefore it is decidable whether $u =_R v$.
+
+The rewriting system $R$ is equivalent to $\{(w, \epsilon)\}$ by \cref{lma:R-equivalent-to-pres}, and since $\{(w, \epsilon)\}$ presents our monoid $M$, $u =_R v$ if and only $u =_M v$. This is precisely the word problem for $M$, and so we have shown that the word problem for a one-relator special monoid is decidable.
 
 
 \printbibliography
