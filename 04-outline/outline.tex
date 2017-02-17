@@ -545,6 +545,11 @@ Taking $C_1 = \{w\}$, let
 	\[ C_{i+1} = C_i \cup \{ xy \mid y \in W(C_i), yx \in C_i \} \cup \{ yz \mid y \in W(C_i), zy \in C_i \} \]
 be those words obtained by moving right factors from $W(C_i)$ to the beginning of the words in $C_i$ in which they appear and left factors to the end of words.
 
+To see why we do this, consider as an example the monoid $N = \langle a, b, c \mid bcab = \epsilon \rangle$. Clearly, the word $bcab$ is invertible in $N$, since it is the identity. Notice also that $L(\{bcab\}) \cap R(\{bcab\}) = \{b, bcab\}$. The letter $b$ appears at the start and end of the word: $bca \cdot b = \epsilon$ and $b \cdot cab = \epsilon$. That is, $bca$ is a left inverse for $b$ and $cab$ is a right inverse for $b$.
+
+Since left and right inverses are the same, it must also follow that $b \cdot bca = \epsilon$ and $cab \cdot b = \epsilon$. These resulting words are also invertible in $N$, so we can repeat the process to gather together all the trivial words which arise in this way. We will discuss this more carefully in the proof of \cref{prop:M'-is-group}.
+
+
 \begin{lemma}
 	For each index $i$, every word in $C_i$ has the same length as $w$.
 \end{lemma}
@@ -556,7 +561,7 @@ It follows from the above that since $|C_i| \le |A|^{|w|}$ (which is finite sinc
 
 This set $E(M)$ will effectively serve as the generating set in the presentation for the group of units of $M$ which we construct in the remainder of the proof.
 
-\begin{example}
+\begin{example} \label{ex:Ck-group}
 	Consider the monoid $M$ defined by the presentation $\langle b, c \mid bcb = \epsilon \rangle$. Running the procedure again we obtain:
 
 	\begin{center}
@@ -587,8 +592,8 @@ This set $E(M)$ will effectively serve as the generating set in the presentation
 	So $C_k = C_1 = \{ bc \}$, and hence $E(B) = \{bc\}$. This suggests that the only invertible element in $B$ is the identity $(bc)^n = bc = \epsilon$.
 \end{example}
 
-\begin{example}
-	For a less extreme example, look at the monoid $N$ with defining presentation $\langle a, b, c \mid bcab = \epsilon\rangle$. Performing the computations:
+\begin{example} \label{ex:monoidN}
+	For a less extreme example, look at the monoid $N$ from earlier with defining presentation $\langle a, b, c \mid bcab = \epsilon\rangle$. Performing the computations:
 
 	\begin{center}
 	\renewcommand{\arraystretch}{1.2}
@@ -599,7 +604,7 @@ This set $E(M)$ will effectively serve as the generating set in the presentation
 	\end{tabular}
 	\end{center}
 
-	This gives $C_k = C_2 = \{bbca, cabb, bcab\}$ and hence $E(N) = \{b, ca\}$.
+	This gives $C_k = C_2 = \{bbca, cabb, bcab\}$ and hence $E(N) = \{b, ca\}$. Notice that in this case, as in our previous examples, the relator $bcab$ can be expressed as a product of the words in $E(N)$.
 
 \end{example}
 
@@ -616,7 +621,7 @@ In \cite{Zhang1992}, an alternative, non-constructive definition of a generating
 	\end{enumerate}
 \end{defn}
 
-We can then write the relator $w$ in terms of minimal factors $w = w_1w_2\ldots w_n$... 
+We can then write the relator $w$ in terms of minimal factors $w = w_1w_2\ldots w_n$.
 
 
 \subsection{Defining the presentation}
@@ -638,7 +643,7 @@ Define a new alphabet $B$ disjoint with $A$ such that we have a bijection $\midt
 
 We now define a monoid $M'$ given by the presentation $\langle B \mid \phi(w) = \epsilon \rangle$. We assert that this monoid is in fact a group:
 
-\begin{prop}
+\begin{prop} \label{prop:M'-is-group}
 	The monoid $M' = \langle B \mid \phi(w) = \epsilon\rangle$ is a group.
 \end{prop}
 \begin{proof}
@@ -653,7 +658,9 @@ We now define a monoid $M'$ given by the presentation $\langle B \mid \phi(w) = 
 	To conclude, let $b \in B$ be a generator of $M'$. Then $\tilde\phi^{-1}(b) \in E(M)$ has an inverse $\midbar b$ in $M$. Hence $\epsilon =_M \tilde\phi^{-1}(b) \midbar{b}$ and so $\epsilon =_{M'} b\phi(\midbar{b})$; and likewise $\phi(\midbar{b})b = \epsilon$. The arbitrary generator $b$ of $M'$ is hence invertible, so $M'$ is a group.
 \end{proof}
 
-We assert further that it is, as suggested, the group of units of $M$.
+Let us apply these results to our monoid $N$ from \cref{ex:monoidN}. We calculated previously that $E(N) = \{b, ca\}$, so write $B = \{\alpha, \beta\}$ with the homomorphism $\phi$ taking $b \mapsto \alpha$ and $ca \mapsto \beta$. The resulting group $N'$ is then given by the monoid presentation $\langle \alpha, \beta \mid \alpha\beta\alpha = \epsilon \rangle$. This is isomorphic to the group we considered in \cref{ex:Ck-group}.
+
+We assert further that these presentations, as suggested, give the group of units of $M$.
 
 \begin{theorem}
 	The monoid $M'$ is isomorphic to the group of units of $M$.

@@ -1,6 +1,6 @@
 LATEXMK ?= latexmk
 LFLAGS += -pdf
-SUBTARGETS := 01-zhang-summary
+SUBTARGETS := 01-zhang-summary 04-outline
 
 
 

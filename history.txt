@@ -21,8 +21,10 @@ Word problem for cancellative semigroups first (mostly) proved undecidable by Tu
 Word problem for semigroups first proved unsolvable by Post in 1947
 	Post, Emil L. (1947). Recursive unsolvability of a problem of Thue, J. Symbolic Logic 12 (1): 1-11.
 
+?????
 Word problem for finite semigroups proved unsolvable by Gurevich in 1966
 	Gurevich, Yuri. (1966). The word problem for certain classes of semigroups, Algebra and Logic 5: 25-35
+?????
 
 Finite cancellative semigroups are groups; and finite groups have solvable (in fact regular! due to Anisimov) WP
 

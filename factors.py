@@ -167,7 +167,7 @@ def steps(w):
     i = 1
 
     while result != new:
-        sys.stdout.write('%d & \\{%s\\} & \\{%s\\}' % (i, ', '.join(new), ', '.join(W1(new))))
+        sys.stdout.write('%d & $\\{%s\\}$ & $\\{%s\\}$' % (i, ', '.join(new), ', '.join(W1(new))))
         result = new
         new = Cnext(result, W1)
         i += 1
