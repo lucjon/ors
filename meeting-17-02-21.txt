@@ -1,0 +1,22 @@
+Broader notes from meeting with NR, 21/02/17.
+
+* Unindent proofs
+* Generally appropriate layout and level of detail in first two sections
+* Mention the implementation of Zhang's algorithm
+	- Perhaps perform some quantitative analysis of `probabilities' that
+	  picking random words gives groups, trivial monoids or `interesting'
+	  examples
+	- Depending on the patterns, these might be easy to prove
+* Look at the structure theorem for the submonoid of right units
+	- Free product of group of units (for which we now have a presentation) and
+	  a free semigroup
+* Investigate the algorithm in the context of inverse monoids
+	- Special inverse monoid WP iff semigroup WP
+	- Zhang's algorithm produces a generating set for the group of units of the
+	  inverse monoid
+		= Prop 4.11 in Ivanov, Margolis, Meakin; NR thinks him and Bob Grey
+		  might have the result without cyclically reduced hypothesis
+	- Do we reduce to the group of units in the same/similar way?
+		= If so, can discuss pretty much the same theory with a big unproved
+		  bit
+
