@@ -711,8 +711,8 @@ We apply \cref{thm:confluent-cond} directly to $R$ to show that it is locally co
 \begin{theorem*}
 	A rewriting system $R$ over an alphabet $A$ is locally confluent if and only if the following hold for all strings $u, v, w, x, y \in A^*$:
 	\begin{enumerate}[(1)]
-		\item \label{it:conf-overlap} If $uv \to x$ and $vw \to y$ are rules of $R$ then there is a $z \in A^*$ such that $xw \to^*_R z$ and $uy \to^*_R z$.
-		\item \label{it:conf-middle} If $uvw \to x$ and $v \to y$ are rules of $R$ then there is a $z \in A^*$ such that $x \to^*_R z$ and $uyw \to^*_R z$.
+		\item If $uv \to x$ and $vw \to y$ are rules of $R$ then there is a $z \in A^*$ such that $xw \to^*_R z$ and $uy \to^*_R z$.
+		\item If $uvw \to x$ and $v \to y$ are rules of $R$ then there is a $z \in A^*$ such that $x \to^*_R z$ and $uyw \to^*_R z$.
 	\end{enumerate}
 \end{theorem*}
 
