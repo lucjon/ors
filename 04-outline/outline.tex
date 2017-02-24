@@ -80,6 +80,8 @@ To give a final example, the dihedral group of order 6 is given by the presentat
 
 In this project, we will be interested mostly in \dn{finitely presented} semigroups, monoids and groups; that is, those structures which admit a presentation $\langle A \mid R\rangle$ where both $A$ and $R$ are finite. Not every semigroup is finitely presented, however. In particular, $\langle a, b \mid ab^ia = aba \quad\forall i \in \mathbb{N} \rangle$ defines a semigroup which is not finitely presented.
 
+\subsection{Free products}
+
 \subsection{Decidable and undecidable problems}
 
 %In the 1930s, the discovery that several natural models of computation (such as Turing machines and Church's $\lambda$-calculus among others) were equally powerful provided strong motivation for most mathematicians to accept that for a procedure to be able to be solved by an algorithm meant that it could be solved by, for example, a Turing machine. With a concrete definition of computability came problems which were proven not to be computable. Turing described his machines for the first time in the 1936 paper \emph{On computable numbers with an application to the \emph{Entscheidungsproblem}}, which he used to prove the existence of these undecidable problems. He showed that the so-called halting problem was undecidable.
@@ -551,7 +553,7 @@ Since left and right inverses are the same, it must also follow that $b \cdot bc
 
 
 \begin{lemma}
-	For each index $i$, every word in $C_i$ has the same length as $w$.
+	For each index $i$, every word in $C_i$ has the same length as $w$. \label{lma:Ci-length-w}
 \end{lemma}
 \begin{proof}
 	This can be shown by a straightforward induction on $i$. It is true in $C_1$, since $C_1 = \{w\}$. So suppose every word in $C_i$ has length $|w|$, and let $xy$ be a new word in $C_{i+1}$ for some $x, y \in A^+$ such that $x$ or $y$ is in $W(C_i)$. Then either $xy$ or $yx$ is in $C_i$ and hence $|xy| = |yx| = |w|$ by the inductive hypothesis. Hence every word in $C_{i+1}$ has length $|w|$ and so every word in $C_i$ has length $|w|$, for any index $i$.
@@ -608,23 +610,8 @@ This set $E(M)$ will effectively serve as the generating set in the presentation
 
 \end{example}
 
-\subsubsection{An alternative definition}
 
-In \cite{Zhang1992}, an alternative, non-constructive definition of a generating set for the group of units is given, based on the idea of \emph{minimal factors} of $w$.
-
-\begin{defn}
-	A word $v \in A^+$ is \dn{minimal} if:
-	\begin{enumerate}[(i)]
-		\item it is invertible in $M$,
-		\item $|v| \le |w|$ and
-		\item none of its nonempty prefixes are invertible in $M$.
-	\end{enumerate}
-\end{defn}
-
-We can then write the relator $w$ in terms of minimal factors $w = w_1w_2\ldots w_n$.
-
-
-\subsection{Defining the presentation}
+\subsection{Defining the presentation} \label{sec:defining-presentation}
 
 Define a new alphabet $B$ disjoint with $A$ such that we have a bijection $\midtilde\phi \colon E(M) \to B$, and let $\phi \colon E(M)^* \to B^*$ be the unique homomorphic extension of $\midtilde\phi$ to $E(M)^*$. By the following result, $\phi(w)$ is well-defined:
 
@@ -639,6 +626,23 @@ Define a new alphabet $B$ disjoint with $A$ such that we have a bijection $\midt
 	We want to show that $v \in W(C_k)$, so that by the inductive hypothesis (since $|v| < n$), $v \in E(M)^*$ and hence $u \in E(M)^*$. Since $v$ is a prefix of $u$, for $v$ to be in $W(C_k)$ it remains only to show that it is a suffix of some word in $C_k$. Because $u \in W(C_k)$, there is some word $x \in C_k$ such that $x = x'u = x've$ . Then by the definition of $C_{k+1}$, since $e \in W(C_k)$, the word $ex'v \in C_{k+1}$. But $C_{k+1} = C_k$, so $v$ is indeed a suffix of a word in $C_k$.
 
 	Altogether, this means $u$ is a product of factors in $E(M)$ and so by induction all the words of $W(C_k)$ are such a product. In particular, since $w \in W(C_k)$, $w$ is a product of factors in $E(M)$.
+\end{proof}
+
+Having introduced this map $\phi$, it is best to consider some of its properties now, as we shall use it throughout. In particular, $\phi$ is an isomorphism.
+
+\begin{lemma}
+	The map $\phi$ is an isomorphism.
+\end{lemma}
+\begin{proof}
+	The function is a homomorphism by construction, therefore we need only show it is a bijection. First, we show $\phi$ is injective. Suppose $e = e_1\cdots e_m$ and $f = f_1\cdots f_n$ are in $E(M)^*$. Then
+	\begin{alignat*}{2}
+		&& \phi(e) &= \phi(f) \\
+		\implies\quad&& \phi(e_1 \cdots e_m) &= \phi(f_1 \cdots f_n) \\
+		\implies\quad&& \tilde\phi(e_1)\cdots\tilde\phi(e_m) &= \tilde\phi(f_1)\cdots\tilde\phi(f_m)
+	\end{alignat*}
+	Each term on both sides is simply one element of $B$, so for them to be equal, we must have $m = n$ and $\tilde\phi(e_i) = \tilde\phi(f_i)$ for each $1 \le i \le n$. Since $\tilde\phi$ is a bijection, we therefore have $e_i = f_i$ for each $i$ and hence $e = f$.
+
+	Finally, $\phi$ is surjective since if $b = b_1 \cdots b_n \in B^*$, then $\phi(\tilde\phi^{-1}(b_1) \cdots \tilde\phi^{-1}(b_n)) = \tilde\phi(\tilde\phi^{-1}(b_1)) \cdots$ $\tilde\phi(\tilde\phi^{-1}(b_n)) = b_1$$\cdots b_n = b$.
 \end{proof}
 
 We now define a monoid $M'$ given by the presentation $\langle B \mid \phi(w) = \epsilon \rangle$. We assert that this monoid is in fact a group:
@@ -658,15 +662,15 @@ We now define a monoid $M'$ given by the presentation $\langle B \mid \phi(w) = 
 	To conclude, let $b \in B$ be a generator of $M'$. Then $\tilde\phi^{-1}(b) \in E(M)$ has an inverse $\midbar b$ in $M$. Hence $\epsilon =_M \tilde\phi^{-1}(b) \midbar{b}$ and so $\epsilon =_{M'} b\phi(\midbar{b})$; and likewise $\phi(\midbar{b})b = \epsilon$. The arbitrary generator $b$ of $M'$ is hence invertible, so $M'$ is a group.
 \end{proof}
 
-Let us apply these results to our monoid $N$ from \cref{ex:monoidN}. We calculated previously that $E(N) = \{b, ca\}$, so write $B = \{\alpha, \beta\}$ with the homomorphism $\phi$ taking $b \mapsto \alpha$ and $ca \mapsto \beta$. The resulting group $N'$ is then given by the monoid presentation $\langle \alpha, \beta \mid \alpha\beta\alpha = \epsilon \rangle$. This is isomorphic to the group we considered in \cref{ex:Ck-group}.
-
-We assert further that these presentations, as suggested, give the group of units of $M$.
-
-\begin{theorem}
-	The monoid $M'$ is isomorphic to the group of units of $M$.
-\end{theorem}
-
 In light of this, we shall henceforth refer to the monoid $M'$ as $G$.
+
+The final property of $\phi$ we need is that it behaves well with respect to our monoids $M$ and $M'$.
+
+\begin{prop}
+	Let $u, v \in A^*$. Then $u =_M v$ if and only if $\phi(u) =_M \phi(v)$.
+\end{prop}
+
+Before continuing, let us apply these results to our monoid $N$ from \cref{ex:monoidN}. We calculated previously that $E(N) = \{b, ca\}$, so write $B = \{\alpha, \beta\}$ with the homomorphism $\phi$ taking $b \mapsto \alpha$ and $ca \mapsto \beta$. The resulting group $N'$ is then given by the monoid presentation $\langle \alpha, \beta \mid \alpha\beta\alpha = \epsilon \rangle$. This is isomorphic to the group we considered in \cref{ex:Ck-group}.
 
 \subsection{The rewriting system}
 
@@ -677,7 +681,7 @@ We note immediately that $R$ is noetherian: since if $(u, v)$ is a rule in $R$, 
 
 This system $R$ is equivalent to the system $\{(w, \epsilon)\}$, i.e. they present the same monoid:
 \begin{lemma} \label{lma:R-equivalent-to-pres}
-	The rewriting systems $\{(w, \epsilon)\}$ and $R$ are equivalent in the sense that their induced congruences  are equal, and hence that $\langle A \mid w \rangle$ = $\langle A \mid \{u = v : (u, v) \in R\}\rangle$.
+	The rewriting systems $\{(w, \epsilon)\}$ and $R$ are equivalent in the sense that their induced congruences  are equal, and hence $\langle A \mid w \rangle$ = $\langle A \mid \{u = v : (u, v) \in R\}\rangle$.
 \end{lemma}
 \begin{proof}
 	First, observe that $w \in E(M)^*$ by \cref{lma:relator-factors-E(M)}; $\epsilon < w$; and $\phi(w) =_G \epsilon$ follows immediately from the presentation for $G$, so $(w, \epsilon)$ is a rule in $R$ and hence $\leftrightarrow^*_{\{(w,\epsilon)\}}\ \subseteq\ \leftrightarrow^*_R$.
@@ -744,6 +748,94 @@ Start by simply enumerating all pairs $(a, b)$ of strings of length $|u|$ or les
 Given two words $u, v \in A^*$, we can thus obtain their normal forms $\bar u$ and $\bar v$ with respect to $R$ in a finite number of steps and, comparing these letter by letter, determine if $u =_R v$. Therefore it is decidable whether $u =_R v$.
 
 The rewriting system $R$ is equivalent to $\{(w, \epsilon)\}$ by \cref{lma:R-equivalent-to-pres}, and since $\{(w, \epsilon)\}$ presents our monoid $M$, $u =_R v$ if and only $u =_M v$. This is precisely the word problem for $M$, and so we have shown that the word problem for a one-relator special monoid is decidable.
+
+
+\section{Exploring the structure of one-relation special monoids}
+
+The rewriting system discussed in the previous section can be used to solve more than just the word problem for special monoids. In this section, we will discuss how it can be used to describe significant parts of the structure of the monoid $M$ --- in particular, we will finally prove that the group $G$ from \cref{sec:defining-presentation} is the group of units. With this established, we shall explore the submonoids of right and left units of $M$, and show how they admit a simple (and surprising) characterisation as a free product of $G$ and a free semigroup.
+
+\subsection{An alternative construction}
+
+In \cite{Zhang1992}, an alternative, non-constructive definition of a generating set for the group of units is given, based on the idea of \emph{minimal factors} of $w$.
+
+\begin{defn}
+	A word $v \in A^+$ is \dn{minimal} if:
+	\begin{enumerate}[(i)]
+		\item it is invertible in $M$,
+		\item $|v| \le |w|$ and
+		\item none of its nonempty prefixes are invertible in $M$.
+	\end{enumerate}
+\end{defn}
+
+We can then write the relator $w$ in terms of minimal factors $w = w_1w_2\ldots w_n$. Let $\Delta$ be the set of all minimal words which are congruent to some minimal factor of $w$, that is
+	\[ \Delta = \{ u \in A^* \mid u =_M w_i \text{ for some } i \}. \]
+
+As might be expected, $E(M)$ plays a parallel role to the minimal factors in this construction:
+
+\begin{prop}
+	The set $E(M)$ is the set of all minimal words in $M$.
+\end{prop}
+\begin{proof}
+	We first show that every word in $E(M)$ is minimal. By the proof of \cref{prop:M'-is-group}, every element of $E(M)$ is invertible in $M$. Furthermore, since every word in $E(M)$ is a factor of a word in $W(C_k)$, and every word in $C_k$ has length $|w|$ by \cref{lma:Ci-length-w}, no word in $E(M)$ can be longer than $|w|$. So it remains to show that for any $u \in E(M)$, no nonempty prefixes of $u$ are invertible.
+
+	Suppose, for a contradiction, that $u$ factors as $u = u'u''$ such that $u', u'' \in A^+$ and $u'$ is invertible.
+\end{proof}
+
+
+\subsection{The group of units}
+
+Using this framework, we are now in a position to prove that the presentations from \cref{sec:defining-presentation} give the group of units of $M$.
+
+Let $I$ denote the set of nonempty prefixes of words in $E(M)$, that is $I = L(E(M)) \setminus \{\epsilon\}$. Observe that by since all words in $E(M)$ are minimal, none of these words are invertible unless they are in $E(M)$. We will need the following factorisation result based around this set:
+
+\begin{lemma}
+	Suppose $u \in A^*$ is irreducible by $R$ and right invertible in $M$. Then $u \in I^*$. \label{lma:factor-I*}
+\end{lemma}
+\begin{proof}
+	We proceed on induction by $|u|$. If $|u| = 0$, then $u$ is trivially such a product. Suppose then that $|u| > 1$, and that all strings of length strictly less than $|u|$ are in $I^*$.
+
+	Since $u$ is right invertible, it has a right inverse $\bar u \in A^*$ such that $u\bar u =_M \epsilon$ and hence such that $u\bar u \to_R^* \epsilon$. We may assume that $\bar u$ is irreducible by $R$, since reducing $\bar u$ by $R$ does not change either of these facts. Then we can write $u = u'u''$, $\bar u = \bar u'\bar u''$ such that $u\bar u = u'u''\bar u'\bar u'' \to_R u'v\bar u'' \to_R^* \epsilon$, where $u''\bar u' \to v$ is a rule in $R$. By the definition of $R$, this means that $u''\bar u' \in E(M)^*$ and so $u'' \in I^*$. Furthermore, $u'' \ne \epsilon$, since otherwise $\bar u$ would have been reducible by $R$; and hence $|u'| < |u|$.
+
+	Finally, $u' \cdot u''\bar u =_M \epsilon$, i.e. $u'$ is right invertible. So by the inductive hypothesis, $u'$ is a product of the desired form. So is $u''$, hence $u = u'u''$ is also in $I^*$.
+\end{proof}
+
+With this in hand, most of the machinery required was introduced in the previous section.
+
+\begin{theorem}
+	The monoid $M' = \langle B \mid \phi(w) = \epsilon \rangle$ is isomorphic to the group of units of $M$.
+\end{theorem}
+\begin{proof}
+	Suppose we have an invertible element of $M$ with irreducible representative $u \in A^*$. In particular, $u$ is right invertible in $M$ and so by \cref{lma:factor-I*}, we can write $u = u_1u_2\cdots u_n$ where $u_i \in I$ for each $1 \le i \le n$. The word $u$ is also left invertible in $M$, so $u^{-1}u_1\cdots u_{n-1}$ is a left inverse for $u_n$.
+	% XXX still don't see it
+	Hence $u_n$ is invertible. But since $u_n \in I$, we must have that $u_n \in E(M)$. Continuing in this manner, $u_{n-1}$, $u_{n-2}$ and so on are also invertible and hence in $E(M)$. Therefore $u \in E(M)^*$.
+
+	Furthermore, by the proof of \cref{prop:M'-is-group}, every element in $E(M)$ and hence of $E(M)^*$ is invertible in $M$. So $G(M)$ is isomorphic to the submonoid generated by $E(M)^*/{=_M}$.
+
+	% XXX probably need to prove this in more detail in previous section
+	Finally, let $\phi$ be the map from \cref{sec:defining-presentation}, and let $\rho_M$ and $\rho_{M'}$ be the congruences associated with the presentations $\{(w, \epsilon)\}$ and $\{(\phi(w), \epsilon)\}$ respectively. Define a map
+	\begin{align*}
+		\psi : \frac{E(M)^*}{\rho_M} \cong G(M) &\to \frac{B^*}{\rho_{M'}} = M' \\
+		u/\rho_M &\mapsto \phi(u)/\rho_{M'}.
+	\end{align*}
+
+	This is a homomorphism since $\phi$ is; injective since $u =_M v$ if and only if $\phi(u) =_{M'} \phi(v)$; and surjective since $\phi(E(M)^*) = B^*$. Therefore we have an isomorphism from $G(M)$ to $M'$ as required.
+\end{proof}
+
+
+
+\subsection{Right and left units}
+
+
+
+\section{Inverse monoids}
+
+In this section, we will describe how the word problem for one-relation special monoids fits together with other work on the general word problem for semigroups. In particular, we will focus on one more special case, the word problem for special inverse monoids, whose word problem has been shown to be equivalent to that of a general monoid.
+
+Our motivation for doing so is the work of Ivanov, Margolis and Meakin in \cite{Ivanov2001}, who extended the algorithm described in \cref{sec:special-monoids} to show that the same procedure works to obtain a generating set for the group of units of a special inverse monoid. In that section, we solved the word problem of $M$ by reducing it to the corresponding problem for $G(M)$, so understanding this group in the context of inverse monoids could prove valuable in solving their word problem, and hence the word problem for every semigroup.
+
+\subsection{Reductions of the one-relation semigroup problem}
+\subsection{Inverse semigroups and monoids}
+\subsection{Special inverse monoids and their groups of units}
 
 
 \printbibliography
