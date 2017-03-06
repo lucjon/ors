@@ -2,6 +2,7 @@
 \addbibresource{../ors.bib}
 \ExecuteBibliographyOptions{url=false}
 
+\usepackage{booktabs}
 \usepackage{tikz}
 \usetikzlibrary{arrows}
 \usetikzlibrary{cd}
@@ -637,7 +638,7 @@ Having introduced this map $\phi$, it is best to consider some of its properties
 	\begin{alignat*}{2}
 		&& \phi(e) &= \phi(f) \\
 		\implies\quad&& \phi(e_1 \cdots e_m) &= \phi(f_1 \cdots f_n) \\
-		\implies\quad&& \tilde\phi(e_1)\cdots\tilde\phi(e_m) &= \tilde\phi(f_1)\cdots\tilde\phi(f_m)
+		\implies\quad&& \tilde\phi(e_1)\cdots\tilde\phi(e_m) &= \tilde\phi(f_1)\cdots\tilde\phi(f_m).
 	\end{alignat*}
 	Each term on both sides is simply one element of $B$, so for them to be equal, we must have $m = n$ and $\tilde\phi(e_i) = \tilde\phi(f_i)$ for each $1 \le i \le n$. Since $\tilde\phi$ is a bijection, we therefore have $e_i = f_i$ for each $i$ and hence $e = f$.
 
@@ -666,8 +667,15 @@ In light of this, we shall henceforth refer to the monoid $M'$ as $G$.
 The final property of $\phi$ we need is that it behaves well with respect to our monoids $M$ and $M'$.
 
 \begin{prop}
-	Let $u, v \in A^*$. Then $u =_M v$ if and only if $\phi(u) =_M \phi(v)$. \incomplete
+	Let $u, v \in E(M)^*$. Then $u =_M v$ if and only if $\phi(u) =_{M'} \phi(v)$. \incomplete
 \end{prop}
+\begin{proof}
+	Since $u =_M v$ if and only if $u \leftrightarrow_M^* v$, whenever $u =_M v$ there must be a sequence of derivations $u = u_0 \leftrightarrow_M u_1 \leftrightarrow_M \cdots \leftrightarrow_M u_{n-1} \leftrightarrow_M u_n = v$. We proceed by induction on the length $n$ of the derivation.
+
+	If $n = 0$, $u = v$ and so $\phi(u) = \phi(v)$.
+	
+	If $n = 1$, then $u \leftrightarrow_M u_1 \leftrightarrow_M v$.
+\end{proof}
 
 Before continuing, let us apply these results to our monoid $N$ from \cref{ex:monoidN}. We calculated previously that $E(N) = \{b, ca\}$, so write $B = \{\alpha, \beta\}$ with the homomorphism $\phi$ taking $b \mapsto \alpha$ and $ca \mapsto \beta$. The resulting group $N'$ is then given by the monoid presentation $\langle \alpha, \beta \mid \alpha\beta\alpha = \epsilon \rangle$. This is isomorphic to the group we considered in \cref{ex:Ck-group}.
 
@@ -785,7 +793,7 @@ As might be expected, $E(M)$ plays a parallel role to the minimal factors in thi
 
 Using this framework, we are now in a position to prove that the presentations from \cref{sec:defining-presentation} give the group of units of $M$.
 
-Let $I$ denote the set of nonempty prefixes of words in $E(M)$, that is $I = L(E(M)) \setminus \{\epsilon\}$. Observe that by since all words in $E(M)$ are minimal, none of these words are invertible unless they are in $E(M)$. We will need the following factorisation result based around this set:
+Let $I$ denote the set of nonempty prefixes of words in $E(M)$, that is $I = L(E(M)) \setminus \{\epsilon\}$. Observe that since all words in $E(M)$ are minimal, none of these words are invertible unless they are in $E(M)$. We will need the following factorisation result based around this set:
 
 \begin{lemma}
 	Suppose $u \in A^*$ is irreducible by $R$ and right invertible in $M$. Then $u \in I^*$. \label{lma:factor-I*}
@@ -833,8 +841,8 @@ Let $D = \langle A, R \rangle$ and $E = \langle B, S \rangle$ be semigroups (or 
 The free product of two semigroups is in a sense the most general semigroup which satisfies all the relations that hold in each of the constituent semigroups.
 
 Elements of a free product take the form of an alternating product
-	\[ a_1^{\delta_1} b_1^{\epsilon_1} a_2^{\delta_2} b_2^{\epsilon_2} \cdots a_m^{\delta_m} b_n^{\delta_n}, \]
-where $a_i \in A$ and $B_i \in B$ for all $i$, and $m, n$ and each $\delta_i$ and $\epsilon_i$ are nonnegative integers with $n$ at most $m + 1$. The elements of the first semigroup do not interact with the elements of the second semigroup in any way: there is no relation in $R \cup S$ which involves letters from both $A$ and $B$.
+	\[ a_1^{\delta_1} b_1^{\epsilon_1} a_2^{\delta_2} b_2^{\epsilon_2} \cdots a_m^{\delta_m} b_n^{\epsilon_m}, \]
+where $a_i \in A$ and $b_i \in B$ for all $i$, $m$ and each $\delta_i$ and $\epsilon_i$ are nonnegative integers (allowing for an empty product when an index is 0). The elements of the first semigroup do not interact with the elements of the second semigroup in any way: there is no relation in $R \cup S$ which involves letters from both $A$ and $B$.
 
 \begin{example}
 	If $F_A = \langle A \mid \rangle$ and $F_B = \langle B \mid \rangle$ are free semigroups, then their free product $F_A \ast F_B = \langle A \cup B \mid \rangle$ is again a free semigroup.
@@ -860,7 +868,9 @@ In \cite{Zhang1992a}, Zhang uses the presentations from the previous section to 
 	Let $M$ be a finitely-presented special monoid. Then $U_r(M) \cong G(M) \ast F$, where $F$ is a free monoid over a finite alphabet.
 \end{theorem}
 
-The analogous theorem for $U_l(M)$ also holds, although $F$ is unlikely to be the same monoid. This result was first proven in the 1980s by Squier in \cite{Squier1987}, with the proviso that there had to exist a special presentation for $M$ which, when viewed as a rewriting system, was itself confluent\footnote{In fact, the original condition was that $M$ had a presentation that was \dn{Church-Rosser}. It is easy to show (see e.g. \cite{Book1993}, lemma 1.1.7) that this property is equivalent to confluence.}. In the case of a one-relation special monoid, as we have been considering thus far, this condition is clearly satisfied.
+The analogous theorem for $U_l(M)$ also holds, although $F$ is unlikely to be the same monoid. This result was first proven in the 1980s by Squier in \cite{Squier1987}, with the proviso that there had to exist a special presentation for $M$ which, when viewed as a rewriting system, was itself confluent\footnote{In fact, the original condition was that $M$ had a presentation that was \dn{Church-Rosser}. It is easy to show (see e.g. \cite{Book1993}, lemma 1.1.7) that this property is equivalent to confluence.}.
+
+This may or may not be the case even for one-relation special monoids. For example, the presentation $\langle a, b \mid abbaab = \epsilon\rangle$ is not confluent\footnote{This example is due to \cite{Xin1989}.}: $\underline{abbaab}baab \to baab$ and $abba\underline{abbaab} \to abba$, but both of these descendants are irreducible.
 
 
 \section{Inverse monoids}
@@ -873,6 +883,13 @@ Our motivation for doing so is the work of Ivanov, Margolis and Meakin in \cite{
 \subsection{Inverse semigroups and monoids}
 \subsection{Special inverse monoids and their groups of units}
 
+
+\appendix
+\section{Computer results on one-relation special monoid presentations}
+
+\begin{widecenter}
+\input{../experiment.tex}
+\end{widecenter}
 
 \printbibliography
 
