@@ -1,14 +1,18 @@
+#!/usr/bin/env python3
 # * encoding: utf-8 *
+import argparse, json, os, pprint, string, tabulate, threading, time
 
 class UnknownGeneratorError(Exception):
     pass
 
 def cached_property(compute):
-    def getter(*a):
-        if not hasattr(getter, 'computed_value'):
-            getter.computed_value = compute(*a)
+    def getter(self, *a):
+        attr = '__computed_%s' % compute.__name__
+        if not hasattr(self, attr):
+            setattr(self, attr, compute(self, *a))
+            getter.computed_value = compute(self, *a)
 
-        return getter.computed_value
+        return getattr(self, attr)
     getter.__name__ = compute.__name__
     return property(getter)
 
@@ -22,7 +26,7 @@ def left_factors(X):
 def right_factors(X):
     r_factors = set()
     for w in X:
-        for i in range(1, len(w)):
+        for i in range(0, len(w)):
             r_factors.add(w[-i:])
     return r_factors
 
@@ -123,7 +127,7 @@ class OneRelatorMonoid(Monoid):
 
     def compute_minimal_words(self, step = lambda A: None):
         '''
-        Compute the set E(M) [Zhang1992a] for the monoid; optionally calling
+        Compute the set E(M) [Zha92a] for the monoid; optionally calling
         the function `step' for every new set C_i.
         '''
         C_prev = None
@@ -167,6 +171,14 @@ class OneRelatorMonoid(Monoid):
         return minimal_words
 
     @cached_property
+    def is_group(self):
+        return {(g,) for g in self.gens}.issubset(self.minimal_words)
+
+    @cached_property
+    def has_trivial_units(self):
+        return len(self.minimal_words) == 1
+
+    @cached_property
     def relator_in_minimal_words(self):
         return factorise(self.minimal_words, self.relator)
 
@@ -178,8 +190,153 @@ class OneRelatorMonoid(Monoid):
         return OneRelatorMonoid(gens, relator)
 
 
+def all_strings(num_letters, length):
+    '''
+    Iterate over all strings of length `length' over {a, b, ...}, stopping at
+    the `num_letters'th letter of the alphabet.
+    '''
+    assert num_letters <= 26
+    if length == 1:
+        yield from [string.ascii_lowercase[i] for i in range(num_letters)]
+    elif length > 1:
+        yield from [string.ascii_lowercase[i] + s for i in range(num_letters) for s in all_strings(num_letters, length - 1)]
+
+# We want to investigate what percentage of one-relator monoids are definitely
+# groups or definitely trivial-unit scaling on number of generators and length
+# of relation.
+class Experiment:
+    def __init__(self, filename):
+        self.results = {}
+        self.filename = filename
+
+        if os.path.exists(filename):
+            self.load()
+
+    def check(self, num_gens, length):
+        if length == 1:
+            return {
+                'total': num_gens,
+                'group': 0,
+                'trivial_units': num_gens,
+                'time': 0
+            }
+
+        result = {
+            'total': 0,
+            'group': 0,
+            'trivial_units': 0,
+            'time': 0
+        }
+        gens = string.ascii_lowercase[:num_gens]
+        start_time = time.time()
+
+        for relation in all_strings(num_gens, length):
+            M = OneRelatorMonoid(gens, relation)
+            result['total'] += 1
+            if M.is_group:
+                result['group'] += 1
+                #groups[num_gens, length] = groups.get((num_gens, length), [])
+                #groups[num_gens, length].append(M)
+            if M.has_trivial_units:
+                result['trivial_units'] += 1
+
+        result['time'] = time.time() - start_time
+        self.results[num_gens, length] = result
+        return result
+    
+    def load(self):
+        with open(self.filename) as handle:
+            self.results = {eval(k): v for k, v in json.load(handle).items()}
+
+    def save(self):
+        with open(self.filename, 'w') as handle:
+            json.dump({str(k): v for k, v in self.results.items()}, handle)
+
+    def run(self, gens_range, length_range, thread_count = 4):
+        gens_min, gens_max = gens_range
+        split = int((gens_max - gens_min) / thread_count)
+        length_min, length_max = length_range
+        threads = []
+
+        for i in range(thread_count):
+             this_min, this_max = split * i, max(split * (i + 1), gens_max)
+             def runner():
+                 for num_gens in range(this_min + 1, this_max + 1):
+                     for length in range(length_min + 1, length_max + 1):
+                         if (num_gens, length) in self.results:
+                             print('Skipping |A|=%d |w|=%d.' % (num_gens, length))
+                             continue
+
+                         print('Starting to check |A|=%d |w|=%d.' % (num_gens, length))
+                         result = self.check(num_gens, length)
+                         print('Finished checking |A|=%d |w|=%d in %.3fs.' % (num_gens, length, result['time']))
+                         self.save()
+
+             thread = threading.Thread(target = runner)
+             threads.append(thread)
+             thread.start()
+
+        try:
+            for thread in threads:
+                thread.join()
+        except KeyboardInterrupt:
+            print('Saving...')
+            self.save()
+    
+    def report(self, format = 'fancy_grid'):
+        headers = ['$|A|$', '$|w|$', '# groups', '% groups', '# trivial units', '% trivial units', 'total', 'time (s)']
+        table = [(gens,
+                  length,
+                  v['group'],
+                  '%.02f' % (v['group'] / v['total'] * 100),
+                  v['trivial_units'],
+                  '%.02f' % (v['trivial_units'] / v['total'] * 100),
+                  v['total'],
+                  '%.4f' % v['time']) for ((gens, length), v) in self.results.items()]
+        table.sort(key = lambda t: (t[0], t[1]))
+        print(tabulate.tabulate(table, headers = headers, tablefmt = format))
 
 
+def present(gens, relator):
+    def step(C_i):
+        W = left_and_right_factors(C_i or [])
+        #print('%d & $\{ %s \}$ & $\{%s\}$ \\\\' % (step.i, ', '.join(C_i or []), ', '.join(W)))
+        step.i += 1
+    step.i = 1
+
+    M = OneRelatorMonoid(gens[0], relator[0])
+    M.compute_minimal_words(step = step)
 
 BicyclicMonoid = OneRelatorMonoid('bc', 'bc')
 M = OneRelatorMonoid('ab', 'bbab')
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description = 'Perform various computations with one-relation special monoids.')
+    parser.add_argument('-f', '--filename', default = 'experiment.dat', help = 'Path to file to store working results in. (default: experiment.dat)')
+
+    sp = parser.add_subparsers(dest = 'mode')
+
+    run_args = sp.add_parser('count', description = 'Count one-relation special monoids by property.')
+    run_args.add_argument('max_gens', type = int, nargs = 1, help = 'Maximum number of generators in generated presentations.')
+    run_args.add_argument('max_length',  type = int, nargs = 1, help = 'Maximum length of relators in generated presentations.')
+    run_args.add_argument('--min-gens', dest = 'min_gens', type = int, default = 1, help = 'Minimum number of generators.')
+    run_args.add_argument('--min-length', dest = 'min_length', type = int, default = 1, help = 'Minimum length of relators.')
+    run_args.add_argument('-t', '--threads', type = int, default = 4, help = 'The number of threads to use checking presentations. (default: 4)')
+
+    report_args = sp.add_parser('report', description = 'Display results from a previous count.')
+    report_args.add_argument('--format', dest = 'format', choices = ('plain', 'simple', 'fancy_grid', 'latex', 'latex_booktabs'), default = 'fancy_grid', help = 'The format of the output grid.')
+
+    present_args = sp.add_parser('present', help = 'Show the derivation of the new presentation given a defining special presentation.')
+    present_args.add_argument('generators', nargs = 1, help = 'A string whose letters are the generators.')
+    present_args.add_argument('relator', nargs = 1, help = 'The string w, where the resulting presentation is < A | w = ε >.')
+
+    args = parser.parse_args()
+    experiment = Experiment(args.filename)
+
+    if args.mode == 'report':
+        experiment.report(args.format)
+    elif args.mode == 'present':
+        present(args.generators, args.relator)
+    else:
+        experiment.run((args.min_gens, args.max_gens[0]), (args.min_length, args.max_length[0]), args.threads)
+

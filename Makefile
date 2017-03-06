@@ -5,10 +5,10 @@ SUBTARGETS := 01-zhang-summary 04-outline
 
 
 ifeq ($(PDFS),)
+all: experiment.tex $(SUBTARGETS)
+
 $(SUBTARGETS): %:
 	make -C $@
-
-all: $(SUBTARGETS)
 else
 all: $(PDFS)
 	
@@ -24,6 +24,9 @@ $(patsubst %,clean-%,$(PDFS)):
 
 clean: $(patsubst %,clean-%,$(PDFS))
 	rm -f missfont.log
+
+experiment.tex: experiment.dat
+	./ors.py -f $< report --format latex_booktabs | sed 's/\\\$$/$$/g' > $@
 
 
 .PHONY: clean $(patsubst %,clean-%,$(PDFS)) $(SUBTARGETS)
