@@ -666,7 +666,7 @@ In light of this, we shall henceforth refer to the monoid $M'$ as $G$.
 The final property of $\phi$ we need is that it behaves well with respect to our monoids $M$ and $M'$.
 
 \begin{prop}
-	Let $u, v \in A^*$. Then $u =_M v$ if and only if $\phi(u) =_M \phi(v)$.
+	Let $u, v \in A^*$. Then $u =_M v$ if and only if $\phi(u) =_M \phi(v)$. \incomplete
 \end{prop}
 
 Before continuing, let us apply these results to our monoid $N$ from \cref{ex:monoidN}. We calculated previously that $E(N) = \{b, ca\}$, so write $B = \{\alpha, \beta\}$ with the homomorphism $\phi$ taking $b \mapsto \alpha$ and $ca \mapsto \beta$. The resulting group $N'$ is then given by the monoid presentation $\langle \alpha, \beta \mid \alpha\beta\alpha = \epsilon \rangle$. This is isomorphic to the group we considered in \cref{ex:Ck-group}.
@@ -696,7 +696,7 @@ Hence the two rewriting systems are equivalent.
 We state here two lemmas about the generating set $E(M)$ which will be useful to prove that $R$ is confluent:
 
 \begin{lemma} \label{lma:no-middle-E(M)}
-	If $x, y, z \in A^*$ are strings such that $xy, yz \in E(M)$, then either $y = \epsilon$ or $x = z = \epsilon$.
+	If $x, y, z \in A^*$ are strings such that $xy, yz \in E(M)$, then either $y = \epsilon$ or $x = z = \epsilon$. \incomplete
 \end{lemma}
 \begin{proof}
 	Suppose $y \ne \epsilon$. Then since $xy \in E(M)$, $xy \in W(C_k)$ and in particular, $xy \in L(C_k)$, so there is some $\alpha \in A^*$ such that $\alpha x \cdot y \in C_k$. So $y$ is a right factor of a word in $C_k$, i.e. $y \in R(C_k)$. Likewise, $yz \in R(C_k)$ so $y \cdot z\beta \in C_k$ for some $\beta \in A^*$ and $y \in L(C_k)$. Hence $y \in W(C_k)$. By the definition of $E(M)$, $xy$ has no proper right factor in $W(C_k)$, so $y$ must not be a proper factor; but by assumption, $y \ne \epsilon$, so we must have $x = \epsilon$. Similarly, $yz$ has no proper right factor in $W(C_k)$, so $z$ is not a proper factor and $z = \epsilon$.
@@ -772,7 +772,7 @@ We can then write the relator $w$ in terms of minimal factors $w = w_1w_2\ldots 
 As might be expected, $E(M)$ plays a parallel role to the minimal factors in this construction:
 
 \begin{prop}
-	The set $E(M)$ is the set of all minimal words in $M$.
+	The set $E(M)$ is the set of all minimal factors of $w$ in $M$. \incomplete
 \end{prop}
 \begin{proof}
 	We first show that every word in $E(M)$ is minimal. By the proof of \cref{prop:M'-is-group}, every element of $E(M)$ is invertible in $M$. Furthermore, since every word in $E(M)$ is a factor of a word in $W(C_k)$, and every word in $C_k$ has length $|w|$ by \cref{lma:Ci-length-w}, no word in $E(M)$ can be longer than $|w|$. So it remains to show that for any $u \in E(M)$, no nonempty prefixes of $u$ are invertible.
@@ -801,7 +801,7 @@ Let $I$ denote the set of nonempty prefixes of words in $E(M)$, that is $I = L(E
 With this in hand, most of the machinery required was introduced in the previous section.
 
 \begin{theorem}
-	The monoid $M' = \langle B \mid \phi(w) = \epsilon \rangle$ is isomorphic to the group of units of $M$.
+	The monoid $M' = \langle B \mid \phi(w) = \epsilon \rangle$ is isomorphic to the group of units of $M$. \incomplete
 \end{theorem}
 \begin{proof}
 	Suppose we have an invertible element of $M$ with irreducible representative $u \in A^*$. In particular, $u$ is right invertible in $M$ and so by \cref{lma:factor-I*}, we can write $u = u_1u_2\cdots u_n$ where $u_i \in I$ for each $1 \le i \le n$. The word $u$ is also left invertible in $M$, so $u^{-1}u_1\cdots u_{n-1}$ is a left inverse for $u_n$.
@@ -877,5 +877,7 @@ Our motivation for doing so is the work of Ivanov, Margolis and Meakin in \cite{
 \printbibliography
 
 \printindex
+
+\printincompleteproofs
 
 \end{document}
