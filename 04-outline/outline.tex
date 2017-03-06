@@ -80,7 +80,6 @@ To give a final example, the dihedral group of order 6 is given by the presentat
 
 In this project, we will be interested mostly in \dn{finitely presented} semigroups, monoids and groups; that is, those structures which admit a presentation $\langle A \mid R\rangle$ where both $A$ and $R$ are finite. Not every semigroup is finitely presented, however. In particular, $\langle a, b \mid ab^ia = aba \quad\forall i \in \mathbb{N} \rangle$ defines a semigroup which is not finitely presented.
 
-\subsection{Free products}
 
 \subsection{Decidable and undecidable problems}
 
@@ -818,13 +817,50 @@ With this in hand, most of the machinery required was introduced in the previous
 		u/\rho_M &\mapsto \phi(u)/\rho_{M'}.
 	\end{align*}
 
-	This is a homomorphism since $\phi$ is; injective since $u =_M v$ if and only if $\phi(u) =_{M'} \phi(v)$; and surjective since $\phi(E(M)^*) = B^*$. Therefore we have an isomorphism from $G(M)$ to $M'$ as required.
+	This is a surjective homomorphism since $\phi$ is, and is injective since $u =_M v$ if and only if $\phi(u) =_{M'} \phi(v)$. Therefore we have an isomorphism from $G(M)$ to $M'$ as required.
 \end{proof}
 
 
+\subsection{Free products}
 
-\subsection{Right and left units}
+We will shortly investigate the structure of certain submonoids of our monoid $M$. First, however, we need to discuss a way of constructing new semigroups (or other structures) from existing ones which will be useful in our discussion. This \dn{free product} also arises naturally when considering semigroups defined by presentations in general.
 
+\begin{defn}
+Let $D = \langle A, R \rangle$ and $E = \langle B, S \rangle$ be semigroups (or monoids, or groups), where $A$ and $B$ are disjoint. Then the \dn{free product} $D \ast E$ of $D$ and $E$ is the semigroup (resp. monoid or group) with the presentation
+	\[ D \ast E = \langle A \cup B, R \cup S \rangle. \]
+\end{defn}
+
+The free product of two semigroups is in a sense the most general semigroup which satisfies all the relations that hold in each of the constituent semigroups.
+
+Elements of a free product take the form of an alternating product
+	\[ a_1^{\delta_1} b_1^{\epsilon_1} a_2^{\delta_2} b_2^{\epsilon_2} \cdots a_m^{\delta_m} b_n^{\delta_n}, \]
+where $a_i \in A$ and $B_i \in B$ for all $i$, and $m, n$ and each $\delta_i$ and $\epsilon_i$ are nonnegative integers with $n$ at most $m + 1$. The elements of the first semigroup do not interact with the elements of the second semigroup in any way: there is no relation in $R \cup S$ which involves letters from both $A$ and $B$.
+
+\begin{example}
+	If $F_A = \langle A \mid \rangle$ and $F_B = \langle B \mid \rangle$ are free semigroups, then their free product $F_A \ast F_B = \langle A \cup B \mid \rangle$ is again a free semigroup.
+\end{example}
+
+\begin{example}
+	If $M = \Mon \langle b, c \mid bc = \epsilon \rangle$ and $N = \Mon \langle \beta, \gamma \mid \beta\gamma = \epsilon \rangle$ are two copies of the bicyclic monoid, then $M \ast N = \Mon \langle b, \beta, c, \gamma \mid bc = \epsilon, \beta\gamma = \epsilon \rangle$. Some elements of $M \ast N$ are $c^3 b$, $\gamma^2\beta^4$, $\beta c b \gamma$, and so on.
+\end{example}
+
+
+\subsection{Left and right units}
+
+Recall that the group of units $G(M)$ of a monoid $M$ is the set of all elements in $M$ which are both left- and right-invertible. It can also be useful to consider the submonoids of `left units' and `right units':
+
+\begin{defn}
+	Let $M$ be a monoid. Then the \dn{submonoid of left units} of $M$, denoted $U_l(M)$, is the subset of elements of $M$ which are left-invertible. Analogously, the \dn{submonoid of right units}, denoted $U_r(M)$, is the set of right-invertible elements.
+\end{defn}
+
+Note that these submonoids do not necessarily form a group.
+
+In \cite{Zhang1992a}, Zhang uses the presentations from the previous section to give a particularly simple characterisation of the structure of these submonoids in the case where $M$ is special.
+\begin{theorem}
+	Let $M$ be a finitely-presented special monoid. Then $U_r(M) \cong G(M) \ast F$, where $F$ is a free monoid over a finite alphabet.
+\end{theorem}
+
+The analogous theorem for $U_l(M)$ also holds, although $F$ is unlikely to be the same monoid. This result was first proven in the 1980s by Squier in \cite{Squier1987}, with the proviso that there had to exist a special presentation for $M$ which, when viewed as a rewriting system, was itself confluent\footnote{In fact, the original condition was that $M$ had a presentation that was \dn{Church-Rosser}. It is easy to show (see e.g. \cite{Book1993}, lemma 1.1.7) that this property is equivalent to confluence.}. In the case of a one-relation special monoid, as we have been considering thus far, this condition is clearly satisfied.
 
 
 \section{Inverse monoids}
