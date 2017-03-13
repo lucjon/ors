@@ -133,7 +133,7 @@ In 1947, however, Emil Post proved that the general word problem for finitely-pr
 
 Some important classes of groups and semigroups do, however, have decidable word problems. All finite groups and semigroups have decidable word problem. The special case which we shall be most concerned with in this project is that of the word problem of one-relation groups and semigroups.
 
-\subsection{One-relation groups and semigroups}
+\subsection{One-relation groups and semigroups} \label{sec:one-relation-overview}
 
 A one-relation group or semigroup is a finitely presented group or semigroup which admits a presentation of the form $\langle A \mid u = v\rangle$, where $u$ and $v$ are words in $A^*$. The word problem for one-relator groups was in fact solved by Magnus in the early 1930s.
 
@@ -950,24 +950,114 @@ The key theorems on which these computations rely are the following:
 
 \section{Inverse monoids}
 
-In this section, we will describe how the word problem for one-relation special monoids fits together with other work on the general word problem for semigroups. In particular, we will focus on one more special case, the word problem for special inverse monoids, whose word problem has been shown to be equivalent to that of a general monoid.
-
-Our motivation for doing so is the work of Ivanov, Margolis and Meakin in \cite{Ivanov2001}, who extended the algorithm described in \cref{sec:special-monoids} to show that a similar generating set to that we considered in \cref{sec:special-monoids} works for the group of units in a special inverse monoid. In that section, we solved the word problem of $M$ by reducing it to the corresponding problem for $G(M)$, so understanding this group in the context of inverse monoids could prove valuable in solving their word problem, and hence the word problem for every semigroup.
+In this section, we will describe how the word problem for one-relation special monoids fits together with other work on the general word problem for semigroups. In particular, we will focus on one more special case, the word problem for one-relation special inverse monoids, whose word problem has been shown to be equivalent to that of a general one-relation monoid.
 
 \subsection{Reductions of the one-relation semigroup problem}
-Many of the first positive results on the word problem for one-relation semigroups were first shown by Adjan from the 1960s, including the special case $M = \Mon \langle A \mid w = \epsilon\rangle$ considered in the previous section, in \cite{Adian1966}. Another important special case considered in this monograph, which did not rely on the semigroup having a monoid structure, is that of a semigroup $S = \Sgp \langle A \mid u = v\rangle$, where the words $u$ and $v$ have different first and last letters. The word problem is indeed decidable for such a semigroup. Adjan showed this by demonstrating that $S$ can be embedded into the group $\Gp \langle A \mid u = v \rangle$ with the same presentation, with the result then following by Magnus' theorem (\cref{thm:orgp-decidablewp}).
+Many of the first positive results on the word problem for one-relation semigroups were first shown by Adjan from the 1960s, including the special case $M = \Mon \langle A \mid w = \epsilon\rangle$ considered in the previous section, in \cite{Adian1966}. Another important special case considered in this monograph, which did not rely on the semigroup having a monoid structure, is that of a semigroup $S = \Sgp \langle A \mid u = v\rangle$, where the words $u$ and $v$ have different first and last letters. The word problem is indeed decidable for such a semigroup; Adjan showed this by demonstrating that $S$ can be embedded into the group $\Gp \langle A \mid u = v \rangle$ with the same presentation, with the result then following by Magnus' theorem (\cref{thm:orgp-decidablewp}).
 
 In both cases, as we saw in \cref{sec:special-monoids}, the solutions reduce the word problem of the semigroup to a similar problem for groups.
 
-Later, in \cite{Adyan1987}, it was shown that the word problem is decidable for presentations of the form $\Sgp \langle A \mid a = w\rangle$, where $a \in A$ is a single letter and $w \in A^*$ is an arbitrary word.
+Another set of results in a similar vain, due to a variety of authors, reduce the general word problem for semigroups to various special cases, in the hopes that these might be more tractable. One such reduction was proven by Adjan and Oganesyan in the 1980s \cite{Adyan1987}:
 
-Another set of results in a similar vain, due to a variety of authors, reduce the general word problem for semigroups to various special cases, in the hopes that these might be more tractable. One such reduction, proven by Adjan and Oganesyan in the 1980s \cite{Adyan1987}, states that the word problem is solved for all one-relation semigroups if it can be solved for those with presentations of the form $\Sgp \langle a, b \mid aua = bva \rangle$.
+\begin{theorem}[Adjan, Ognesyan] \label{thm:aua=bva}
+	The word problem is decidable for all one-relation semigroups if it is decidable for those with presentations of the form $\Sgp \langle a, b \mid aua = bva \rangle$, where $u, v \in \{a, b\}^*$.
+\end{theorem}
 
-A more recent resulti from 2001, and the one that we will consider in this section, is that of Ivanov, Margolis and Meakin \cite{Ivanov2001}, which showed that the one-relation semigroup word problem is solved if the one-relation special inverse monoid word problem is solved; that is, if the word problem is decidable for inverse monoids with presentations of the form $\Inv \langle A \mid w = \epsilon\rangle$.
+Building on Adjan and Oganesyan's reduction, Ivanov, Margolis and Meakin \cite{Ivanov2001} showed more recently that the one-relation semigroup word problem is solved if the one-relation special inverse monoid word problem is solved; that is, if the word problem is decidable for inverse monoids with presentations of the form $\Inv \langle A \mid w = \epsilon\rangle$. 
+
+We will examine this result in more detail in the following sections. Our particular motivation for doing so is an observation of the former that a similar set to the one found to generate $G(M)$ in \cref{sec:special-monoids} also suffices to generate the group of units of an inverse monoid (although a full presentation is not derived). In understanding the group of units of the special monoid $M$, we were able to solve the word problem for the whole monoid. It seems reasonable that better understanding the group of units in the inverse monoid case could lead to a solution for their word problem, and therefore for the general one-relation semigroup word problem.
 
 \subsection{Inverse semigroups and monoids}
 
+We begin with an elementary discussion of inverse semigroups and monoids. More thorough treatment is found in, for example, chapter 5 of \cite{Howie1996}.
+
+\begin{defn}
+	Let $S$ be a semigroup, and $x \in S$. Then an element $y \in S$ is a \dn{(semigroup) inverse} for $x$ if $xyx = x$ and $yxy = y$.
+\end{defn}
+
+Note that in general, semigroup inverses are not unique even when they exist. If every $x \in S$ has an inverse, $S$ is called a \dn{regular semigroup}. Furthermore:
+
+\begin{defn}
+	If every element $x \in S$ has a \emph{unique} semigroup inverse $x^{-1} \in S$, then $S$ is called an \dn{inverse semigroup}. If $S$ also possesses an identity element, then $S$ is said to be an \dn{inverse monoid}.
+\end{defn}
+
+It is clear that every group, for example, is an inverse monoid. However, not every inverse monoid is a group:
+
+\begin{example}
+The bicyclic monoid, presented by $\Mon \langle b, c \mid bc = \epsilon \rangle$  is inverse: $b\cdot c\cdot b = b$ and $c\cdot b \cdot c = c$. But it is not a group, since while $bc = \epsilon$, $cb \ne \epsilon$.
+\end{example}
+
+Our usual notion of semigroup presentations extends to inverse monoids in a relatively natural way:
+
+\begin{defn}
+	Let $\Mon \langle A \mid R \rangle$ be a monoid presentation, and let $A^{-1}$ be an alphabet disjoint to $A$ such that there is a bijection $a \mapsto a^{-1}$ from $A$ to $A^{-1}$, with corresponding inverse $(a^{-1})^{-1} \mapsto a$. Then the \dn{inverse monoid presented by $\langle A \mid R \rangle$} is the monoid
+	\[ \Inv \langle A \mid R \rangle = \Mon \langle A \cup A^{-1} \mid R \cup \{ aa^{-1}a = a : a \in A \} \cup \{ aa^{-1}bb^{-1} = bb^{-1}aa^{-1} : a, b \in A \cup A^{-1} \}\rangle. \]
+\end{defn}
+
+This definition arises from the following characterisation of inverse semigroups:
+\begin{theorem} \label{thm:inv-semigp-cond}
+	A semigroup $S$ is an inverse semigroup if and only if it admits a map $a \mapsto a^{-1}$ from $S$ to $S$, such that $(a^{-1})^{-1} = a$, $aa^{-1}a = a$ and $aa^{-1}bb^{-1} = bb^{-1}aa^{-1}$ for all $a, b \in S$.
+\end{theorem}
+
+We give a proof of the forwards direction here as motivation, adapted from theorem 5.1.1 in \cite{Howie1996} (although note that Howie uses slightly different terminology), but do not show the reverse implication here.
+
+\begin{proof}[ \pCref{thm:inv-semigp-cond}]
+	Suppose $S$ is an inverse semigroup. Clearly the map taking $x \in S$ to its unique inverse satisfies the first two properties required, so we show the third. Let $a, b \in S$, $e = aa^{-1}$, $f = bb^{-1}$ and $z = (ef)^{-1}$. Calculating,
+	\[ (ef)fze(ef) = ef^2ze^2f = efzef = (ef)z(ef) = ef, \]
+	and
+	\[ (fze)ef(fze) = fze^2f^2ze = f(z\cdot ef\cdot z)f = fze, \]
+	so $fze$ is an inverse of $ef$. So by the uniqueness of inverses, $z = fze$. But then
+	\[ z^2 = (fze)^2 = f(z\cdot ef \cdot z)e = fze = z. \]
+	Hence $z\cdot z\cdot z = z$, i.e. $z$ is its own inverse. So $z = z^{-1} = ((ef)^{-1})^{-1} = ef$, which also gives $(ef)^{-1} = ef$ and $(ef)^2 = ef$. A similar argument showing $(fe)ezf(fe) = (fe)z(fe)$ and $(ezf)fe(ezf) = ezf$ allows us to conclude that $(fe)^2 = fe$ also. Then finally,
+	\[ (ef)fe(ef) = ef^2e^2f = efef = ef \]
+	and
+	\[ (fe)ef(fe) = fe^2f^2e = fefe = fe, \]
+	so $fe$ and $ef$ are inverses of $ef$. Therefore by uniqueness of inverses, $aa^{-1}bb^{-1} = ef = fe = bb^{-1}aa^{-1}$ as required.
+\end{proof}
+
+As an example, the bicyclic monoid is given by the presentation $B = \Inv \langle a \mid aa^{-1} = \epsilon \rangle$.
+
+Finally, some special types of word:
+
+\begin{defn}
+	A word $w \in (A \cup A^{-1})^*$ is \dn{reduced} if it does not contain $xx^{-1}x$ or $x^{-1}xx^{-1}$ for any $x \in A$. Moreover, a word $w$ is \dn{cyclically reduced} if all cyclic permutations of $w$ are reduced.
+\end{defn}
+	
+Observe that in fact the rewriting system $R_F = \{ xx^{-1}x \to x, x^{-1}xx^{-1} \to x^{-1} \mid x \in A\}$ is confluent since $\underline{x^{-1}xx^{-1}}x \to x^{-1}x \leftarrow x^{-1}\underline{xx^{-1}x}$ is the only overlap between each pair of rules for a given $x$, and rules for different $x \in A$ cannot overlap. This rewriting system is also noetherian, since every rule reduces the length of the string.
+
 \subsection{Special inverse monoids and their groups of units}
+
+Analogously to our definition from \cref{sec:one-relation-overview}, we consider the following class of inverse monoids:
+\begin{defn}
+	Let $M$ be an inverse monoid. Then $M$ is said to be a \dn{special inverse monoid} if it admits a presentation of the form $M = \Inv \langle A \mid w_1 = \epsilon, w_2 = \epsilon, \ldots, w_n = \epsilon \rangle$ for some $w_i \in (A \cup A^{-1})^*$.
+\end{defn}
+
+As discussed in the introduction to this section, we are considering inverse monoids primarily because of the following result:
+\begin{theorem}[\cite{Ivanov2001}, Theorem 2.2]
+	If the word problem is decidable for one-relation special inverse monoids $M = \Inv \langle A \mid w = \epsilon\rangle$, where $w \in (A \cup A^{-1})^*$ is reduced, then the word problem is decidable for all one-relation monoids.
+\end{theorem}
+
+Ivanov, et al. assert that the word problem for semigroups in \cref{thm:aua=bva} is reducible to that for monoids $M$ with presentations of the form $\Mon \langle A \mid aub = avc \rangle$, for $a, b, c \in A$, $b \ne c$ and $u, v \in A^*$. They then show that this monoid embeds in the inverse monoid $I = \Inv \langle A \mid aubc^{-1}v^{-1}a^{-1} = \epsilon\rangle$, and so if the word problem were solvable for all one-relation special inverse monoids, it would be for $I$ and hence $M$.
+
+
+Motivation in hand, we reproduce their result on the group of units of a special inverse monoid, which has an interesting connection to the discussion in \cref{sec:special-monoids}. They make the following definitions:
+
+\begin{defn}
+	If $w, w' \in (A \cup A^{-1})^*$, then $w'$ is a \dn{cyclic conjugate} of $w$ if $w' = uv$ and $w = vu$ for some factors $u, v \in (A \cup A^{-1})^*$. Furthermore, $w'$ is a \dn{unit cyclic conjugate} with respect to a presentation $M = \Inv \langle A \mid w_1 = \epsilon, \ldots, w_n = \epsilon \rangle$ if $w'$ is a cyclic conjugate of some $w_i$ and $w' =_M \epsilon$.
+\end{defn}
+
+Observe that, if we take the same definition but consider monoid presentations rather than inverse monoid presentations, that every element of the set $C_k$ from \cref{sec:constructing-genset} is a unit cyclic conjugate of $w$ with respect to $M = \Mon \langle A \mid w = \epsilon \rangle$ --- by construction every element is a cyclic conjugate, and each one is trivial in $M$ by the proof of \cref{prop:M'-is-group}.
+
+The structure theorem is then as follows:
+
+\begin{theorem}[\cite{Ivanov2001}, Proposition 4.2] \label{thm:inv-monoid-units-unit-conjugates}
+	Let $M = \Inv \langle A \mid w_1 = \epsilon, \ldots, w_n = \epsilon\rangle$, where each $w_i$ is cyclically reduced. Then the group of units of $M$ is the submonoid generated by suffixes of the unit cyclic conjugates of each relator $w_i$.
+\end{theorem}
+
+Translating the language again, we see that the generating set is analogous to $E(M)$ --- every word in $E(M)$ is a suffix of a unit cyclic conjugate.
+
+\Cref{thm:inv-monoid-units-unit-conjugates} is argued in a broadly similar way to \cref{thm:Mdash-is-group-of-units}. First, it is established that every right unit can be written as a product of prefixes of the relators $w_i$, similarly to \cref{lma:factor-I*}. Then, a similar induction to the body of \cref{thm:Mdash-is-group-of-units} finishes the proof, as their treatment is less formal with regards to congruence classes and so on than our description.
+
 
 \begin{onlycomputing}
 \appendix
