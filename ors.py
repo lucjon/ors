@@ -212,7 +212,7 @@ class Experiment:
         if os.path.exists(filename):
             self.load()
 
-    def check(self, num_gens, length):
+    def check(self, num_gens, length, verbose = False):
         if length == 1:
             return {
                 'total': num_gens,
@@ -240,6 +240,12 @@ class Experiment:
             if M.has_trivial_units:
                 result['trivial_units'] += 1
 
+            if verbose:
+                group = 'group ' if M.is_group else ''
+                trivial = 'trivial ' if M.has_trivial_units else ''
+                neither = 'neither' if not M.is_group and not M.has_trivial_units else ''
+                print('< %s | %s >: %s%s%s' % (gens, relation, group, trivial, neither))
+
         result['time'] = time.time() - start_time
         self.results[num_gens, length] = result
         return result
@@ -252,7 +258,7 @@ class Experiment:
         with open(self.filename, 'w') as handle:
             json.dump({str(k): v for k, v in self.results.items()}, handle)
 
-    def run(self, gens_range, length_range, thread_count = 4):
+    def run(self, gens_range, length_range, thread_count = 4, verbose = False):
         gens_min, gens_max = gens_range
         split = int((gens_max - gens_min) / thread_count)
         length_min, length_max = length_range
@@ -268,7 +274,7 @@ class Experiment:
                              continue
 
                          print('Starting to check |A|=%d |w|=%d.' % (num_gens, length))
-                         result = self.check(num_gens, length)
+                         result = self.check(num_gens, length, verbose)
                          print('Finished checking |A|=%d |w|=%d in %.3fs.' % (num_gens, length, result['time']))
                          self.save()
 
@@ -297,10 +303,18 @@ class Experiment:
         print(tabulate.tabulate(table, headers = headers, tablefmt = format))
 
 
-def present(gens, relator):
+PRESENT_FORMATS = {
+    'latex': '%d & $\{ %s \}$ & $\{ %s \}$ \\\\',
+    'plain': 'i = %d:\n\tC_i:\t{%s}\n\tW(C_i):\t{%s}'
+}
+def present(gens, relator, fmt = 'plain'):
     def step(C_i):
-        W = left_and_right_factors(C_i or [])
-        #print('%d & $\{ %s \}$ & $\{%s\}$ \\\\' % (step.i, ', '.join(C_i or []), ', '.join(W)))
+        if C_i is None:
+            return
+
+        C_i = [''.join(x) for x in C_i]
+        W = [''.join(x) for x in left_and_right_factors(C_i)]
+        print(PRESENT_FORMATS[fmt] % (step.i, ', '.join(C_i), ', '.join(W)))
         step.i += 1
     step.i = 1
 
@@ -315,6 +329,7 @@ if __name__ == '__main__':
     parser.add_argument('-f', '--filename', default = 'experiment.dat', help = 'Path to file to store working results in. (default: experiment.dat)')
 
     sp = parser.add_subparsers(dest = 'mode')
+    sp.required = True
 
     run_args = sp.add_parser('count', description = 'Count one-relation special monoids by property.')
     run_args.add_argument('max_gens', type = int, nargs = 1, help = 'Maximum number of generators in generated presentations.')
@@ -322,11 +337,13 @@ if __name__ == '__main__':
     run_args.add_argument('--min-gens', dest = 'min_gens', type = int, default = 1, help = 'Minimum number of generators.')
     run_args.add_argument('--min-length', dest = 'min_length', type = int, default = 1, help = 'Minimum length of relators.')
     run_args.add_argument('-t', '--threads', type = int, default = 4, help = 'The number of threads to use checking presentations. (default: 4)')
+    run_args.add_argument('-v', '--verbose', action = 'store_true', dest = 'verbose', default = False, help = 'Print detailed information about the calculations in progress.')
 
     report_args = sp.add_parser('report', description = 'Display results from a previous count.')
     report_args.add_argument('--format', dest = 'format', choices = ('plain', 'simple', 'fancy_grid', 'latex', 'latex_booktabs'), default = 'fancy_grid', help = 'The format of the output grid.')
 
     present_args = sp.add_parser('present', help = 'Show the derivation of the new presentation given a defining special presentation.')
+    present_args.add_argument('-f', '--format', dest = 'format', choices = list(PRESENT_FORMATS.keys()), default = 'plain', help = 'The output format for the steps of computation.')
     present_args.add_argument('generators', nargs = 1, help = 'A string whose letters are the generators.')
     present_args.add_argument('relator', nargs = 1, help = 'The string w, where the resulting presentation is < A | w = ε >.')
 
@@ -337,6 +354,8 @@ if __name__ == '__main__':
         experiment.report(args.format)
     elif args.mode == 'present':
         present(args.generators, args.relator)
+    elif args.mode == 'count':
+        experiment.run((args.min_gens, args.max_gens[0]), (args.min_length, args.max_length[0]), args.threads, args.verbose)
     else:
-        experiment.run((args.min_gens, args.max_gens[0]), (args.min_length, args.max_length[0]), args.threads)
+        parser.usage()
 
