@@ -334,8 +334,8 @@ This theorem is often known as Newman's lemma, having first been proven by Newma
 	\begin{tikzcd}
 		& \arrow[dl] x \arrow[dr] \\
 		x_1 \arrow[dd, "*"'] \arrow[dr, "*"] & & x_1' \arrow[dd, "*"] \arrow[dl, "*"'] \\
-		& u \arrow[ddl, "*"] & \\
-		X \arrow[d, "*"'] & & X' \\
+		& u \arrow[ddl, "*", red] & \\
+		X \arrow[d, "*"', red] & & X' \\
 		v
 	\end{tikzcd}
 	\par}
@@ -346,8 +346,8 @@ This theorem is often known as Newman's lemma, having first been proven by Newma
 	\begin{tikzcd}
 		& \arrow[dl] x \arrow[dr] \\
 		x_1 \arrow[dd, "*"'] \arrow[dr, "*"] & & x_1' \arrow[dd, "*"] \arrow[dl, "*"'] \\
-		& u \arrow[ddl, "*"] \arrow[ddr, "*"'] & \\
-		X \arrow[d, "*"'] & & X' \arrow[d, "*"] \\
+		& u \arrow[ddl, "*"] \arrow[ddr, "*"', red] & \\
+		X \arrow[d, "*"'] & & X' \arrow[d, "*", red] \\
 		v & & w
 	\end{tikzcd}
 	\par}
@@ -360,7 +360,7 @@ This theorem is often known as Newman's lemma, having first been proven by Newma
 		x_1 \arrow[dd, "*"'] \arrow[dr, "*"] & & x_1' \arrow[dd, "*"] \arrow[dl, "*"'] \\
 		& u \arrow[ddl, "*"] \arrow[ddr, "*"'] & \\
 		X \arrow[d, "*"'] & & X' \arrow[d, "*"] \\
-		v \arrow[dr, "*"] & & w \arrow[dl, "*"'] \\
+		v \arrow[dr, "*", red] & & w \arrow[dl, "*"', red] \\
 		& z & 
 	\end{tikzcd}
 	\par}
@@ -459,6 +459,8 @@ In fact, a rewriting system is confluent, not just locally confluent, if it sati
 
 	\textbf{Case (v)}: $u'$ is entirely contained in $Z$. This case is very similar to case (i) and is omitted.
 \end{proof}
+
+A slightly different characterisation of confluence, which is often more useful when considering a particular, concrete rewriting system, comes from the notion of \dn{critical pairs}.
 
 \begin{prop}
 	In a confluent rewriting system a string has at most one irreducible descendant. \label{prop:confluent-at-most-one}
@@ -981,7 +983,7 @@ Note that in general, semigroup inverses are not unique even when they exist. If
 	If every element $x \in S$ has a \emph{unique} semigroup inverse $x^{-1} \in S$, then $S$ is called an \dn{inverse semigroup}. If $S$ also possesses an identity element, then $S$ is said to be an \dn{inverse monoid}.
 \end{defn}
 
-It is clear that every group, for example, is an inverse monoid. However, not every inverse monoid is a group:
+It is clear that every group $G$, for example, is an inverse monoid; since if $x^{-1}$ is the (group) inverse for an element $x \in G$, it is also the unique semigroup inverse in $G$. However, not every inverse monoid is a group:
 
 \begin{example}
 The bicyclic monoid, presented by $\Mon \langle b, c \mid bc = \epsilon \rangle$  is inverse: $b\cdot c\cdot b = b$ and $c\cdot b \cdot c = c$. But it is not a group, since while $bc = \epsilon$, $cb \ne \epsilon$.
@@ -1012,10 +1014,10 @@ We give a proof of the forwards direction here as motivation, adapted from theor
 	\[ (ef)fe(ef) = ef^2e^2f = efef = ef \]
 	and
 	\[ (fe)ef(fe) = fe^2f^2e = fefe = fe, \]
-	so $fe$ and $ef$ are inverses of $ef$. Therefore by uniqueness of inverses, $aa^{-1}bb^{-1} = ef = fe = bb^{-1}aa^{-1}$ as required.
+	so $fe$ as well as $ef$ are inverses of $ef$. Therefore by uniqueness of inverses, $aa^{-1}bb^{-1} = ef = fe = bb^{-1}aa^{-1}$ as required.
 \end{proof}
 
-As an example, the bicyclic monoid is given by the presentation $B = \Inv \langle a \mid aa^{-1} = \epsilon \rangle$.
+To give some examples: the bicyclic monoid is given by the presentation $B = \Inv \langle a \mid aa^{-1} = \epsilon \rangle$. The monoid of integers under addition, also known as the free inverse monoid with one generator, is presented by $\mathbb{Z} = \Inv \langle a \mid \rangle$. (This is also a group presentation for $\mathbb{Z}$.)
 
 Finally, some special types of word:
 
