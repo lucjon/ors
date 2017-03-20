@@ -14,5 +14,7 @@ __pycache__/*
 *.fls
 *.fdb_latexmk
 *.toc
+*.nav
+*.snm
 lit/*
 experiment.*
