@@ -1,3 +1,3 @@
-PDFS := outline.pdf
+PDFS := project.pdf
 include ../Makefile
 
