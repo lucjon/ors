@@ -1,4 +1,5 @@
 \documentclass[noindex,noinsetproof,12pt]{lmaths}
+\synctex=1
 \addbibresource{../ors.bib}
 \ExecuteBibliographyOptions{url=false}
 
@@ -16,8 +17,17 @@
 \newcommand{\draftnote}[1]{\textcolor{red}{#1}}
 \newcommand{\nearrowstar}{\mathclap{\nearrow}_{*}}
 \newcommand{\searrowstar}{\mathclap{\searrow}^{*}}
+\newcommand{\leftrightst}{\mathrel{\smash{\stackrel{\hspace{0.1em}\ast}{\leftrightarrow}}}}
+\newcommand{\paradec}{\par\begin{center}$\ast$\end{center}}
 
 \newtheorem{algorithm}[defn]{Algorithm}
+
+\usepackage{fancyhdr}
+\setlength\headheight{15pt}
+\pagestyle{fancy}
+\fancyhead{}
+\lhead{\itshape\rightmark}
+\renewcommand\sectionmark[1]{\markboth{\thesection. #1}{}}
 
 \DeclareMathOperator{\WP}{WP}
 \DeclareMathOperator{\FG}{FG}
@@ -29,6 +39,7 @@
 
 \begin{document}
 
+\thispagestyle{empty}
 \maketitle
 \bigskip
 \tableofcontents
@@ -462,6 +473,59 @@ In fact, a rewriting system is confluent, not just locally confluent, if it sati
 
 A slightly different characterisation of confluence, which is often more useful when considering a particular, concrete rewriting system, comes from the notion of \dn{critical pairs}.
 
+\begin{defn}
+	Let $R$ be a rewriting system over an alphabet $A$, and let $u, v \in A^*$, $u \ne v$. Then $(u, v)$ is a \dn{critical pair} of $R$ if there is a string $w \in A^*$ such that $w \to_R u$ and $w \to_R v$.
+\end{defn}
+
+That is, a critical pair is a pair of distinct words which arise as the result of rewriting the same string with $R$.
+
+\begin{defn}
+	A critical pair $(u, v)$ of a rewriting system $R$ over $A$ is said to \dn{resolve} if there exists $z \in A^*$ such that $u \to^*_R z$ and $v \to^*_R z$.
+\end{defn}
+
+It is then straightforward to rephrase \cref{thm:confluent-cond} in the following terms:
+
+\begin{theorem}
+	A rewriting system $R$ is locally confluent if every critical pair of $R$ resolves.
+\end{theorem}
+\begin{proof}
+	The conditions (1) and (2) in the statement of \cref{thm:confluent-cond} are exactly the circumstances in which critical pairs can arise. (See \S 2.3 of \cite{Book1993} for more details.)
+\end{proof}
+
+\begin{example}
+	Consider the rewriting system $R = \{a^3 \to \epsilon, b^2 \to \epsilon, ab \to ba^2\}$. To enumerate the critical pairs of $R$, it suffices to consider when the left hand sides of any two (not necessarily different) rules can overlap.
+
+	\emph{Rule 1}: $a^3 \to \epsilon$. The two possible overlaps are:
+	\begin{align*}
+		\underline{aaa}a \to \epsilon a = a & \quad & a\underline{aaa} \to a\epsilon = a
+	\end{align*}
+	and
+	\begin{align*}
+		\underline{aaa}b \to \epsilon b = b & \quad & aa\underline{ab} \to a\underline{ab}aa \to ab\underline{aaa}a \\
+		&&\to \underline{ab}a \to b\underline{aaa} \to b,
+	\end{align*}
+	which both resolve.
+
+	\emph{Rule 2}: $b^2 \to \epsilon$. The two possible overlaps are:
+	\begin{align*}
+		\underline{bb}b \to b & \quad & b\underline{bb} \to b
+	\end{align*}
+	and
+	\begin{align*}
+		a\underline{bb} \to a & \quad & \underline{ab}b \to b\underline{aaa} \to b,
+	\end{align*}
+	which also both resolve.
+
+	\emph{Rule 3}: $ab \to ba^2$. We have already considered all the possible overlaps.
+
+	Every critical pair resolves, so $R$ is confluent.
+\end{example}
+
+\medskip
+\begin{center}*\end{center}
+
+The principal property that confluence guarantees us is the following:
+
 \begin{prop}
 	In a confluent rewriting system a string has at most one irreducible descendant. \label{prop:confluent-at-most-one}
 \end{prop}
@@ -666,19 +730,24 @@ We now define a monoid $M'$ given by the presentation $\langle B \mid \phi(w) = 
 	To conclude, let $b \in B$ be a generator of $M'$. Then $\tilde\phi^{-1}(b) \in E(M)$ has an inverse $\midbar b$ in $M$. Hence $\epsilon =_M \tilde\phi^{-1}(b) \midbar{b}$ and so $\epsilon =_{M'} b\phi(\midbar{b})$; and likewise $\phi(\midbar{b})b = \epsilon$. The arbitrary generator $b$ of $M'$ is hence invertible, so $M'$ is a group.
 \end{proof}
 
-In light of this, we shall henceforth refer to the monoid $M'$ as $G$.
-
 The final property of $\phi$ we need is that it behaves well with respect to our monoids $M$ and $M'$.
 
 \begin{prop}
-	Let $u, v \in E(M)^*$. Then $u =_M v$ if and only if $\phi(u) =_{M'} \phi(v)$. \incomplete
+	Let $u, v \in E(M)^*$. Then $u =_M v$ if and only if $\phi(u) =_{M'} \phi(v)$. \label{prop:phi-compatible-MM'}
 \end{prop}
 \begin{proof}
-	Since $u =_M v$ if and only if $u \leftrightarrow_M^* v$, whenever $u =_M v$ there must be a sequence of derivations $u = u_0 \leftrightarrow_M u_1 \leftrightarrow_M \cdots \leftrightarrow_M u_{n-1} \leftrightarrow_M u_n = v$. We proceed by induction on the length $n$ of the derivation.
+	Suppose $u =_M v$. Since $u =_M v$ if and only if $u \leftrightst v$, whenever $u =_M v$ there must be a sequence of derivations $u = u^{(0)} \leftrightarrow_M u^{(1)} \leftrightarrow_M \cdots \leftrightarrow_M u^{(n-1)} \leftrightarrow_M u^{(n)} = v$. We proceed by induction on the length $n$ of the derivation.
 
 	If $n = 0$, $u = v$ and so $\phi(u) = \phi(v)$.
 	
-	If $n = 1$, then $u \leftrightarrow_M u_1 \leftrightarrow_M v$.
+	So suppose the statement holds for derivations of lengths up to $n$, and that $u = u^{(0)} \leftrightarrow_M \cdots \leftrightarrow_M u^{(n)} \leftrightarrow_M u^{(n+1)} = v$. Write $U = u^{(n)}$. Then $\phi(u) =_{M'} \phi(U)$ by the inductive hypothesis, and so we need to show that $\phi(U) =_{M'} \phi(v)$. Since $U \leftrightarrow_M v$, we have two cases.
+
+	If $U \to_M v$, then since $w \to \epsilon$ is the only rule in $M$, we can choose $U'$ and $U'' \in A^*$ such that $U = U'wU''$ and $U'U'' = v$. Then since $\phi$ is a homomorphism, $\phi(U) = \phi(U')\phi(w)\phi(U'') $. By definition, $\phi(w) =_M \epsilon$, so $\phi(U) =_{M'} \phi(U')\phi(U'') = \phi(U'U'') = \phi(v)$.
+
+	On the other hand, if $U \leftarrow_M v$, then $v \to_M U$ and a symmetrical argument to the previous case shows that $\phi(v) =_{M'} \phi(U)$. Therefore by induction $\phi(u) =_{M'} \phi(v)$ for all $u, v$ such that $u \leftrightst_M v$.
+
+
+	The converse direction follows by a very similar argument, where a word $U$ factors as $U'\phi(w)U''$ and $\phi(w) \to_{M'} \epsilon$ by the definition of $M'$.
 \end{proof}
 
 Before continuing, let us apply these results to our monoid $N$ from \cref{ex:monoidN}. We calculated previously that $E(N) = \{b, ca\}$, so write $B = \{\alpha, \beta\}$ with the homomorphism $\phi$ taking $b \mapsto \alpha$ and $ca \mapsto \beta$. The resulting group $N'$ is then given by the monoid presentation $\langle \alpha, \beta \mid \alpha\beta\alpha = \epsilon \rangle$. This is isomorphic to the group we considered in \cref{ex:Ck-group}.
@@ -686,7 +755,7 @@ Before continuing, let us apply these results to our monoid $N$ from \cref{ex:mo
 \subsection{The rewriting system}
 
 Let $\prec$ be some linear order on the alphabet $A$, and extend it to a short-lex order $<$ on $A^*$. Then define a rewriting system $R$ on $A^*$ by
-	\[ R = \{ (u, v) \mid u, v \in E(M)^*, v < u, \phi(u) =_G \phi(v) \}. \]
+	\[ R = \{ (u, v) \mid u, v \in E(M)^*, v < u, \phi(u) =_{M'} \phi(v) \}. \]
 
 We note immediately that $R$ is noetherian: since if $(u, v)$ is a rule in $R$, then we must have $v < u$, and the short-lex order $<$ is a well-founded relation by a result from the previous section.
 
@@ -695,9 +764,9 @@ This system $R$ is equivalent to the system $\{(w, \epsilon)\}$, i.e. they prese
 	The rewriting systems $\{(w, \epsilon)\}$ and $R$ are equivalent in the sense that their induced congruences  are equal, and hence $\langle A \mid w \rangle$ = $\langle A \mid \{u = v : (u, v) \in R\}\rangle$.
 \end{lemma}
 \begin{proof}
-	First, observe that $w \in E(M)^*$ by \cref{lma:relator-factors-E(M)}; $\epsilon < w$; and $\phi(w) =_G \epsilon$ follows immediately from the presentation for $G$, so $(w, \epsilon)$ is a rule in $R$ and hence $\leftrightarrow^*_{\{(w,\epsilon)\}}\ \subseteq\ \leftrightarrow^*_R$.
+	First, observe that $w \in E(M)^*$ by \cref{lma:relator-factors-E(M)}; $\epsilon < w$; and $\phi(w) =_G \epsilon$ follows immediately from the presentation for $G$, so $(w, \epsilon)$ is a rule in $R$ and hence $\leftrightst_{\{(w,\epsilon)\}}\ \subseteq\ \leftrightst_R$.
 
-Conversely, suppose $(u, v)$ is a rule in $R$. Then $\phi(u) =_G \phi(v)$ means $\phi(u) \leftrightarrow^*_{\{(\phi(w), \epsilon)\}} \phi(v)$, and since $\phi$ is a homomorphism, $u \leftrightarrow^*_{\{(w, \epsilon)\}} v$. So $\leftrightarrow^*_R\ \subseteq\ \leftrightarrow^*_{\{(w,\epsilon)\}}$.
+Conversely, suppose $(u, v)$ is a rule in $R$. Then $\phi(u) =_G \phi(v)$ means $\phi(u) \leftrightst_{\{(\phi(w), \epsilon)\}} \phi(v)$, and since $\phi$ is a homomorphism, $u \leftrightst_{\{(w, \epsilon)\}} v$. So $\leftrightst_R\ \subseteq\ \leftrightst_{\{(w,\epsilon)\}}$.
 
 Hence the two rewriting systems are equivalent.
 \end{proof}
@@ -708,14 +777,14 @@ Hence the two rewriting systems are equivalent.
 We state here two lemmas about the generating set $E(M)$ which will be useful to prove that $R$ is confluent:
 
 \begin{lemma} \label{lma:no-middle-E(M)}
-	If $x, y, z \in A^*$ are strings such that $xy, yz \in E(M)$, then either $y = \epsilon$ or $x = z = \epsilon$. \incomplete
+	If $x, y, z \in A^*$ are strings such that $xy, yz \in E(M)$, then either $y = \epsilon$ or $x = z = \epsilon$.
 \end{lemma}
 \begin{proof}
 	Suppose $y \ne \epsilon$. Then since $xy \in E(M)$, $xy \in W(C_k)$ and in particular, $xy \in L(C_k)$, so there is some $\alpha \in A^*$ such that $\alpha x \cdot y \in C_k$. So $y$ is a right factor of a word in $C_k$, i.e. $y \in R(C_k)$. Likewise, $yz \in R(C_k)$ so $y \cdot z\beta \in C_k$ for some $\beta \in A^*$ and $y \in L(C_k)$. Hence $y \in W(C_k)$. By the definition of $E(M)$, $xy$ has no proper right factor in $W(C_k)$, so $y$ must not be a proper factor; but by assumption, $y \ne \epsilon$, so we must have $x = \epsilon$. Similarly, $yz$ has no proper right factor in $W(C_k)$, so $z$ is not a proper factor and $z = \epsilon$.
 \end{proof}
 
 \begin{cly} \label{cly:middle-E(M)*}
-	If $x, y, z \in A^*$ are strings such that $xy, yz \in E(M)^*$, then $y \in E(M)^*$.
+	If $x, y, z \in A^*$ are strings such that $xy, yz \in E(M)^*$, then $y \in E(M)^*$. \incomplete
 \end{cly}
 
 
@@ -761,7 +830,7 @@ Given two words $u, v \in A^*$, we can thus obtain their normal forms $\bar u$ a
 The rewriting system $R$ is equivalent to $\{(w, \epsilon)\}$ by \cref{lma:R-equivalent-to-pres}, and since $\{(w, \epsilon)\}$ presents our monoid $M$, $u =_R v$ if and only $u =_M v$. This is precisely the word problem for $M$, and so we have shown that the word problem for a one-relator special monoid is decidable.
 
 
-\section{Exploring the structure of one-relation special monoids}
+\section{The structure of one-relation special monoids}
 
 The rewriting system discussed in the previous section can be used to solve more than just the word problem for special monoids. In this section, we will discuss how it can be used to describe significant parts of the structure of the monoid $M$ --- in particular, we will finally prove that the group $G$ from \cref{sec:defining-presentation} is the group of units. With this established, we shall explore the submonoids of right and left units of $M$, and show how they admit a simple (and surprising) characterisation as a free product of $G$ and a free semigroup.
 
@@ -779,12 +848,17 @@ In \cite{Zhang1992}, an alternative, non-constructive definition of a generating
 \end{defn}
 
 We can then write the relator $w$ in terms of minimal factors $w = w_1w_2\ldots w_n$. Let $\Delta$ be the set of all minimal words which are congruent to some minimal factor of $w$, that is
-	\[ \Delta = \{ u \in A^* \mid u =_M w_i \text{ for some } i \}. \]
+	\[ \Delta = \{ u \in A^* \mid u =_M w_i \text{ for some } i, u\text{ minimal} \}. \]
 
-As might be expected, $E(M)$ plays a parallel role to the minimal factors in this construction:
+\begin{lemma}
+	In a one-relation special monoid, $\Delta = \{w_1, \ldots, w_n\}$. \incomplete
+\end{lemma}
 
+As might be expected, $E(M)$ plays a parallel role in this construction:
+
+% We actually think that E(M) is precisely the set of minimal factors {w_1, ..., w_n} of w.
 \begin{prop}
-	The set $E(M)$ is the set of all minimal factors of $w$ in $M$. \incomplete
+	The sets $E(M)$ and $\Delta$ are equal; that is, $E(M)$ is the set of minimal factors of $w$. \incomplete
 \end{prop}
 \begin{proof}
 	We first show that every word in $E(M)$ is minimal. By the proof of \cref{prop:M'-is-group}, every element of $E(M)$ is invertible in $M$. Furthermore, since every word in $E(M)$ is a factor of a word in $W(C_k)$, and every word in $C_k$ has length $|w|$ by \cref{lma:Ci-length-w}, no word in $E(M)$ can be longer than $|w|$. So it remains to show that for any $u \in E(M)$, no nonempty prefixes of $u$ are invertible.
@@ -803,7 +877,7 @@ Let $I$ denote the set of nonempty prefixes of words in $E(M)$, that is $I = L(E
 	Suppose $u \in A^*$ is irreducible by $R$ and right invertible in $M$. Then $u \in I^*$. \label{lma:factor-I*}
 \end{lemma}
 \begin{proof}
-	We proceed on induction by $|u|$. If $|u| = 0$, then $u$ is trivially such a product. Suppose then that $|u| > 1$, and that all strings of length strictly less than $|u|$ are in $I^*$.
+	We proceed by induction on $|u|$. If $|u| = 0$, then $u$ is trivially in $I^*$. Suppose then that $|u| \ge 1$, and that all strings of length strictly less than $|u|$ are in $I^*$.
 
 	Since $u$ is right invertible, it has a right inverse $\bar u \in A^*$ such that $u\bar u =_M \epsilon$ and hence such that $u\bar u \to_R^* \epsilon$. We may assume that $\bar u$ is irreducible by $R$, since reducing $\bar u$ by $R$ does not change either of these facts. Then we can write $u = u'u''$, $\bar u = \bar u'\bar u''$ such that $u\bar u = u'u''\bar u'\bar u'' \to_R u'v\bar u'' \to_R^* \epsilon$, where $u''\bar u' \to v$ is a rule in $R$. By the definition of $R$, this means that $u''\bar u' \in E(M)^*$ and so $u'' \in I^*$. Furthermore, $u'' \ne \epsilon$, since otherwise $\bar u$ would have been reducible by $R$; and hence $|u'| < |u|$.
 
@@ -813,7 +887,7 @@ Let $I$ denote the set of nonempty prefixes of words in $E(M)$, that is $I = L(E
 With this in hand, most of the machinery required to complete the proof was introduced in the previous section. Recall that $B$ is an alphabet disjoint from $A$ and in one-to-one correspondence with $E(M)$, and that $\phi : E(M)^* \to B^*$ is the isomorphism induced by this correspondence.
 
 \begin{theorem} \label{thm:Mdash-is-group-of-units}
-	The monoid $M' = \langle B \mid \phi(w) = \epsilon \rangle$ is isomorphic to the group of units of $M$. \incomplete
+	The monoid $M' = \langle B \mid \phi(w) = \epsilon \rangle$ is isomorphic to the group of units of $M$.
 \end{theorem}
 \begin{proof}
 	Suppose we have an invertible element of $M$ with irreducible representative $u \in A^*$. In particular, $u$ is right invertible in $M$ and so by \cref{lma:factor-I*}, we can write $u = u_1u_2\cdots u_n$ where $u_i \in I$ for each $1 \le i \le n$. The word $u$ is also left invertible in $M$, so $u^{-1}u_1\cdots u_{n-1}$ is a left inverse for $u_n$.
@@ -835,7 +909,7 @@ With this in hand, most of the machinery required to complete the proof was intr
 
 \subsection{Free products}
 
-We will shortly investigate the structure of certain submonoids of our monoid $M$. First, however, we need to discuss a way of constructing new semigroups (or other structures) from existing ones which will be useful in our discussion. This \dn{free product} also arises naturally when considering semigroups defined by presentations in general.
+We will shortly investigate the structure of certain submonoids of our monoid $M$. First, however, we need a way of constructing new semigroups (or other structures) from existing ones which will be useful in our discussion. This \dn{free product} also arises naturally when considering semigroups defined by presentations in general.
 
 \begin{defn}
 Let $D = \langle A, R \rangle$ and $E = \langle B, S \rangle$ be semigroups (or monoids, or groups), where $A$ and $B$ are disjoint. Then the \dn{free product} $D \ast E$ of $D$ and $E$ is the semigroup (resp. monoid or group) with the presentation
@@ -868,14 +942,54 @@ Recall that the group of units $G(M)$ of a monoid $M$ is the set of all elements
 Note that these submonoids do not necessarily form a group.
 
 In \cite{Zhang1992a}, Zhang uses the presentations from the previous section to give a particularly simple characterisation of the structure of these submonoids in the case where $M$ is special.
-\begin{theorem}
+\begin{theorem} \label{thm:gen-units-factor-freely}
 	Let $M$ be a finitely-presented special monoid. Then $U_r(M) \cong G(M) \ast F$, where $F$ is a free monoid over a finite alphabet.
 \end{theorem}
 
 The analogous theorem for $U_l(M)$ also holds, although $F$ is unlikely to be the same monoid. This result was first proven in the 1980s by Squier in \cite{Squier1987}, with the proviso that there had to exist a special presentation for $M$ which, when viewed as a rewriting system, was itself confluent\footnote{In fact, the original condition was that $M$ had a presentation that was \dn{Church-Rosser}. It is easy to show (see e.g. \cite{Book1993}, lemma 1.1.7) that this property is equivalent to confluence.}.
 
-This may or may not be the case even for one-relation special monoids. For example, the presentation $\langle a, b \mid abbaab = \epsilon\rangle$ is not confluent\footnote{This example is due to \cite{Xin1989}.}: $\underline{abbaab}baab \to baab$ and $abba\underline{abbaab} \to abba$, but both of these descendants are irreducible.
+This may or may not be the case even for one-relation special monoids. For example, the presentation $\langle a, b \mid abbaab = \epsilon\rangle$ is not confluent: $\underline{abbaab}baab \to baab$ and $abba\underline{abbaab} \to abba$, but both of these descendants are irreducible.
 
+\paradec
+
+Recall from \cref{sec:group-of-units} the definition $I = L(E(M)) \setminus \{\epsilon\}$, and define $I_0$ to be the set of all words in $I \setminus I^2$ which are irreducible with respect to our rewriting system $R$. (Here $I^2$ denotes all the concatenations of two words from $I$; that is, $I^2 = \{ uv \mid u, v \in I \}$.)
+
+Our presentation for the group of units of $M$ was $G(M) = \langle B \mid \phi(w) = \epsilon \rangle$. We define a new alphabet $C = B \cup \{c_1, \ldots, c_m\}$ disjoint with $A$ where the new letters $c_i$ correspond to those words in $I_0$ which are not congruent to any minimal factor of $w$. There is then a natural bijection $\bar\psi : I_0 \to C$ extending the map $\bar\phi : E(M) \to B$ from \cref{sec:defining-presentation}; as in that section, we extend this to an isomorphism $\psi : I_0^* \to C^*$. Finally, we use this to define a new monoid $N = \langle C \mid \phi(w) = \epsilon\rangle$.
+
+We will use $\psi$ to construct a map from $N$ to the group of right units and claim it is an isomorphism. As in \cref{sec:group-of-units}, the proof of this relies crucially on the fact that $\psi$ is `compatible' with the congruences defining $M$ and $N$.
+
+\begin{prop}
+	If $u, v \in I_0^*$, then $u =_M v$ if and only if $\psi(u) =_N \psi(v)$. \incomplete\label{prop:psi-MN-compatible}
+\end{prop}
+\begin{proof}
+	The forwards direction follows very similarly to the forwards direction of \cref{prop:phi-compatible-MM'}: because $w \in E(M)^*$, $\psi(w) = \phi(w) = \epsilon$ and the argument remains the same.
+
+	Conversely, suppose $\psi(u) =_N \psi(v)$.
+\end{proof}
+
+\begin{lemma} \label{lma:I0*-generates-Ur}
+	The words in $I_0$ generate $U_r(M)$.
+\end{lemma}
+\begin{proof}
+	Let $u \in A^*$ be the irreducible representative (with respect to $R$) of an element of $U_r(M)$. Then by \cref{lma:factor-I*}, $u \in I^*$. The set $I_0$ consists of the irreducible words in $I \setminus I^2$; since $u$ is irreducible, and $(I^2)^* \subseteq I^*$, $u$ belongs to $I_0^*$.
+
+	Conversely, if $v \in I_0$, then either $v \in E(M)$ --- in which case it is a unit and so certainly a right unit --- or it is a left factor of some element $v' \in E(M)$. Then $vv'$ is a unit, and so there is some $v'' \in A^*$ such that $v'v''$ is a right inverse for $v$, meaning $v$ is in $U_r(M)$. Every generator of $I_0^*$ is hence right invertible, and so every element of $I_0^*$ must be.
+\end{proof}
+
+We now refine \cref{thm:gen-units-factor-freely} as follows:
+
+\begin{theorem} \label{thm:spec-units-factor-freely}
+	The monoid $N$ is in fact the submonoid of right units of $M$, i.e. $U_r(M) \cong \langle C \mid \phi(w) = \epsilon \rangle = G(M) \ast \langle C \setminus B \mid \rangle$.
+\end{theorem}
+\begin{proof}
+	Let $\rho_M$ and $\rho_N$ be the congruences on $A^*$ and $C^*$ associated with the presentations $M = \langle A \mid w = \epsilon \rangle$ and $N = \langle C \mid \psi(w) = \epsilon\rangle$ respectively.
+	Define a map
+		\begin{align*}
+			\xi : U_r(M) &\to N \\
+			 u/\rho_M &\mapsto \psi(u)/\rho_N
+		\end{align*}
+	where $u$ is the irreducible representative in $I_0^*$ of any element of $U_r(M)$, which exists by \cref{lma:I0*-generates-Ur}. This map is well-defined and injective by \cref{prop:psi-MN-compatible}, and it is a surjective homomorphism because $\psi$ is.
+\end{proof}
 
 
 \begin{onlycomputing}
@@ -1017,7 +1131,7 @@ We give a proof of the forwards direction here as motivation, adapted from theor
 	so $fe$ as well as $ef$ are inverses of $ef$. Therefore by uniqueness of inverses, $aa^{-1}bb^{-1} = ef = fe = bb^{-1}aa^{-1}$ as required.
 \end{proof}
 
-To give some examples: the bicyclic monoid is given by the presentation $B = \Inv \langle a \mid aa^{-1} = \epsilon \rangle$. The monoid of integers under addition, also known as the free inverse monoid with one generator, is presented by $\mathbb{Z} = \Inv \langle a \mid \rangle$. (This is also a group presentation for $\mathbb{Z}$.)
+To give some examples: the bicyclic monoid is given by the presentation $B = \Inv \langle a \mid aa^{-1} = \epsilon \rangle$. The monoid of integers under addition, also known as the free inverse monoid on one generator, is presented by $\mathbb{Z} = \Inv \langle a \mid \rangle$. (This is also a group presentation for $\mathbb{Z}$.)
 
 Finally, some special types of word:
 
@@ -1039,7 +1153,7 @@ As discussed in the introduction to this section, we are considering inverse mon
 	If the word problem is decidable for one-relation special inverse monoids $M = \Inv \langle A \mid w = \epsilon\rangle$, where $w \in (A \cup A^{-1})^*$ is reduced, then the word problem is decidable for all one-relation monoids.
 \end{theorem}
 
-Ivanov, et al. assert that the word problem for semigroups in \cref{thm:aua=bva} is reducible to that for monoids $M$ with presentations of the form $\Mon \langle A \mid aub = avc \rangle$, for $a, b, c \in A$, $b \ne c$ and $u, v \in A^*$. They then show that this monoid embeds in the inverse monoid $I = \Inv \langle A \mid aubc^{-1}v^{-1}a^{-1} = \epsilon\rangle$, and so if the word problem were solvable for all one-relation special inverse monoids, it would be for $I$ and hence $M$.
+Ivanov, et al. assert that the word problem for the class of semigroups described in \cref{thm:aua=bva} is reducible to that for monoids $M$ with presentations of the form $\Mon \langle A \mid aub = avc \rangle$, for $a, b, c \in A$, $b \ne c$ and $u, v \in A^*$. They then show that this monoid embeds in the inverse monoid $I = \Inv \langle A \mid aubc^{-1}v^{-1}a^{-1} = \epsilon\rangle$, and so if the word problem were solvable for all one-relation special inverse monoids, it would be for $I$ and hence $M$.
 
 
 Motivation in hand, we reproduce their result on the group of units of a special inverse monoid, which has an interesting connection to the discussion in \cref{sec:special-monoids}. They make the following definitions:
@@ -1048,9 +1162,9 @@ Motivation in hand, we reproduce their result on the group of units of a special
 	If $w, w' \in (A \cup A^{-1})^*$, then $w'$ is a \dn{cyclic conjugate} of $w$ if $w' = uv$ and $w = vu$ for some factors $u, v \in (A \cup A^{-1})^*$. Furthermore, $w'$ is a \dn{unit cyclic conjugate} with respect to a presentation $M = \Inv \langle A \mid w_1 = \epsilon, \ldots, w_n = \epsilon \rangle$ if $w'$ is a cyclic conjugate of some $w_i$ and $w' =_M \epsilon$.
 \end{defn}
 
-Observe that, if we take the same definition but consider monoid presentations rather than inverse monoid presentations, that every element of the set $C_k$ from \cref{sec:constructing-genset} is a unit cyclic conjugate of $w$ with respect to $M = \Mon \langle A \mid w = \epsilon \rangle$ --- by construction every element is a cyclic conjugate, and each one is trivial in $M$ by the proof of \cref{prop:M'-is-group}.
+Observe that, if we take the same definition but consider monoid presentations rather than inverse monoid presentations, every element of the set $C_k$ from \cref{sec:constructing-genset} is a unit cyclic conjugate of $w$ with respect to $M = \Mon \langle A \mid w = \epsilon \rangle$ --- by construction every element is a cyclic conjugate, and each one is trivial in $M$ by the proof of \cref{prop:M'-is-group}.
 
-The structure theorem is then as follows:
+The generation theorem is then as follows:
 
 \begin{theorem}[\cite{Ivanov2001}, Proposition 4.2] \label{thm:inv-monoid-units-unit-conjugates}
 	Let $M = \Inv \langle A \mid w_1 = \epsilon, \ldots, w_n = \epsilon\rangle$, where each $w_i$ is cyclically reduced. Then the group of units of $M$ is the submonoid generated by suffixes of the unit cyclic conjugates of each relator $w_i$.
