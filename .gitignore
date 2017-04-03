@@ -16,5 +16,6 @@ __pycache__/*
 *.toc
 *.nav
 *.snm
+*.synctex*
 lit/*
 experiment.*
