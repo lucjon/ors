@@ -19,3 +19,4 @@ __pycache__/*
 *.synctex*
 lit/*
 experiment.*
+*_minted*

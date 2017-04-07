@@ -5,6 +5,7 @@
 
 \usepackage{booktabs}
 \usepackage{tikz}
+\usepackage{minted}
 \usetikzlibrary{arrows}
 \usetikzlibrary{cd}
 \tikzcdset{arrow style=math font}
@@ -678,6 +679,8 @@ This set $E(M)$ will effectively serve as the generating set in the presentation
 
 \end{example}
 
+The tables above and the sets $E(M)$ for the above presentations were computed using a simple GAP program; see \cref{sec:E(M)-program} for more details.
+
 
 \subsection{Defining the presentation} \label{sec:defining-presentation}
 
@@ -1175,14 +1178,12 @@ Translating the language again, we see that the generating set is analogous to $
 \Cref{thm:inv-monoid-units-unit-conjugates} is argued in a broadly similar way to \cref{thm:Mdash-is-group-of-units}. First, it is established that every right unit can be written as a product of prefixes of the relators $w_i$, similarly to \cref{lma:factor-I*}. Then, a similar induction to the body of \cref{thm:Mdash-is-group-of-units} finishes the proof, as their treatment is less formal with regards to congruence classes and so on than our description.
 
 
-\begin{onlycomputing}
 \appendix
-\section{Computer results on one-relation special monoid presentations}
+\section{A program for computing \texorpdfstring{E(M)}{$E(M)$}} \label{sec:E(M)-program}
 
-\begin{widecenter}
-\input{../experiment.tex}
-\end{widecenter}
-\end{onlycomputing}
+In \cref{sec:constructing-genset}, we computed the generating sets $E(M)$ and the sets $C_k$ as described in \cite{Zhang1992a} using a simple GAP program, reproduced below.
+
+\inputminted[linenos=true,mathescape,tabsize=2,breaklines]{gap}{../ors.g}
 
 \printbibliography
 

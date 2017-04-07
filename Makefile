@@ -1,5 +1,5 @@
 LATEXMK ?= latexmk
-LFLAGS += -pdf
+LFLAGS += -pdf -pdflatex="pdflatex -shell-escape %O %S"
 SUBTARGETS := 01-zhang-summary 04-project 05-zhang-cs 06-talk
 
 

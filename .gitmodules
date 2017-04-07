@@ -1,3 +1,6 @@
 [submodule "lmaths"]
 	path = lmaths
 	url = git@lithonian.com:lmaths
+[submodule "gap-pygments-lexer"]
+	path = gap-pygments-lexer
+	url = https://github.com/pbelmans/gap-pygments-lexer
