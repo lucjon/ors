@@ -21,6 +21,9 @@
 \newcommand{\leftrightst}{\mathrel{\smash{\stackrel{\hspace{0.1em}\ast}{\leftrightarrow}}}}
 \newcommand{\paradec}{\par\begin{center}$\ast$\end{center}}
 
+\newcommand{\frontmatter}{\pagenumbering{roman}}
+\newcommand{\mainmatter}{\pagenumbering{arabic}}
+
 \newtheorem{algorithm}[defn]{Algorithm}
 
 \usepackage{fancyhdr}
@@ -39,15 +42,35 @@
 \author{Lucas Jones}
 
 \begin{document}
-
-\thispagestyle{empty}
+\vfill
 \maketitle
-\bigskip
+\vfill
+\thispagestyle{empty}
+\clearpage
+
+\frontmatter
+I certify that this project report has been written by me, is a record of work carried out by me, and is essentially different from work undertaken for any other purpose or assessment.
+
+\vspace{1.5em}
+Signed: \rule[-2pt]{15em}{1pt}
+\clearpage
+
+\begin{abstract}
+	In this project, we discuss a long-standing area of research in semigroup theory --- the question of the decidability of the word problem for a semigroup --- and its connections with the theory of string rewriting systems. In particular, we examine the open problem of the word problem for semigroups admitting a presentation with one defining relation. We present a proof that a significant special case --- the word problem for so-called `special' one-relation monoids --- is solvable, using an approach due to Zhang, and prove some results about the structure of these monoids. We also explore the connection between this work and the work of Ivanov et al. on special inverse monoids, which describes a potential avenue for solving the word problem for all one-relation semigroups.
+\end{abstract}
+
 \tableofcontents
 
+\clearpage
+
+\mainmatter
 \section{Introduction} \label{sec:intro}
 
-The aim of this project is to investigate the decidability of the word problem for so-called special one-relation monoids, via Zhang's application of string rewriting systems. In \cref{sec:intro}, we will recall some elementary definitions which will be useful throughout the project, before giving a brief history of the word problem for semigroups and, in particular, an overview of work which has been done for the special case of one-relator semigroups. In \cref{sec:rewriting-systems}, we provide an elementary introduction to string rewriting systems and their properties, which is crucial to \cref{sec:special-monoids}, an exposition of Zhang's proof in \cite{Zhang1992a} that the word problem for one-relation special monoids is decidable.
+The aim of this project is to investigate the decidability of the word problem for so-called special one-relation monoids, via Zhang's application of string rewriting systems. In \cref{sec:intro}, we will recall some elementary definitions which will be useful throughout the project, before giving a brief history of the word problem for semigroups and, in particular, an overview of work which has been done for the special case of one-relator semigroups.
+
+In \cref{sec:rewriting-systems}, we provide an elementary introduction to string rewriting systems and their properties, which is crucial to \cref{sec:special-monoids}, an exposition of Zhang's proof in \cite{Zhang1992a} that the word problem for one-relation special monoids is decidable. \Cref{sec:structure} extends these rewriting methods according to \cite{Zhang1992}, using them to prove various, perhaps surprising, results on the unit structure of one-relation special monoids.
+
+The conclusion of the project, in \cref{sec:inverse-monoids}, discusses the broader context of Zhang's work in relation to the broader one-relation semigroup problem, and gives an overview of an intriguing analogy to Ivanov, Margolis and Meakin's work in \cite{Ivanov2001} on one-relation special inverse monoids which could lead to a solution to the general one-relation word problem.
 
 It is expected that the reader has a basic familiarity with the theory of semigroups, equivalent to the St Andrews module \emph{MT5826 Semigroups}, and an elementary acquaintance with groups.
 
@@ -77,13 +100,21 @@ The idea is that the letters in $A$ generate a semigroup (or monoid, or group) a
 
 For example, the free semigroup on two letters $F_2$ is presented by $\langle a, b \mid \rangle$. As another example, the presentation $\langle a \mid a^7 = a \rangle$ defines the cyclic group of order 6.
 
+If $S$ is a semigroup given by a presentation, we will write $\rho_S$ for this smallest congruence by which we are taking the quotient.
+
 This definition extends very naturally to monoids.
 
 \begin{defn}
 	The \dn{monoid presented by a presentation} $\langle A \mid R\rangle$ is the quotient monoid $\Mon \langle A \mid R\rangle = A^*/\rho$, where $\rho$ is the smallest congruence on $A^*$ containing $R$. This is also denoted $\langle A \mid R \rangle$.
 \end{defn}
 
-The bicyclic monoid, for example, can be written as $\Mon \langle b, c \mid bc = \epsilon \rangle$. This is equivalent to the semigroup presentation $\langle b, c, \epsilon \mid bc = \epsilon, b\epsilon = \epsilon b = b, a\epsilon = \epsilon a = a, \epsilon^2 = \epsilon \rangle$.
+\begin{example}
+The bicyclic monoid, can be written as $\Mon \langle b, c \mid bc = \epsilon \rangle$. This is equivalent to the semigroup presentation $\langle b, c, \epsilon \mid bc = \epsilon, b\epsilon = \epsilon b = b, a\epsilon = \epsilon a = a, \epsilon^2 = \epsilon \rangle$.
+\end{example}
+
+\begin{example}
+	The symmetric group on three points, $S_3$, is given by the semigroup presentation $\langle \sigma, \tau \mid \sigma^2 = \tau^2 = (\sigma\tau)^3 = \epsilon \rangle$, where the generators $\sigma$ and $\tau$ are the 2-cycles $\sigma = (1\ 2)$ and $\tau = (2\ 3)$.
+\end{example}
 
 A group presentation is defined in a similar way to the above, except that we need to include the trivial relations $aa^{-1} = a^{-1}a = \epsilon$ implied by the group axioms.
 
@@ -499,9 +530,7 @@ It is then straightforward to rephrase \cref{thm:confluent-cond} in the followin
 	\emph{Rule 1}: $a^3 \to \epsilon$. The two possible overlaps are:
 	\begin{align*}
 		\underline{aaa}a \to \epsilon a = a & \quad & a\underline{aaa} \to a\epsilon = a
-	\end{align*}
-	and
-	\begin{align*}
+	\shortintertext{and}
 		\underline{aaa}b \to \epsilon b = b & \quad & aa\underline{ab} \to a\underline{ab}aa \to ab\underline{aaa}a \\
 		&&\to \underline{ab}a \to b\underline{aaa} \to b,
 	\end{align*}
@@ -510,9 +539,7 @@ It is then straightforward to rephrase \cref{thm:confluent-cond} in the followin
 	\emph{Rule 2}: $b^2 \to \epsilon$. The two possible overlaps are:
 	\begin{align*}
 		\underline{bb}b \to b & \quad & b\underline{bb} \to b
-	\end{align*}
-	and
-	\begin{align*}
+	\shortintertext{and}
 		a\underline{bb} \to a & \quad & \underline{ab}b \to b\underline{aaa} \to b,
 	\end{align*}
 	which also both resolve.
@@ -739,7 +766,7 @@ The final property of $\phi$ we need is that it behaves well with respect to our
 	Let $u, v \in E(M)^*$. Then $u =_M v$ if and only if $\phi(u) =_{M'} \phi(v)$. \label{prop:phi-compatible-MM'}
 \end{prop}
 \begin{proof}
-	Suppose $u =_M v$. Since $u =_M v$ if and only if $u \leftrightst v$, whenever $u =_M v$ there must be a sequence of derivations $u = u^{(0)} \leftrightarrow_M u^{(1)} \leftrightarrow_M \cdots \leftrightarrow_M u^{(n-1)} \leftrightarrow_M u^{(n)} = v$. We proceed by induction on the length $n$ of the derivation.
+	Suppose $u =_M v$. Since $u =_M v$ if and only if $u \leftrightst_M v$, whenever $u =_M v$ there must be a sequence of derivations $u = u^{(0)} \leftrightarrow_M u^{(1)} \leftrightarrow_M \cdots \leftrightarrow_M u^{(n-1)} \leftrightarrow_M u^{(n)} = v$. We proceed by induction on the length $n$ of the derivation.
 
 	If $n = 0$, $u = v$ and so $\phi(u) = \phi(v)$.
 	
@@ -833,7 +860,7 @@ Given two words $u, v \in A^*$, we can thus obtain their normal forms $\bar u$ a
 The rewriting system $R$ is equivalent to $\{(w, \epsilon)\}$ by \cref{lma:R-equivalent-to-pres}, and since $\{(w, \epsilon)\}$ presents our monoid $M$, $u =_R v$ if and only $u =_M v$. This is precisely the word problem for $M$, and so we have shown that the word problem for a one-relator special monoid is decidable.
 
 
-\section{The structure of one-relation special monoids}
+\section{The structure of one-relation special monoids} \label{sec:structure}
 
 The rewriting system discussed in the previous section can be used to solve more than just the word problem for special monoids. In this section, we will discuss how it can be used to describe significant parts of the structure of the monoid $M$ --- in particular, we will finally prove that the group $G$ from \cref{sec:defining-presentation} is the group of units. With this established, we shall explore the submonoids of right and left units of $M$, and show how they admit a simple (and surprising) characterisation as a free product of $G$ and a free semigroup.
 
@@ -942,7 +969,7 @@ Recall that the group of units $G(M)$ of a monoid $M$ is the set of all elements
 	Let $M$ be a monoid. Then the \dn{submonoid of left units} of $M$, denoted $U_l(M)$, is the subset of elements of $M$ which are left-invertible. Analogously, the \dn{submonoid of right units}, denoted $U_r(M)$, is the set of right-invertible elements.
 \end{defn}
 
-Note that these submonoids do not necessarily form a group.
+It should be fairly clear that these sets form a submonoid, but note that they do not necessarily form a group.
 
 In \cite{Zhang1992a}, Zhang uses the presentations from the previous section to give a particularly simple characterisation of the structure of these submonoids in the case where $M$ is special.
 \begin{theorem} \label{thm:gen-units-factor-freely}
@@ -959,16 +986,7 @@ Recall from \cref{sec:group-of-units} the definition $I = L(E(M)) \setminus \{\e
 
 Our presentation for the group of units of $M$ was $G(M) = \langle B \mid \phi(w) = \epsilon \rangle$. We define a new alphabet $C = B \cup \{c_1, \ldots, c_m\}$ disjoint with $A$ where the new letters $c_i$ correspond to those words in $I_0$ which are not congruent to any minimal factor of $w$. There is then a natural bijection $\bar\psi : I_0 \to C$ extending the map $\bar\phi : E(M) \to B$ from \cref{sec:defining-presentation}; as in that section, we extend this to an isomorphism $\psi : I_0^* \to C^*$. Finally, we use this to define a new monoid $N = \langle C \mid \phi(w) = \epsilon\rangle$.
 
-We will use $\psi$ to construct a map from $N$ to the group of right units and claim it is an isomorphism. As in \cref{sec:group-of-units}, the proof of this relies crucially on the fact that $\psi$ is `compatible' with the congruences defining $M$ and $N$.
-
-\begin{prop}
-	If $u, v \in I_0^*$, then $u =_M v$ if and only if $\psi(u) =_N \psi(v)$. \incomplete\label{prop:psi-MN-compatible}
-\end{prop}
-\begin{proof}
-	The forwards direction follows very similarly to the forwards direction of \cref{prop:phi-compatible-MM'}: because $w \in E(M)^*$, $\psi(w) = \phi(w) = \epsilon$ and the argument remains the same.
-
-	Conversely, suppose $\psi(u) =_N \psi(v)$.
-\end{proof}
+We claim that $I_0$ forms a generating set for the submonoid of right units.
 
 \begin{lemma} \label{lma:I0*-generates-Ur}
 	The words in $I_0$ generate $U_r(M)$.
@@ -978,6 +996,73 @@ We will use $\psi$ to construct a map from $N$ to the group of right units and c
 
 	Conversely, if $v \in I_0$, then either $v \in E(M)$ --- in which case it is a unit and so certainly a right unit --- or it is a left factor of some element $v' \in E(M)$. Then $vv'$ is a unit, and so there is some $v'' \in A^*$ such that $v'v''$ is a right inverse for $v$, meaning $v$ is in $U_r(M)$. Every generator of $I_0^*$ is hence right invertible, and so every element of $I_0^*$ must be.
 \end{proof}
+
+We will now use $\psi$ to construct a map from $N$ to the group of right units and claim it is an isomorphism. As in \cref{sec:group-of-units}, the proof of this relies crucially on the fact that $\psi$ is `compatible' with the congruences defining $M$ and $N$. To show this is the case, we require the following, rather technical, factorisation theorem for special presentations.
+
+\newcommand{\verteq}{\rotatebox{90}{$=$\hspace{0.5em}}}
+\newcommand{\verteqM}{\updownarrow}
+\begin{lemma} \label{lma:special-factorisation}
+	Let $M = \langle A \mid w = \epsilon\rangle$ be a special monoid,  and let $u, v \in A^+$ such that $u =_M v$. Then there are words $u_1, \ldots, u_n, v_1, \ldots v_n \in A^*$ and $x_1, \ldots, x_n \in A^+$ into which $u$ and $v$ factor as
+		\[
+		\arraycolsep=0.2em
+		\begin{array}{ccccccccc}
+			u =& u_0 & x_1 & u_1 & x_2 & u_2 & \cdots & x_n & u_n \\
+			& \verteqM & \verteq & \verteqM & \verteq & \verteqM & & \verteq & \verteqM \\
+			v =& v_0 & x_1 & v_1 & x_2 & v_2 & \cdots & x_n & v_n
+		\end{array}
+		\]
+	where $\leftrightarrow$ denotes equality in $M$, $u_i$ and $v_i$ are invertible in $M$ for every index $i$, and $u_j v_j \ne \epsilon$ for every index $0 \le j \le n - 1$.
+\end{lemma}
+
+This is a weakening of theorem 1.2 in \cite{Zhang1992}, for which Zhang refers the reader to \S5 of \cite{Otto1991} for a proof (although this paper still does not give a full proof). If we require a stricter condition on the $u_i$ and $v_i$, namely that they are so-called `maximal' invertible factors of $u$ and $v$, then the factorisation is in fact unique --- however, we shall not require this property to show the results in this section.
+
+\begin{prop}
+	If $u, v \in I_0^*$, then $u =_M v$ if and only if $\psi(u) =_N \psi(v)$. \incomplete\label{prop:psi-MN-compatible}
+\end{prop}
+\begin{proof}
+	If $\psi(u) =_N \psi(v)$, then a very similar argument to \cref{prop:phi-compatible-MM'} gives $u =_M v$, noting that since $w \in E(M)^*$, $\psi(w) = \phi(w) = \epsilon$.
+
+	Conversely, suppose $u =_M v$. If both $u$ and $v$ are invertible, then they belong to $E(M)^*$, and so $\psi(u) = \phi(u)$ and $\psi(v) = \phi(v)$. Hence by \cref{prop:phi-compatible-MM'}, $\psi(u) =_M \psi(v)$.
+
+	If at least one is not invertible, then we induct on the total length $|u| + |v|$ of the strings and take advantage of our factorisation result above. If $|u|+|v| = 0$, then $u = v = \epsilon$ and so trivially $\psi(u) =_N \psi(v)$. So suppose the proposition holds for all pairs of words whose total length is less than $|u| + |v|$, and let $u_1, \ldots, u_n, v_1, \ldots, v_n$ and $x_1, \ldots, x_n$ give a factorisation of $u$ and $v$ as in \cref{lma:special-factorisation}.
+
+	We consider two cases. In the first case, we suppose at least one of $u_n$ or $v_n$ is nonempty; assume without loss of generality that $u_n \ne \epsilon$. Then by the factorisation lemma, $u_n$ is invertible, and so by \cref{lma:I0*-generates-Ur}, $u_n \in I_0^*$. For $u$ to be in $I_0^*$ as the hypothesis claims, it must then also be the case that $u_0x_1u_1\cdots x_n \in I_0^*$. Since $u_n =_M v_n$, $v_n$ is also invertible in $M$ and a similar argument gives $v_0x_1v_1\cdots x_n \in I_0^*$. Bringing this together,
+	\begin{align*}
+		u_0x_1u_1 \cdots x_n u_n &=_M v_0x_1v_1\cdots x_n v_n \\
+		&=_M v_0x_1v_1\cdots x_n u_n
+	\end{align*}
+	and so right multiplying by the inverse of $u_n$ gives
+		\[ u_0x_1u_1 \cdots x_n =_M v_0x_1v_1\cdots x_n. \]
+	The total length of the strings on each side is less than $|u| + |v|$ because $u_n$ is nonempty, so by the inductive hypothesis,
+		\[ \psi(u_0x_1u_1 \cdots x_n) =_N \psi(v_0x_1v_1\cdots x_n). \]
+	Then multiplying again gives
+	\begin{align*}
+		\psi(u_0x_1u_1 \cdots x_n)\psi(u_n) &=_N \psi(v_0x_1v_1\cdots x_n)\psi(u_n) \\
+		&=_N \psi(v_0x_1v_1\cdots x_n)\psi(v_n).
+	\end{align*}
+	The last equivalence holds from our earlier argument, because $u_n =_M v_n$, and both are invertible. We know that all the arguments to $\psi$ in the above equation belong to $I_0^*$, and so the fact that $\psi$ is a homomorphism on $I_0^*$ allows us to conclude that
+	\[ \psi(u_0x_1u_1 \cdots x_n u_n) =_N \psi(v_0 x_1 v_1 \cdots x_n v_n) \]
+	as required.
+
+	It remains to deal with the case where $u_n = v_n = \epsilon$. Factorise $u = f_1 f_2 \cdots f_l$ and $v = g_1 g_2 \cdots g_m$, where each $f_i$ and $g_i$ come from $I_0$. If $|x_n| \ge |f_l|$, then $x_n = Ef_l$ for some $E \in A^*$. Since $u$ and $v$ both end in $x_n$, $g_m$ ends in $f_l$; we claim that $g_m$ must then equal $f_l$.
+	
+	Recall that $I_0 \subseteq I \setminus I^2 \subseteq I = L(E(M)) \setminus \{\epsilon\}$.	Since $g_m$ ends in $f_l$, $g_m = Gf_l \in I_0$ for some $G \in A^*$. We cannot have $G \in I_0$, or $Gf_l$ is in $I^2$, a contradiction. But $Gf_l$ is a proper left factor of a word in $E(M)$, and so $G$ is certainly a left factor of a word in $E(M)$ --- we know it is not in $I$, so the only possibility is that $G = \epsilon$ and hence $g_m = f_l$.
+
+	On the other hand, if $|x_n| < |f_l|$, we claim that $f_l = Fu_k x_{k+1} \cdots x_{n-1}u_{n-1}x_n$ for some $0 \le k < n$ and a suffix $F \in A^+$ of $x_{k-1}$. Since it is longer than $x_n$, it must contain at least part of $u_{n-1}$, and perhaps contains more of $u$. However, if it begins with just part of some $u_k$, it must contain all of it: if $u = u_k'u_k''$ and $f_l = u_k''\omega$ for $u_k', u_k'', \omega \in A^+$, then since $u_k$ is invertible, there is a $\overline{u_k}$ such that $f_l =_M \overline{u_k}u_k' \cdot u_k''\omega =_M \omega$. So $f_l \leftrightst_R \omega$. But $f_l$ is in $I_0$ and so is irreducible by $R$, hence $\omega \to^*_R f_l$; by the definition of $R$, this gives $|\omega| \ge |f_l|$, which is a contradiction.
+
+	By the same argument, $w_m = Gv_jx_{j+1} \cdots x_{n-1}v_{n-1}x_n$ for some $0 \le j < n$ and a suffix $G \in A^+$ of $x_{j-1}$. We may assume that $u$ and $v$ are such that $j \le k$. Since $f_l$ and $g_m$ are irreducible under $R$, all the $u_p$ contained in $f_l$ are irreducible under $R$, for $k \le p < n$; as are all the $v_q$ are for $j \le q < n$. The factorisation guarantees that $u_i =_M v_i$ for $k \le i < n$, and so $u_i \leftrightst_{\{w\to\epsilon\}} v_i$. So $u_i = v_i$ for all these $i$, and hence $f_l$ is a (not necessarily proper) suffix of $g_m$. Therefore by the argument from the case $|g_l| \ge |x_n|$, $g_m = f_l$.
+
+	Our situation then looks like
+		\[ u =  u_0x_1u_1\cdots u_{n-1}E \cdot f_l = f_1f_2\cdots f_{l-1} \cdot f_l \stackrel{(\star)\hphantom{{}_M}}{=_M} g_1g_2\cdots g_{m-1} \cdot f_l = v_0x_1v_1\cdots v_{n-1}E \cdot f_l = v. \]
+	Since $f_l \in I_0$, it is a right unit by \cref{lma:I0*-generates-Ur}; multiplying $(\star)$ by its right inverse gives
+		\[ f_1f_2\cdots f_{l-1} =_M g_1g_2\cdots g_{m-1}. \]
+	The string $f_l$ is nonempty, so by the inductive hypothesis, we conclude
+		\[ \psi(f_1 f_2 \cdots f_{l-1}) =_N \psi(g_1 g_2\cdots g_{m-1}). \]
+	Our words here are all in $I_0^*$, so we can multiply to get
+		\[ \psi(f_1 f_2 \cdots f_{l-1} f_l) =_N \psi(g_1 g_2\cdots g_{m-1} g_m); \]
+	that is, $\psi(u) =_N \psi(v)$ as required.
+\end{proof}
+
 
 We now refine \cref{thm:gen-units-factor-freely} as follows:
 
@@ -994,6 +1079,10 @@ We now refine \cref{thm:gen-units-factor-freely} as follows:
 	where $u$ is the irreducible representative in $I_0^*$ of any element of $U_r(M)$, which exists by \cref{lma:I0*-generates-Ur}. This map is well-defined and injective by \cref{prop:psi-MN-compatible}, and it is a surjective homomorphism because $\psi$ is.
 \end{proof}
 
+A symmetrical argument, which we shall not attempt to write out in full, gives us the theorem in the other direction:
+\begin{theorem}
+	The submonoid $U_l(M)$ of left units of $M$ is isomorphic to the free product of $G(M)$ and a free monoid over a finite generating set.
+\end{theorem}
 
 \begin{onlycomputing}
 \section{Computing with presentations}
@@ -1067,7 +1156,7 @@ The key theorems on which these computations rely are the following:
 
 
 
-\section{Inverse monoids}
+\section{Inverse monoids} \label{sec:inverse-monoids}
 
 In this section, we will describe how the word problem for one-relation special monoids fits together with other work on the general word problem for semigroups. In particular, we will focus on one more special case, the word problem for one-relation special inverse monoids, whose word problem has been shown to be equivalent to that of a general one-relation monoid.
 
@@ -1088,7 +1177,7 @@ We will examine this result in more detail in the following sections. Our partic
 
 \subsection{Inverse semigroups and monoids}
 
-We begin with an elementary discussion of inverse semigroups and monoids. More thorough treatment is found in, for example, chapter 5 of \cite{Howie1996}.
+We begin with an elementary discussion of inverse semigroups and monoids. More thorough treatment is found in, for example, chapter 5 of \cite{Howie1995}.
 
 \begin{defn}
 	Let $S$ be a semigroup, and $x \in S$. Then an element $y \in S$ is a \dn{(semigroup) inverse} for $x$ if $xyx = x$ and $yxy = y$.
@@ -1110,15 +1199,17 @@ Our usual notion of semigroup presentations extends to inverse monoids in a rela
 
 \begin{defn}
 	Let $\Mon \langle A \mid R \rangle$ be a monoid presentation, and let $A^{-1}$ be an alphabet disjoint to $A$ such that there is a bijection $a \mapsto a^{-1}$ from $A$ to $A^{-1}$, with corresponding inverse $(a^{-1})^{-1} \mapsto a$. Then the \dn{inverse monoid presented by $\langle A \mid R \rangle$} is the monoid
-	\[ \Inv \langle A \mid R \rangle = \Mon \langle A \cup A^{-1} \mid R \cup \{ aa^{-1}a = a : a \in A \} \cup \{ aa^{-1}bb^{-1} = bb^{-1}aa^{-1} : a, b \in A \cup A^{-1} \}\rangle. \]
+	\[ \Inv \langle A \mid R \rangle = \Mon \langle A \cup A^{-1} \mid R \cup \{ aa^{-1}a = a : a \in A \} \cup \{ aa^{-1}bb^{-1} = bb^{-1}aa^{-1} : a, b \in (A \cup A^{-1})^* \}\rangle. \]
 \end{defn}
+
+The least congruence containing the relations described above (i.e. the congruence associated with the free inverse semigroup $\Inv \langle A \mid\rangle$) is known as the \dn{Wagner congruence}, after Viktor Wagner, one of the first mathematicians to investigate inverse semigroups.
 
 This definition arises from the following characterisation of inverse semigroups:
 \begin{theorem} \label{thm:inv-semigp-cond}
 	A semigroup $S$ is an inverse semigroup if and only if it admits a map $a \mapsto a^{-1}$ from $S$ to $S$, such that $(a^{-1})^{-1} = a$, $aa^{-1}a = a$ and $aa^{-1}bb^{-1} = bb^{-1}aa^{-1}$ for all $a, b \in S$.
 \end{theorem}
 
-We give a proof of the forwards direction here as motivation, adapted from theorem 5.1.1 in \cite{Howie1996} (although note that Howie uses slightly different terminology), but do not show the reverse implication here.
+We give a proof of the forwards direction here as motivation, adapted from theorem 5.1.1 in \cite{Howie1995} (although note that Howie uses slightly different terminology), but do not show the reverse implication here.
 
 \begin{proof}[ \pCref{thm:inv-semigp-cond}]
 	Suppose $S$ is an inverse semigroup. Clearly the map taking $x \in S$ to its unique inverse satisfies the first two properties required, so we show the third. Let $a, b \in S$, $e = aa^{-1}$, $f = bb^{-1}$ and $z = (ef)^{-1}$. Calculating,
