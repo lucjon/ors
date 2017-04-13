@@ -1,35 +1,28 @@
 # vim: ft=gap
-
 ### Utility functions for calculating factors of a word.
-
 # Calculate the left factors of a set of strings S, including the strings
-# themselves and \epsilon.
+# themselves and $\epsilon$.
 LeftFactors := function(S)
 	local L, s, i;
 	L := [""];
-
 	for s in S do
 		for i in [1..Length(s)] do
 			AddSet(L, s{[1..i]});
 		od;
 	od;
-
 	return L;
 end;
 
-# Calculate the right factors of a set of strings S, including the strings
-# themselves and $\epsilon$.
+# Calculate the right factors of a set of strings S.
 RightFactors := function(S)
 	local L, s, i, n;
 	L := [""];
-
 	for s in S do
 		n := Length(s);
 		for i in [0..n-1] do
 			AddSet(L, s{[(n-i)..n]});
 		od;
 	od;
-
 	return L;
 end;
 
@@ -84,9 +77,7 @@ Factorise := function(Sigma, w, arg...)
 	fi;
 end;
 
-
 ### The algorithm for computing the generating set.
-
 # Compute the set $C_k$ as described in [Zha92a] for the monoid $\langle A \mid w = \epsilon \rangle$.
 # Returns a list [$C_k$, $W(C_k)$], as both are computed simultaneously.
 ComputeCk := function(w)
