@@ -26,6 +26,9 @@ RightFactors := function(S)
 	return L;
 end;
 
+# Compute only the proper right factors, i.e. not whole words or $\epsilon$
+ProperRightFactors := S -> Difference(RightFactors(S), Concatenation(S, [""]));
+
 # Compute words which are left and right factors of S.
 LeftAndRightFactors := S -> Intersection(LeftFactors(S), RightFactors(S));
 
@@ -115,25 +118,10 @@ end;
 # The main function. Computes the set $E(M)$ of minimal words of the monoid
 # $\langle A \mid w = \epsilon\rangle$, where $A$ is the set of letters in $w$.
 MinimalWords := function(w)
-	local result, W, is_minimal, u;
-	result := [];
-	W := ComputeCk(w)[1];
-
-	for w in W do
-		is_minimal := true;
-		for u in Difference(RightFactors([w]), [w, ""]) do
-			if u in W then
-				is_minimal := false;
-				break;
-			fi;
-		od;
-
-		if is_minimal then
-			AddSet(result, w);
-		fi;
-	od;
-
-	return result;
+	local W, is_minimal;
+	W := ComputeCk(w)[2];
+	is_minimal := w -> IsEmpty(Intersection(ProperRightFactors([w]), W));
+	return Filtered(W, w -> w <> "" and is_minimal(w));
 end;
 
 

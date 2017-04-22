@@ -17,6 +17,7 @@ __pycache__/*
 *.nav
 *.snm
 *.synctex*
+*.bak
 lit/*
 experiment.*
 *_minted*

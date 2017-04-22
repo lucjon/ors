@@ -1,7 +1,10 @@
 \documentclass[noindex,noinsetproof,emphthm,12pt]{lmaths}
 \synctex=1
+
 \addbibresource{../ors.bib}
 \ExecuteBibliographyOptions{url=false}
+\AtEveryBibitem{\clearfield{issn}}
+\AtEveryCitekey{\clearfield{issn}}
 
 \geometry{vmargin=2.5cm}
 \usepackage{booktabs}
@@ -58,12 +61,16 @@
 
 \frontmatter
 
+\begin{comment}
 \clearpage
 I certify that this project report has been written by me, is a record of work carried out by me, and is essentially different from work undertaken for any other purpose or assessment.
 
 \vspace{1.5em}
 Signed: \rule[-2pt]{15em}{1pt} \\*[0.8em]
 \hphantom{Signed: }Lucas Jones
+\end{comment}
+\includepdf{declaration.pdf}
+
 \clearpage
 
 
@@ -83,7 +90,7 @@ The aim of this project is to investigate the decidability of the word problem f
 
 In \cref{sec:rewriting-systems}, we provide an elementary introduction to string rewriting systems and their properties, which is crucial to \cref{sec:special-monoids}, an exposition of Zhang's proof in \cite{Zhang1992a} that the word problem for one-relation special monoids is decidable. \Cref{sec:structure} extends these rewriting methods according to \cite{Zhang1992}, using them to prove various, perhaps surprising, results on the unit structure of one-relation special monoids.
 
-The conclusion of the project, in \cref{sec:inverse-monoids}, discusses the broader context of Zhang's work in relation to the broader one-relation semigroup problem, and gives an overview of an intriguing analogy to Ivanov, Margolis and Meakin's work in \cite{Ivanov2001} on one-relation special inverse monoids which could lead to a solution to the general one-relation word problem.
+The conclusion of the project, in \namecrefs{sec:inverse-monoids} \ref{sec:inverse-monoids} and \ref{sec:related-questions}, discusses the broader context of Zhang's work in relation to the broader one-relation semigroup problem, and gives an overview of an intriguing analogy to Ivanov, Margolis and Meakin's work in \cite{Ivanov2001} on one-relation special inverse monoids which could lead to a solution to the general one-relation word problem.
 
 It is expected that the reader has a basic familiarity with the theory of semigroups, equivalent to the St Andrews module \emph{MT5826 Semigroups}, and an elementary acquaintance with groups.
 
@@ -98,7 +105,7 @@ The \dn{free monoid} $A^*$ over $A$ is the set $A^+ \cup \{\epsilon\}$ under con
 
 The construction of a free group is more involved, since the existence of inverses forces there to be some relations between letters. Again, let $A$ be an alphabet and fix an arbitrary set $A^{-1}$ which is disjoint but in bijection with $A$. We will write $a^{-1}$ for the image of $a \in A$ under this bijection. For any letter $a \in A$, the strings $aa^{-1}$ and $a^{-1}a$ are known as \dn{trivial relators}. We say a word is \dn{freely reduced} if it contains no trivial relators.
 
-We say that two words $u$ and $v$ in $(A \cup A^{-1})^*$ are related by an elementary move if one can transform $u$ into $v$ by adding or removing a trivial relator at some point in $u$. We extend this to an equivalence relation $\sim$ by saying that $u \sim v$ if $u$ is related to $v$ by a finite sequence of elementary moves.  Furthermore, we claim that this relation $\sim$ is a congruence, and that the resultant quotient monoid $(A \cup A^{-1})^*/{\sim}$ is a group, called the \dn{free group} on $A$ and denoted $\FG(A)$.
+We say that two words $u$ and $v$ in $(A \cup A^{-1})^*$ are related by an elementary move if one can transform $u$ into $v$ by adding or removing a trivial relator at some point in $u$. We extend this to an equivalence relation $\sim$ by saying that $u \sim v$ if $u$ is related to $v$ by a finite sequence of elementary moves.  Furthermore, we claim that this relation $\sim$ is a congruence, and that the resultant quotient monoid $(A \cup A^{-1})^*/{\sim}$ is a group, called the \dn{free group} on $A$.
 
 \subsection{Presentations}
 
@@ -118,7 +125,7 @@ For example, the free semigroup on two letters $F_2$ is presented by $\langle a,
 
 If $S$ is a semigroup given by a presentation, we will write $\rho_S$ for this smallest congruence by which we are taking the quotient.
 
-This definition extends very naturally to monoids.
+This definition extends very naturally to monoids:
 
 \begin{defn}
 	The \dn{monoid presented by a presentation} $\langle A \mid R\rangle$ is the quotient monoid $\Mon \langle A \mid R\rangle = A^*/\rho$, where $\rho$ is the smallest congruence on $A^*$ containing $R$. This is also denoted $\langle A \mid R \rangle$.
@@ -138,9 +145,9 @@ A group presentation is defined in a similar way to the above, except that we ne
 	The \dn{group presented by a presentation} $\langle A \mid R\rangle$, is the quotient monoid $\Gp \langle A \mid R\rangle = A^*/\rho$, where $\rho$ is the smallest congruence on $A^*$ containing $R$ and the trivial relations, namely $aa^{-1} = \epsilon$ and $a^{-1}a = \epsilon$ for each $a \in A$.
 \end{defn}
 
-To give a final example, the dihedral group of order 6 is given by the presentation $\Gp \langle \rho, \sigma \mid \rho^3 = \epsilon, \sigma^2 = \epsilon, \sigma\rho = \rho\sigma^{-1} \rangle$, with $\rho$ representing the rotation by $\frac{2\pi}{3}$ radians and $\sigma$ representing a horizontal flip.
+To give a final example, the dihedral group of order 6 acting on a triangle is given by the presentation $\Gp \langle \rho, \sigma \mid \rho^3 = \epsilon, \sigma^2 = \epsilon, \sigma\rho = \rho\sigma^{-1} \rangle$, with $\rho$ representing the rotation by $\frac{2\pi}{3}$ radians and $\sigma$ representing a horizontal flip.
 
-In this project, we will be interested mostly in \dn{finitely presented} semigroups, monoids and groups; that is, those structures which admit a presentation $\langle A \mid R\rangle$ where both $A$ and $R$ are finite. Not every semigroup is finitely presented, however. In particular, $\langle a, b \mid ab^ia = aba \quad\forall i \in \mathbb{N} \rangle$ defines a semigroup which is not finitely presented.
+In this project, we will be interested mostly in \dn{finitely presented} semigroups, monoids and groups; that is, those structures which admit a presentation $\langle A \mid R\rangle$ where both $A$ and $R$ are finite. Not every semigroup is finitely presented, however. In particular, $\langle a, b \mid ab^ia = aba \,\,\forall i \in \mathbb{N} \rangle$ defines a semigroup which is not finitely presented.
 
 
 \subsection{Decidable and undecidable problems}
@@ -221,16 +228,16 @@ We say a one-relator monoid is \dn{special} if it admits a finite presentation o
 There is a monoid analogue to the Freiheitssatz, due to Squier and Wrathall (\cite{Squier1983}):
 % XXX check this XXX
 \begin{theorem}[Freiheitssatz for one-relator monoids]
-	Let $S = \langle A \mid u = v \rangle$ be a one-relator group, with $w$ cylically reduced, and let $a \in A$ be a letter contained in $uv$. Then the subgroup $\langle A \setminus \{a\} \rangle$ is free.
+	Let $S = \langle A \mid u = v \rangle$ be a one-relator monoid and let $a \in A$ be a letter contained in $uv$. Then the submonoid $\langle A \setminus \{a\} \rangle$ is free.
 \end{theorem}
-However, perhaps surprisingly, while both Zhang's proof and Adjan's original proof of the result for one-relator special monoids rely crucially upon the Freiheitssatz for groups, neither uses the monoid result at all.
+However, perhaps surprisingly, while both Adjan's proof of the result for one-relator special monoids (and the simplified proof of Zhang which we shall see later) rely crucially upon the Freiheitssatz for groups, neither uses the monoid result at all.
 
 
 \section{Rewriting systems} \label{sec:rewriting-systems}
 
 \subsection{Introduction}
 
-A \dn{string rewriting system} over an alphabet $A$ is a set $R \subseteq A^* \times A^*$ of rules, normally written $\{u_1 \to v_1, u_2 \to v_2, \ldots\}$. The rules specify the action of the rewriting system on a string: each rule $u \to v$ specifies that whenever $u$ appears as a substring, it should be replaced by the string $v$. Formally:
+A \dn{string rewriting system} over an alphabet $A$ is a set $R \subseteq A^* \times A^*$ of rules, which we write $\{u_1 \to v_1, u_2 \to v_2, \ldots\}$. The rules specify the action of the rewriting system on a string: each rule $u \to v$ specifies that whenever $u$ appears as a substring, it should be replaced by the string $v$. Formally:
 
 \begin{defn}
 	Let $R$ be a string rewriting system over an alphabet $A$. Then the \dn{rewriting relation} $\to_R$ (or often just $\to$) is defined as follows: if $u, v \in A^*$, then $u \to_R v$ if and only if there exist strings $A, B \in A^*$ and a rule $(w, z) \in R$ such that $u = AwB$ and $v = AzB$.
@@ -240,7 +247,7 @@ A \dn{string rewriting system} over an alphabet $A$ is a set $R \subseteq A^* \t
 	Let $R$ be the rewriting system $\{ bb \to a, aa \to b \}$. Then $abba \to aaa$, $aaa \to ba$ and $aaa \to ab$. On the other hand, $a \nrightarrow bb$, $bba \nrightarrow ba$ and $abba \nrightarrow ab$.
 \end{example}
 
-Two strings are related under this relation if the right hand side is the result of making exactly one replacement according to a single rule in the corresponding rewriting system. Often it is useful to consider strings arising after an arbitrary number of replacements:
+Two strings are related under this relation if the right hand side is the result of making exactly one replacement according to a single rule in the corresponding rewriting system. Often it is useful to consider strings arising from an arbitrary number of replacements:
 
 \begin{defn}
 	The \dn{transitive closure} of the rewriting relation $\to_R$, denoted $\to_R^*$, is the smallest transitive relation on $A^*$ containing $\to_R$. Equivalently, two strings $u, v \in A^*$ are related under $\to_R^*$ if there exist strings $u_1, u_2, \ldots, u_n \in A^*$ (for some $n \ge 0$) such that $u \to_R u_1 \to_R u_2 \to_R \cdots \to_R u_n \to_R v$.
@@ -256,7 +263,7 @@ Let $u, v, w \in A^*$ be strings. If $u \to^* w$, then we say that $v$ is a \dn{
 
 \subsection{Equivalences and presentations}
 
-We can further extend the rewriting relation to an equivalence relation.
+We can extend the rewriting relation to an equivalence relation.
 
 \begin{defn}
 	The \dn{symmetric closure} of the rewriting relation $\to_R$, denoted $\leftrightarrow_R$, is defined such that for two words $u, v \in A^*$, $u \leftrightarrow_R v$ if and only if $u \to_R v$ or $v \to_R u$.
@@ -266,25 +273,25 @@ We can further extend the rewriting relation to an equivalence relation.
 	Given a string rewriting system $R$, the relation \dn{equivalence modulo $R$}, denoted $=_R$, is the smallest equivalence relation containing $R^*$. Equivalently, if $u, v \in A^*$ are two words, then $u =_R v$ if there exist strings $u_1, u_2, \ldots, u_n \in A^*$, for some $n \ge 1$, such that $u = u \leftrightarrow u_1 \leftrightarrow u_2 \leftrightarrow \cdots \leftrightarrow u_n = v$.
 \end{defn}
 
-In the above definition, taking $n = 1$ leaves no conditions to check, so $u =_R u$ for all strings $u \in A^*$.
+By construction, this relation is clearly transitive and symmetric, and in the above definition, taking $n = 1$ leaves no conditions to check, hence $u =_R u$ for all strings $u \in A^*$.
 
-\label{sec:rws-presentations} The usefulness of this equivalence relation for our purposes becomes apparent when we identify rewriting systems with monoid presentations. Suppose we have a presentation $\Mon \langle A \mid R\rangle$. Then picking a `direction' for each equation in $R$, we can write $R = \{ (r_1, s_1), (r_2, s_2), \ldots \}$. This set $R$ also forms a string rewriting system over $A^*$, and the equivalence $=_R$ is exactly the word problem for the monoid $M = \Mon \langle A \mid R\rangle$. Furthermore, $=_R$ is also a congruence on $A^*$, and the quotient $A^*/{=_R}$ is isomorphic to $M$.
+\label{sec:rws-presentations} The usefulness of this equivalence relation for our purposes becomes apparent when we identify rewriting systems with monoid presentations. Suppose we have a presentation $\Mon \langle A \mid R\rangle$. Then picking a `direction' for each equation $r_i = s_i$ in $R$, we can write $R = \{ (r_1, s_1), (r_2, s_2), \ldots \}$. This set $R$ also forms a string rewriting system over $A^*$, and the equivalence $=_R$ is exactly the word problem for the monoid $M = \Mon \langle A \mid R\rangle$. Furthermore, $=_R$ is also a congruence on $A^*$, and the quotient $A^*/{=_R}$ is isomorphic to $M$.
 
 \subsection{Noetherian rewriting systems}
 
-Noetherianness is one property we put on a rewriting system to ensure its rewriting algorithm (see \ref{sec:normal-forms}) always terminates, no matter which string it is applied to. It is very useful to know that a rewriting system is noetherian if one wants to prove, as we will later, that an algorithm which uses it also always terminates. Before discussing noetherianness, we need to make some definitions relating to partial orders.
+Noetherianness is one property we put on a rewriting system to ensure its rewriting algorithm (see \ref{sec:normal-forms}) always terminates, no matter which string it is applied to. It is very useful to know that a rewriting system is noetherian if one wants to prove, as we will later, that an algorithm which uses it also always terminates. Before discussing noetherianness, we make some definitions relating to partial orders.
 
 \begin{defn}
-	A linear order on a set $X$ is a relation $<$ on $X$ which has the following properties for all $a, b, c \in X$:
+	A linear order on a set $X$ is a relation $>$ on $X$ which has the following properties for all $a, b, c \in X$:
 	\begin{itemize}
-		\item \emph{Trichotomy:} exactly one of $a < b$, $b < a$ or $a = b$ holds.
-		\item \emph{Transitivity:} if $a < b$ and $b < c$, then $a < c$.
+		\item \emph{Trichotomy:} exactly one of $a > b$, $b > a$ or $a = b$ holds.
+		\item \emph{Transitivity:} if $a > b$ and $b > c$, then $a > c$.
 	\end{itemize}
 \end{defn}
 
 \begin{defn}
-	An order $<$ on a set $X$ is \dn{well-founded} if there is no sequence $x_1, x_2, \ldots \in X$ such that
-	\[ x_1 < x_2 < x_3 < \cdots. \]
+	An order $>$ on a set $X$ is \dn{well-founded} if there is no sequence $x_1, x_2, \ldots \in X$ such that
+	\[ x_1 > x_2 > x_3 > \cdots. \]
 \end{defn}
 
 An interesting application of well-foundedness is the concept of noetherian induction, which generalises regular mathematical induction to any set equipped with a well-founded order.
@@ -317,7 +324,7 @@ The crucial consequence of this is the following:
 	but since $R$ is noetherian, $\to$ is well-founded and so this is a contradiction.
 \end{proof}
 
-One way of showing a rewriting system is noetherian is to define a well-founded linear order $>$ on the set of strings $A^*$, and show that whenever $(u, v)$ is a rule in $R$, $u > v$. One common order which can be applied to many practical rewriting systems is the short-lexicographic order, which takes an order $\succ$ on the alphabet $A$ and extends it to a useful order on the whole set of strings $A^*$. Our examples thus far have mostly used the alphabet $\{a, b, c\}$, on which there is an `obvious' order to extend, $c \succ b \succ a$.
+One way of showing a rewriting system is noetherian is to define a well-founded linear order $>$ on the set of strings $A^*$, and show that whenever $u \to v$ is a rule in $R$, $u > v$. One common order which can be applied to many practical rewriting systems is the short-lexicographic order, which takes an order $\succ$ on the alphabet $A$ and extends it to a useful order on the whole set of strings $A^*$. Our examples thus far have mostly used the alphabet $\{a, b, c\}$, on which there is an `obvious' order to extend, $c \succ b \succ a$.
 
 \begin{defn}
 	Let $A$ be an alphabet, and let $\succ$ be a linear order on $A$. Then the \dn{short-lexicographic}, or \dn{short-lex order} $>$ on $A^*$ extending $\succ$ is defined as follows: suppose $u = u_1\cdots u_m, v = v_1\cdots v_n \in A^*$ are words. Then $u > v$ if and only if
@@ -353,25 +360,28 @@ It remains to show that the order as defined is suitable for the purposes we des
 While noetherianness is useful in showing the rewriting algorithm terminates, for the answer it produces to be useful as a normal form, we want the resulting irreducible descendant to be unique. Without imposing extra conditions, it is possible that one string could have multiple irreducible descendants depending on which rules were chosen at each stage.
 
 \begin{example}
-	A very simple example of a non-confluent rewriting system is
+	A very simple example of such a rewriting system is
 		\[ R = \{ ab \to a, ab \to b \}. \]
 \end{example}
+
+We formalise requirement for uniqueness with the following definition:
 
 \begin{defn}
 	A rewriting system $R$ over an alphabet $A$ is \dn{confluent} if for all strings $a, b, c \in A^*$, whenever $a \to_R^* b$ and $a \to_R^* c$, there exists a string $z \in A^*$ such that $b \to^*_R z$ and $c \to^*_R z$.
 \end{defn}
 
+A similar notion is the notion of `local' confluence, which only requires us to consider pairs of strings related by a single rewriting step --- in this way, it is easier to verify since we can directly enumerate all such pairs.
+
 \begin{defn}
 	A rewriting system $R$ over an alphabet $A$ is \dn{locally confluent} if for all strings $a, b, c \in A^*$, whenever $a \to_R b$ and $a \to_R c$, there exists a string $z \in A^*$ such that $b \to^*_R z$ and $c \to^*_R z$.
 \end{defn}
 
+The notion of local confluence is particularly useful when considered in the context of noetherian rewriting systems from the last section. The following theorem is often known as Newman's lemma, having first been proven by Newman in \cite{Newman1942}. Here we follow a simpler proof due to Huet written using the modern language of rewriting systems, which appears in \cite{Huet1980}. The principal technique of this proof is the notion of Noetherian induction (\cref{prop:noetherian-induction}).
+
 \begin{theorem}[Newman] \label{thm:newman}
 	If $R$ is a noetherian rewriting system, then $R$ is confluent if and only if it is locally confluent.
 \end{theorem}
-
-This theorem is often known as Newman's lemma, having first been proven by Newman in \cite{Newman1942}. Here we follow a simpler proof due to Huet written using the modern language of rewriting systems, which appears in \cite{Huet1980}. The principal technique of this proof is the notion of Noetherian induction (\cref{prop:noetherian-induction}).
-
-\begin{proof}[ \pCref{thm:newman}]
+\begin{proof}
 	It is clear that a confluent system is locally confluent, since if $x \to z$ then $x \to^* z$ for all $x, z \in A^*$.
 
 	Conversely, suppose $R$ is a locally confluent rewriting system over an alphabet $A$. We shall prove the statement $P(x)$ over $A^*$ by noetherian induction, defining $P(x)$ to be true if and only if for all $X, X' \in A^*$ such that $x \to^* X$ and $x \to^* X'$, there exists $z \in A^*$ such that $X \to^* z$ and $X' \to^* z$. If $P(x)$ holds for all strings $x$, the system is confluent by definition. 
@@ -613,7 +623,7 @@ Since we are considering confluent noetherian rewriting systems, the following s
 		\item Let $w' \leftarrow w$.
 		\item For every rule $u \to v$ in $R$:	\label{nfal-for-every-rule}
 			\begin{enumerate}
-				\item Scan the string $w'$ from left to right to try to find an occurence of $u$.
+				\item Scan the string $w'$ from left to right to try to find an occurrence of $u$.
 				\item If one is found, then we can write $w' = AuB$. Set $w' \leftarrow AvB$ and return to step \ref{nfal-for-every-rule}. It should be clear that $AuB =_R AvB$.
 			\end{enumerate}
 		\item If we reach this point, then $w'$ is irreducible and so we can set $\bar w \leftarrow w'$.
@@ -630,7 +640,7 @@ This is essentially the argument we will use in \cref{sec:special-monoids} to co
 In this section, we discuss the word problem for a special class of one-relation semigroups, namely `special' one-relation monoids.
 
 \begin{defn} \label{def:special}
-	A monoid $M$ is \dn{special} if it has a presentation of the form $\langle A \mid w_1 = \epsilon, w_2 = \epsilon, \ldots, w_n = \epsilon \rangle$ for nonempty words $w_i \in A^*$.
+	A monoid $M$ is said to be \dn{special} if it admits a presentation of the form $\langle A \mid w_1 = \epsilon, w_2 = \epsilon, \ldots, w_n = \epsilon \rangle$ for nonempty words $w_i \in A^*$.
 \end{defn}
 
 The main result is a theorem of Adjan, which states that the word problem is indeed decidable for one-relation special monoids:
@@ -639,9 +649,9 @@ The main result is a theorem of Adjan, which states that the word problem is ind
 	Let $M$ be a one-relation special monoid, i.e. a monoid admitting a presentation of the form $\langle A \mid w = \epsilon\rangle$, where $A$ is an alphabet, $w \in A^+$. Then $M$ has decidable word problem.
 \end{theorem}
 
-Here, we follow Zhang's proof from \cite{Zhang1992a}, which uses rewriting systems to obtain a dramatic simplification of Adian's first proof in \cite{Adian1966}. Zhang's overall approach is to construct a one-relation presentation for the group of units of the special monoid --- whose word problem is then decidable by Magnus' theorem --- and reduce the word problem of the whole monoid to that of the group of units using a confluent, noetherian rewriting system.
+Here, we follow Zhang's proof from \cite{Zhang1992a}, which uses rewriting systems to obtain a dramatic simplification of Adjan's first proof in \cite{Adian1966}. Zhang's overall approach is to construct a one-relation presentation for the group of units of the special monoid --- whose word problem is then decidable by Magnus' theorem --- and reduce the word problem of the whole monoid to that of the group of units using a confluent, noetherian rewriting system.
 
-In another paper \cite{Zhang1992}, Zhang uses a similar method to generalise this statement by reducing the word problem of any special monoid to the word problem of its group of units, as well as obtaining similar results on the conjugacy and divisibility problems for these monoids.
+In another paper \cite{Zhang1992}, Zhang uses a similar method to generalise this statement by reducing the word problem of any special monoid to the word problem of its group of units, as well as obtaining similar results on the conjugacy and divisibility problems for these monoids. We will discuss the first of these results in \cref{sec:structure}.
 
 
 \subsection{Constructing a generating set} \label{sec:constructing-genset}
@@ -671,9 +681,11 @@ Since left and right inverses are the same, it must also follow that $b \cdot bc
 	This can be shown by a straightforward induction on $i$. It is true in $C_1$, since $C_1 = \{w\}$. So suppose every word in $C_i$ has length $|w|$, and let $xy$ be a new word in $C_{i+1}$ for some $x, y \in A^+$ such that $x$ or $y$ is in $W(C_i)$. Then either $xy$ or $yx$ is in $C_i$ and hence $|xy| = |yx| = |w|$ by the inductive hypothesis. Hence every word in $C_{i+1}$ has length $|w|$ and so every word in $C_i$ has length $|w|$, for any index $i$.
 \end{proof}
 
-It follows from the above that since $|C_i| \le |A|^{|w|}$ (which is finite since $M$ is finitely presented) and $C_{i+1} \supseteq C_i$ for all $i \ge 1$, there is a maximal set $C_k$. Define a new set $E(M)$ to be those words in $W(C_k)$ which have no proper right factors in $W(C_k)$.
+It follows from the above that since $|C_i| \le |A|^{|w|}$ (which is finite since $M$ is finitely presented) and $C_{i+1} \supseteq C_i$ for all $i \ge 1$, there is a maximal set $C_k$. This set allows us define what will effectively serve as the generating set in the presentation for the group of units of $M$ which we construct in the remainder of the proof:
 
-This set $E(M)$ will effectively serve as the generating set in the presentation for the group of units of $M$ which we construct in the remainder of the proof.
+\begin{defn}
+	For a one-relator special monoid $M = \langle A \mid w = \epsilon \rangle$, we define $E(M)$ to be the set of words in $C_k$, as constructed above, which have no proper right factors in $W(C_k)$.
+\end{defn}
 
 \begin{example} \label{ex:Ck-group}
 	Consider the monoid $M$ defined by the presentation $\langle b, c \mid bcb = \epsilon \rangle$. Running the procedure again we obtain:
@@ -830,8 +842,11 @@ We state here two lemmas about the generating set $E(M)$ which will be useful to
 \end{proof}
 
 \begin{cly} \label{cly:middle-E(M)*}
-	If $x, y, z \in A^*$ are strings such that $xy, yz \in E(M)^*$, then $y \in E(M)^*$. \incomplete
+	If $x, y, z \in A^*$ are strings such that $xy, yz \in E(M)^*$, then $y \in E(M)^*$.
 \end{cly}
+\begin{proof}
+	Let $x, y, z \in A^*$ such that $xz, yz \in E(M)^*$, and factor $xy$ as $xy = u_1u_2 \cdots u_k$ over $E(M)$. Then $y = u_i''u_{i+1}\cdots u_k$, where $u_i'' \in A^+$ is a suffix of $u_i$ for some index $1 \le i \le k$. Then $yz = u_i'' u_{i+1} \cdots u_k z$, and since this is in $E(M)^*$, $u_i''$ must overlap with some $c \in E(M)$: put $c = c'c''$ such that $u_i'' = vc'$ where $c' \in A^+$ and $c'', v \in A^*$. Thus $u_i = u_i' u_i'' = u_i'vc'$ for some $u_i' \in A^+$. Since $u_i = u_i'v \cdot c' \in E(M)$ and $c' \cdot c'' \in E(M)$, applying \cref{lma:no-middle-E(M)} gives either $u_i'v = c'' = \epsilon$ or $c' = \epsilon$. The latter is not the case by assumption, so $u_i'v = \epsilon$. Hence $u_i'' = \epsilon$ and so $y \in E(M)^*$.
+\end{proof}
 
 
 \subsubsection{\texorpdfstring{Confluence of $R$}{Confluence of R}}
@@ -878,11 +893,11 @@ The rewriting system $R$ is equivalent to $\{(w, \epsilon)\}$ by \cref{lma:R-equ
 
 \section{The structure of one-relation special monoids} \label{sec:structure}
 
-The rewriting system discussed in the previous section can be used to solve more than just the word problem for special monoids. In this section, we will discuss how it can be used to describe significant parts of the structure of the monoid $M$ --- in particular, we will finally prove that the group $G$ from \cref{sec:defining-presentation} is the group of units. With this established, we shall explore the submonoids of right and left units of $M$, and show how they admit a simple (and surprising) characterisation as a free product of $G$ and a free semigroup.
+The rewriting system discussed in the previous section can be used to do more than just solve the word problem for special monoids. In this section, we will discuss how it can be used to describe significant parts of the structure of the monoid $M$ --- in particular, we will finally prove that the group $G$ from \cref{sec:defining-presentation} is the group of units. With this established, we shall explore the submonoids of right and left units of $M$, and show how they admit a simple (and surprising) characterisation as a free product of $G$ and a free semigroup.
 
 \subsection{An alternative approach}
 
-In \cite{Zhang1992}, an alternative, non-constructive definition of a generating set for the group of units is given, based on the idea of \emph{minimal factors} of $w$.
+In \cite{Zhang1992}, an alternative, non-constructive description of a generating set for the group of units of $M = \Mon \langle A \mid w = \epsilon\rangle$ is given, based on the idea of \emph{minimal factors} of the relator $w$.
 
 \begin{defn}
 	A word $v \in A^+$ is \dn{minimal} if:
@@ -896,6 +911,7 @@ In \cite{Zhang1992}, an alternative, non-constructive definition of a generating
 We can then write the relator $w$ in terms of minimal factors $w = w_1w_2\ldots w_n$. Let $\Delta$ be the set of all minimal words which are congruent to some minimal factor of $w$, that is
 	\[ \Delta = \{ u \in A^* \mid u =_M w_i \text{ for some } i, u\text{ minimal} \}. \]
 
+\begin{comment}
 \begin{lemma}
 	In a one-relation special monoid, $\Delta = \{w_1, \ldots, w_n\}$. \incomplete
 \end{lemma}
@@ -905,22 +921,33 @@ We can then write the relator $w$ in terms of minimal factors $w = w_1w_2\ldots 
 	Otherwise, let $1 \le i \le n$ and consider the set $\Delta_i = \{ u \in A^* \mid u =_M w_i \}$. Since all the words in this set are congruent in $M$, and the congruence of $R$ is equal to the congruence of $M$, it follows from the fact that $R$ is confluent and noetherian that there is a unique element $\bar u \in \Delta_i$ which is irreducible by $R$.
 %Then there are $A, B, x, y \in A^*$ such that $w_i = AxB$, $w_i' = AyB$ and $x \to y$ is a rule in $R$. By the definition of $R$, $|x| \ge |y|$ and $x, y \in E(M)^*$.
 \end{proof}
+\end{comment}
 
 As might be expected, $E(M)$ plays a parallel role to $\Delta$ in this approach:
 
 \begin{prop}
-	The sets $E(M)$ and $\Delta$ are equal; that is, $E(M)$ is the set of minimal factors of $w$. \incomplete
+	The sets $E(M)$ and $\Delta$ are equal; that is, there is only one minimal word congruent to each minimal factor of $w$, and $E(M)$ is the set of minimal factors of $w$.
 \end{prop}
 \begin{proof}
-	We first show that every word in $E(M)$ is minimal, and so $E(M) \subseteq \Delta$. By the proof of \cref{prop:M'-is-group}, every element of $E(M)$ is invertible in $M$. Furthermore, since every word in $E(M)$ is a factor of a word in $W(C_k)$, and every word in $C_k$ has length $|w|$ by \cref{lma:Ci-length-w}, no word in $E(M)$ can be longer than $|w|$. So it remains to show that for any $u \in E(M)$, no nonempty prefixes of $u$ are invertible.
+%	We first show that every word in $E(M)$ is minimal, and so $E(M) \subseteq \Delta$.
+	By the proof of \cref{prop:M'-is-group}, every element of $E(M)$ is invertible in $M$. Furthermore, since every word in $E(M)$ is a factor of a word in $W(C_k)$, and every word in $C_k$ has length $|w|$ by \cref{lma:Ci-length-w}, no word in $E(M)$ can be longer than $|w|$. Finally, no proper prefix of a word in $E(M)$ is invertible, so every word in $E(M)$ is minimal, so $E(M) \subseteq \Delta$.
+\begin{comment}
+	So it remains to show that for any $u \in E(M)$, no nonempty prefixes of $u$ are invertible.
 
-	Suppose, for a contradiction, that $u$ factors as $u = u'u''$ such that $u', u'' \in A^+$ and $u'$ is invertible.
+	Suppose, for a contradiction, that $u$ factors as $u = u'u''$ such that $u', u'' \in A^+$ and $u'$ is invertible. Then since $u \in W(C_k)$, there exist words $v, t \in C_k$ such that $v = uv'$ and $t = t'u$ for appropriate proper factors $v', t' \in A^+$. By the proof of \cref{prop:M'-is-group}, each word in $C_k$ is trivial in $M$, and so $u'u''v' =_M t'u'u'' =_M \epsilon$. Since $u'$ is invertible, $u''v' =_M t'u'u'' =_M \overline{u'}$; so $u'v'u'' =_M \epsilon$. Then from before, $\epsilon =_M u'u''v' =_M t'u'u''$, hence $u'v' =_M t'u' =_M \overline{u''}$.
+
+	Since $u'v' =_M t'u'$, the two words have a unique common irreducible descendant $z \in A^*$ such that $u'v' \to^*_R z$ and $t'u' \to^*_R z$, where $R$ is our rewriting system from \cref{sec:special-monoids}. By \cref{lma:shorter-irreducible}, because $u \in E(M)$ and $|u'| < |u|$, $u'$ is irreducible by $R$.
+
+Since $u \in E(M)$ and $|u'| < |u|$, $u'$ is irreducible by \cref{lma:shorter-irreducible}. So if $u'v' \to_R \mu$ for some $\mu \in A^*$, then either $u'v' = u'\alpha X\beta$ such that $X$ is the left hand side of a rule in $R$; or $u'v'=\gamma Y Z \delta$ such that $u' = \gamma Y$, $v' = Z\delta$ and $YZ$ is a rule in $R$.
+
+Everything is irreducible by $\{w\to\epsilon\}$, since we are shorter than $w$.
+\end{comment}
 
 	We now show the converse. Factor $w$ over $E(M)$ as $w = \alpha_1 \alpha_2 \cdots \alpha_m$ and over $\Delta$ as $\beta_1 \beta_2 \cdots \beta_n$.
 
 	\emph{Case 1.} Suppose $|\alpha_m| < |\beta_n|$. Then $\beta_n = X\alpha_m$ for some $X \in A^+$. Since $\beta_n$ is invertible, it has an inverse $\overline{\beta_n}$ such that $\overline{\beta_n}X\alpha_m =_M \epsilon$ and hence $X =_M \beta_n\overline{\alpha_m}$. This contradicts $\beta_n$ being minimal, since $X$ is now a nonempty invertible prefix.
 
-	\emph{Case 2.} Now suppose $|\alpha_m| > |\beta_n|$. Then $\alpha_m = Y\beta_n$ for some $Y \in A^+$, and so $\beta_{n-1} = VY$ for some $V \in A^*$. Since $\beta_n$ is invertible, $Y =_M \alpha_m\overline{\beta_m}$, and hence $\beta_{n-1} =_M V\alpha_m\overline{\beta_n}$. As $\alpha_m \in E(M)$, it is invertible, and we conclude that $V =_M \beta_{n-1}\beta{n}\overline{\alpha_m}$. This is a product of invertible elements and so $V$ is itself invertible. If $V$ is nonempty, then we have a nonempty prefix of $\beta_{n-1}$ which is invertible, contradicting the minimality of $\beta_{n-1}$. Otherwise, $\alpha_m = \beta_{n-1}\beta{n}$ and the invertibilty of $\beta_{n-1}$ contradicts $\alpha_m$ being minimal.
+	\emph{Case 2.} Now suppose $|\alpha_m| > |\beta_n|$. Then $\alpha_m = Y\beta_n$ for some $Y \in A^+$, and so $\beta_{n-1} = VY$ for some $V \in A^*$. Since $\beta_n$ is invertible, $Y =_M \alpha_m\overline{\beta_m}$, and hence $\beta_{n-1} =_M V\alpha_m\overline{\beta_n}$. As $\alpha_m \in E(M)$, it is invertible, and we conclude that $V =_M \beta_{n-1}\beta{n}\overline{\alpha_m}$. This is a product of invertible elements and so $V$ is itself invertible. If $V$ is nonempty, then we have a nonempty prefix of $\beta_{n-1}$ which is invertible, contradicting the minimality of $\beta_{n-1}$. Otherwise, $\alpha_m = \beta_{n-1}\beta{n}$ and the invertibility of $\beta_{n-1}$ contradicts $\alpha_m$ being minimal.
 
 	Hence $|\alpha_m| = |\beta_n|$ and consequently $\alpha_m = \beta_n$. Applying the same argument to the strings $\alpha_1 \cdots \alpha_{m-1}$ and $\beta_1 \cdots \beta_{n-1}$ and so on gives us that $\alpha_i = \beta_i$ for all indices $1 \le i \le m = n$, and therefore that $\Delta \subseteq E(M)$.
 \end{proof}
@@ -938,9 +965,9 @@ Let $I$ denote the set of nonempty prefixes of words in $E(M)$, that is $I = L(E
 \begin{proof}
 	We proceed by induction on $|u|$. If $|u| = 0$, then $u$ is trivially in $I^*$. Suppose then that $|u| \ge 1$, and that all strings of length strictly less than $|u|$ are in $I^*$.
 
-	Since $u$ is right invertible, it has a right inverse $\bar u \in A^*$ such that $u\bar u =_M \epsilon$ and hence such that $u\bar u \to_R^* \epsilon$. We may assume that $\bar u$ is irreducible by $R$, since reducing $\bar u$ by $R$ does not change either of these facts. Then we can write $u = u'u''$, $\bar u = \bar u'\bar u''$ such that $u\bar u = u'u''\bar u'\bar u'' \to_R u'v\bar u'' \to_R^* \epsilon$, where $u''\bar u' \to v$ is a rule in $R$. By the definition of $R$, this means that $u''\bar u' \in E(M)^*$ and so $u'' \in I^*$. Furthermore, $u'' \ne \epsilon$, since otherwise $\bar u$ would have been reducible by $R$; and hence $|u'| < |u|$.
+	Since $u$ is right invertible, it has a right inverse $\widebar u \in A^*$ such that $u\widebar u =_M \epsilon$ and hence such that $u\widebar u \to_R^* \epsilon$. We may assume that $\widebar u$ is irreducible by $R$, since reducing $\widebar u$ by $R$ does not change either of these facts. Then we can write $u = u'u''$, $\widebar u = \widebar u'\widebar u''$ such that $u\widebar u = u'u''\widebar u'\widebar u'' \to_R u'v\widebar u'' \to_R^* \epsilon$, where $u''\widebar u' \to v$ is a rule in $R$. By the definition of $R$, this means that $u''\widebar u' \in E(M)^*$ and so $u'' \in I^*$. Furthermore, $u'' \ne \epsilon$, since otherwise $\widebar u$ would have been reducible by $R$; and hence $|u'| < |u|$.
 
-	Finally, $u' \cdot u''\bar u =_M \epsilon$, i.e. $u'$ is right invertible. So by the inductive hypothesis, $u'$ is a product of the desired form. So is $u''$, hence $u = u'u''$ is also in $I^*$.
+	Finally, $u' \cdot u''\widebar u =_M \epsilon$, i.e. $u'$ is right invertible. So by the inductive hypothesis, $u'$ is a product of the desired form. So is $u''$, hence $u = u'u''$ is also in $I^*$.
 \end{proof}
 
 With this in hand, most of the machinery required to complete the proof was introduced in the previous section. Recall that $B$ is an alphabet disjoint from $A$ and in one-to-one correspondence with $E(M)$, and that $\phi : E(M)^* \to B^*$ is the isomorphism induced by this correspondence.
@@ -1288,7 +1315,7 @@ The canonical examples of inverse monoids, however, are the symmetric inverse mo
 \end{defn}
 
 Their canonicity comes from the following theorem (see chapter 5 of \cite{Howie1995}), the analogue of Cayley's theorem for groups:
-\begin{theorem}[Wagner-Preston]
+\begin{theorem}[Wagner--Preston]
 	Every inverse monoid $M$ is isomorphic to an inverse submonoid of $\mathcal{I}_M$.
 \end{theorem}
 
@@ -1297,14 +1324,14 @@ We write partial bijections in two-line notation, using `$-$' to denote that the
 		\mathcal{I}_{\{0,1\}} = \left\{ \pmat{0 & 1 \\ - & -}, \pmat{0 & 1 \\ 0 & -}, \pmat{0 & 1 \\ 1 & -}, \pmat{0 & 1 \\ - & 0}, \pmat{0 & 1 \\ - & 1}, \pmat{0 & 1 \\ 0 & 1}, \pmat{0 & 1 \\ 1 & 0} \right\}.
 	\]
 Composition of relations in this case corresponds to composition of functions, except that `$-$' is contagious: if $f, g$ are partial bijections and either $f$ or $g$ is undefined at a point $x$, then so is $fg$. For example, \[\pmat{0 & 1 \\ 0 & -} \pmat{0 & 1 \\ - & 1} = \pmat{0 & 1 \\ - & -}. \]
-It is clear that this is an associative operation, and that the composition of two partial bijections is again a partial bijection. We also have an identity element, namely the identity map, and so $\mathcal{I}_X$ is genuinely a monoid. Inverses are obtained by considering the inverse of an element as a bijection from its domain to its image.
+It is clear that this is an associative operation, and that the composition of two partial bijections is again a partial bijection. We also have an identity element, namely the identity map, and so $\mathcal{I}_X$ is genuinely a monoid. Inverses are obtained by considering the inverse of an element as a full bijection from its domain to its image.
 
-The inverse monoid $\mathcal{I}_{\{0,1\}}$ is in fact given by the presentation $I_{\{0,1\}} = \Inv \langle a, z \mid a^2 = \epsilon, z^2 = z, (za)^2 = (za)^3 \rangle$. Here, $a$ corresponds to the permutation $(0 1)$, and $z$ to the partial map $\left(\begin{smallmatrix} 0 & 1 \\ 1 & - \end{smallmatrix}\right)$. Enumerating words in $\{a, z\}$ and using the relations shows that the presentation gives rise to an inverse monoid of 8 elements, and the remaining relations are easily checked.
+The inverse monoid $\mathcal{I}_{\{0,1\}}$ is in fact given by the presentation $I_{\{0,1\}} = \Inv \langle a, z \mid a^2 = \epsilon, z^2 = z, (za)^2 = (za)^3 \rangle$. Here, $a$ corresponds to the permutation $(0\ 1)$, and $z$ to the partial map $\left(\begin{smallmatrix} 0 & 1 \\ 1 & - \end{smallmatrix}\right)$. Enumerating words in $\{a, z\}$ and using the relations shows that the presentation gives rise to an inverse monoid of 8 elements, and the remaining relations are easily checked.
 
 More generally (see chapter 9 of \cite{Lipscomb1996}), the symmetric inverse monoid on $\{1, \ldots, n\}$ is given by the presentation
 \begin{align*}
-	\mathcal{I}_n = \Inv \langle z, t_1, \ldots, t_{n-1} \mid & \quad\, \{ t_i^2 = (t_i t_{i+1})^3 = (t_i t_j)^2 = \epsilon \mid 1 \le i < n,\ |i-j|>1 \} \\
-	& \cup \{ zt_i = t_iz \mid 2 \le i < n \} \cup \{ z^2 = z, (zt_1)^2 = (zt_1)^3 \} \rangle,
+	\mathcal{I}_n = \Inv \langle z, t_1, \ldots, t_{n-1} \mid & \{ t_i^2 = (t_i t_{i+1})^3 = (t_i t_j)^2 = \epsilon \mid 1 \le i < n,\ |i-j|>1 \}\, \cup \\
+	& \{ zt_i = t_iz \mid 2 \le i < n \} \cup \{ z^2 = z, (zt_1)^2 = (zt_1)^3 \} \rangle,
 \end{align*}
 where the first set of relations together with generators $t_1, \ldots, t_{n-1}$ suffices to define $S_n$, the symmetric group on $n$ points.
 
@@ -1459,7 +1486,7 @@ One direction is easy:
 
 	The tree $\MT(u)$ corresponds to a path $\epsilon = x_1 \to[a_1] x_2 \to[a_2] \cdots \to[a_{n-1}] x_n =_F u$ in $\FGamma(A)$. By construction, $\MT(uu^{-1}u)$ corresponds to the path $\epsilon = x_1 \to[a_1] \cdots \to[a_{n-1}] \to x_n \to[a_{n-1}^{-1}] x_{n-1} \to[a_{n-2}^{-1}] \cdots \to[a_1^{-1}] \epsilon \to[a_1] \cdots \to[a_{n-1}] x_n$ in $\FGamma(A)$. Observe that we have not visited any vertices, or travelled along any edges, that we did not visit or travel along in constructing $\MT(u)$. Furthermore, the initial and terminal vertices $\alpha$ and $\beta$ in $\MT(uu^{-1}u)$ are exactly the vertices in $\MT(u)$ corresponding to $\epsilon$ and $x_n$. So in fact we have $\MT(u) = \MT(uu^{-1}u)$.
 
-	Rather similarly, the vertices and edges considered when constructing $\MT(uu^{-1}vv^{-1})$ and $\MT(vv^{-1}uu^{-1})$ do not change: we follow the paths labelled $uu^{-1}$ and $vv^{-1}$ in both cases, just in a different order. Our initial and terminal vertices both correspond to $\epsilon$, and so $\MT(uu^{-1}vv^{-1}) = \MT(vv^{-1}uu^{-1})$.
+	Rather similarly, the vertices and edges considered when constructing the trees $\MT(uu^{-1}vv^{-1})$ and $\MT(vv^{-1}uu^{-1})$ do not change: we follow the paths labelled $uu^{-1}$ and $vv^{-1}$ in both cases, just in a different order. Our initial and terminal vertices both correspond to $\epsilon$, and so $\MT(uu^{-1}vv^{-1}) = \MT(vv^{-1}uu^{-1})$.
 \end{proof}
 
 The converse is more difficult to establish.
@@ -1525,7 +1552,7 @@ We offer only a sketch of the proof here. Munn shows that there is a bijection b
 \end{example}
 
 \begin{theorem} \label{thm:equal-FIM-iff-Munn-isomorphic}
-	Let $u, v \in F = \Inv \langle A\mid\rangle$. Then $u =_F v$ if and only if $\MT(u)$ and $\MT(v)$ are isomorphic as birooted trees, i.e. they are isomorphic as graphs and vertices labelled $\alpha$ and $\beta$ in $\MT(u)$ have their images labelled $\alpha$ and $\beta$ in $\MT(v)$ under $\phi$.
+	Let $u, v \in F = \Inv \langle A\mid\rangle$. Then $u =_F v$ if and only if $\MT(u)$ and $\MT(v)$ are isomorphic as bi-rooted trees, i.e. they are isomorphic as graphs and vertices labelled $\alpha$ and $\beta$ in $\MT(u)$ have their images labelled $\alpha$ and $\beta$ in $\MT(v)$ under $\phi$.
 \end{theorem}
 \end{comment}
 
@@ -1535,7 +1562,7 @@ Taking together these two propositions gives us the key result:
 	The word problem for free inverse monoids is decidable.
 \end{theorem}
 \begin{proof}
-	Suppose $F = \Inv \langle A \mid\rangle$, and let $u, v \in \Abar^*$. By \cref{prop:MT-isomorphic-u=Fv}, $u =_F v$ if and only if $\phi^{-1})(u)$ and $\phi^{-1}(v)$ are equal. We can construct a representative from each isomorphism class, namely $\MT(u)$ and $\MT(v)$, in a finite number of steps. From there, determining when two finite graphs are isomorphic is a well-studied problem; it is easily seen to be decidable --- there are a finite number of possible maps $\phi : V(G) \to V(H)$, and only finitely many conditions to check as per \cref{def:graph-isomorphism}. Every Munn tree is finite, so it is decidable whether $\MT(u)$ and $\MT(v)$ are isomorphic, so it is decidable whether $\phi^{-1}(u) = \phi^{-1}(v)$ and in turn whether $u =_F v$..
+	Suppose $F = \Inv \langle A \mid\rangle$, and let $u, v \in \Abar^*$. By \cref{prop:MT-isomorphic-u=Fv}, $u =_F v$ if and only if $\phi^{-1})(u)$ and $\phi^{-1}(v)$ are equal. We can construct a representative from each isomorphism class, namely $\MT(u)$ and $\MT(v)$, in a finite number of steps. From there, determining when two finite graphs are isomorphic is a well-studied problem; it is easily seen to be decidable --- there are a finite number of possible maps $\phi : V(G) \to V(H)$, and only finitely many conditions to check as per \cref{def:graph-isomorphism}. Every Munn tree is finite --- therefore it is decidable whether $\MT(u)$ and $\MT(v)$ are isomorphic, so it is decidable whether $\phi^{-1}(u) = \phi^{-1}(v)$ and in turn whether $u =_F v$.
 \end{proof}
 
 \subsection{Special inverse monoids and their groups of units}
@@ -1545,7 +1572,7 @@ Analogously to our definition from \cref{sec:one-relation-overview}, we consider
 	Let $M$ be an inverse monoid. Then $M$ is said to be a \dn{special inverse monoid} if it admits a presentation of the form $M = \Inv \langle A \mid w_1 = \epsilon, w_2 = \epsilon, \ldots, w_n = \epsilon \rangle$ for some $w_i \in \Abar^*$.
 \end{defn}
 
-As discussed in the introduction to this section, we are considering inverse monoids primarily because of the following result:
+As discussed in the introduction to this part of the project, we are considering inverse monoids primarily because of the following result:
 \begin{theorem}[\cite{Ivanov2001}, Theorem 2.2]
 	If the word problem is decidable for one-relation special inverse monoids $M = \Inv \langle A \mid w = \epsilon\rangle$, where $w \in \Abar^*$ is reduced, then the word problem is decidable for all one-relation monoids.
 \end{theorem}
@@ -1600,12 +1627,12 @@ Note that in this example, $M$ is not a strictly $w$-positive presentation, but 
 
 The proofs of both of these theorems rely heavily on the notion of so-called Schützenberger automata --- deterministic automata whose accepted language characterises an element in an inverse monoid given by a presentation --- and on Stephen's construction of these automata using Munn trees (which we saw in \cref{sec:free-inverse-monoids}). These automata, and the mentioned construction, are described in detail in \cite{Stephen1990}.
 
-\section{Related questions}
+\section{Related questions} \label{sec:related-questions}
 In this project, we have mostly concerned ourselves with the word problem for one-relation semigroups. We have looked in detail at the one-relation special monoids, using rewriting systems to show the solution to their word problem and glean some information about their structure. We also examined various reductions of the one-relation semigroup problem, with particular focus on the one-relation special inverse monoids, which have intriguing connections to the one-relation special monoids we considered first. Finally, we surveyed some special cases of the one-relation inverse monoid problem which have been solved, showing some of the directions that researchers are looking in to solve the general problem.
 
 One natural inclination given this vantage point is to try and `connect the dots' between the one-relation special monoid and inverse monoid cases. There are, however, many other natural questions which could be answered about one-relation semigroups, such as whether other decision problems are solvable: the conjugacy and isomorphism problems that Dehn posed, for example, or very slightly more exotic ones such as the divisibility problem. Zhang, for instance, investigates the divisibility problem for special one-relation monoids in the same paper \cite{Zhang1992a}, making fruitful use of rewriting systems once again. Zhang also reduces the conjugacy problem for these monoids to that of their groups of units in \cite{Zhang1991}.
 
-Another possible avenue of exploration is to ask how difficult the word problem is to solve, rather than just asking whether it is possible. We have been focussed on showing that the word problem is decidable, in the sense that it is recognisable by a Turing machine. One might ask if the word problem is recognisable by less powerful machines, such as deterministic automata. There are many general results in this vein; e.g. Anisimov's theorem states that the word problem of a group is regular if and only if the group is finite, and the same is true for semigroups. Muller and Schupp proved that the word problem of a group is context-free if and only if the group is virtually free, i.e. it contains a free subgroup of finite index. Some work on this question has been done to do with the structures we have been studying --- for example, in \cite{Margolis1993}, the inverse monoids with idempotent relator we described in \cref{thm:idempotent-generated-WP-decidable} are shown to have context-free word problem.
+Another possible avenue of exploration is to ask how difficult the word problem is to solve, rather than just asking whether it is possible. We have been focussed on showing that the word problem is decidable, in the sense that it is recognisable by a Turing machine. One might ask if the word problem is recognisable by less powerful machines, such as deterministic automata. There are many general results in this vein; e.g. Anisimov's theorem states that the word problem of a group is regular if and only if the group is finite, and the same is true for semigroups. Muller and Schupp proved that the word problem of a group is context-free if and only if the group is virtually free, i.e. it contains a free subgroup of finite index. Some work on this question has been done regarding the objects we have been studying --- for example, in \cite{Margolis1993}, the inverse monoids with idempotent relator we described in \cref{thm:idempotent-generated-WP-decidable} are shown to have context-free word problem.
 
 To conclude, this project has attempted to illuminate a small corner of one-relation semigroup theory. It raises a wide variety of connected questions whose answers involve many different areas of mathematics; we hope the reader is convinced of the interest in studying these structures, and that they have seen some stimulating mathematics on the way.
 
